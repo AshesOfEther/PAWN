@@ -2,7 +2,16 @@ grammar BoardGameLang;
 
 // Parser rules
 expression
-    : equalities
+    : '(' expression ')'
+    | expression argList ('{' statementList '}')?
+    | expression '[' expressionList ']'
+    | expression '^' expression
+    | expression ('*' | '/' | '%') expression
+    | expression ('+' | '-') expression
+    | expression ('..=' | '..') expression
+    | expression ('=='|'!='|'<='|'>='|'<'|'>') expression
+    | member
+    | literal
     ;
 
 member
@@ -10,44 +19,11 @@ member
     | NAME
     ;
 
-equalities
-    : range ('=='|'!='|'<='|'>='|'<'|'>') equalities
-    | range
-    ;
-
-range
-    : sum ('..='|'..') sum
-    | sum
-    ;
-
-atom
-    : '(' expression ')'
-    | atom argList ('{' statementList '}')? // call
-    | atom '[' expressionList ']' // indexing
-    | member
-    | literal
-    ;
-
 literal
     : list
     | BOOL
     | NUMBER
     | STRING
-    ;
-
-power
-    : atom '^' power
-    | atom
-    ;
-
-sum
-    : product ('+'|'-') sum
-    | product
-    ;
-
-product
-    : power ('*'|'/'|'%') product
-    | power
     ;
 
 list
