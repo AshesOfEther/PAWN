@@ -1,0 +1,56 @@
+players(count = 2..=4) {
+        pieces(count = 1);
+
+        pawns = Pieces(count = 8) {
+            type = "pawn";
+            position = spaces[8 + piece.id];
+
+            fn targets(x, y) {
+
+            }
+        };
+
+        score = 500;
+};
+
+
+board () {
+        spaces = Grid(rows = 10, columns = 10, margin = 5, connect = true) {
+                fn index(x, y) {
+                        thing = 3;
+                        if (y % 2 == 0) {
+                                return y * 10 + x;
+                        } else {
+                                return (10 - y) * 10 + y;
+                        }
+                }
+        };
+
+        space = Space(x = 20, y = 30, width = 5, height = 5) {
+                fn land(piece) {
+                        piece.move(spaces[to], trigger = false);
+                }
+        };
+
+        /#for pair in CONNECTIONS {
+                from = pair[0];
+                to = pair[1];
+                apply spaces[from] {
+                        fn land(piece) {
+                                piece.move(spaces[to], trigger = false);
+                        }
+                }
+        }#/
+
+        apply spaces[100] {
+            x = 5;
+            fn land(player) {
+                    player.win();
+            }
+        }
+};
+
+turn () {
+        distance = actions.rollDice([6]);
+        currentPlayer.piece.moveForward(6);
+};
