@@ -1,5 +1,11 @@
 grammar BoardGameLang;
 
+type
+    : type '[]'
+
+    | TYPE
+    ;
+
 // Parser rules
 expression
     : equalities
@@ -31,7 +37,8 @@ atom
 literal
     : list
     | BOOL
-    | NUMBER
+    | INT
+    | FLOAT
     | STRING
     ;
 
@@ -85,6 +92,7 @@ statement
     | return ';'
     | expression ';'
     | assignment ';'
+    | declaration ';'
     ;
 
 apply
@@ -102,17 +110,21 @@ if
     ;
 
 functionDecl
-    : 'fn' NAME functionDeclArgs '{' statementList '}'
+    : 'fn' type? NAME functionDeclArgs '{' statementList '}'
     ;
 
 functionDeclArgs
     : '(' ')'
-    | '(' nameList (',' namedArgsDeclList)? ','? ')'
+    | '(' positionalArgsDeclList (',' namedArgsDeclList)? ','? ')'
     | '(' namedArgsDeclList ','? ')'
     ;
 
-nameList
-    : NAME (',' NAME)*
+positionalArgsDeclList
+    : positionalArgDecl (',' positionalArgDecl)*
+    ;
+
+positionalArgDecl
+    : type NAME
     ;
 
 namedArgsDeclList
@@ -120,11 +132,15 @@ namedArgsDeclList
     ;
 
 namedArgDecl
-    : NAME '=' expression
+    : type NAME '=' expression
     ;
 
 return
     : 'return' expression
+    ;
+
+declaration
+    : type NAME '=' expression
     ;
 
 assignment
@@ -135,8 +151,10 @@ assignment
 // Lexer rules
 LINE_COMMENT : '#' .*? '\r'? '\n' -> skip;
 MULTILINE_COMMENT : '/#' .*? '#/' -> skip;
+TYPE : 'Int' | 'Float' | 'String' | 'Boolean';
 BOOL : 'true' | 'false';
 NAME : [a-zA-Z_][a-zA-Z0-9_]*;
-NUMBER : '-'?[0-9]+('.'[0-9]+)?; // Float or int
+FLOAT : '-'?[0-9]+'.'[0-9]+;
+INT : '-'?[0-9]+;
 STRING : '"' ('\\'[\\"] | .)*? '"';
 WS : [ \t\r\n]+ -> skip;
