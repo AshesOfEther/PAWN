@@ -126,6 +126,6 @@ EQUAL : '==';
 NOT_EQUAL : '!=';
 LESS_THAN : '<';
 GREATER_THAN : '>';
-LESS_EUQAL : '<=';
+LESS_EQUAL : '<=';
 GREATER_EQUAL : '>=';
 WS : [ \t\r\n]+ -> skip;
