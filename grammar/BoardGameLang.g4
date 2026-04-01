@@ -2,16 +2,16 @@ grammar BoardGameLang;
 
 // Parser rules
 expression
-    : '(' expression ')'
-    | expression argList ('{' statementList '}')?
-    | expression '[' expressionList ']'
-    | expression '^' expression
-    | expression ('*' | '/' | '%') expression
-    | expression ('+' | '-') expression
-    | expression ('..=' | '..') expression
-    | expression ('=='|'!='|'<='|'>='|'<'|'>') expression
-    | member
-    | literal
+    : '(' expression ')'                                        # Parens
+    | expression argList ('{' statementList '}')?               # Call
+    | expression '[' expressionList ']'                         # Index
+    | expression '^' expression                                 # Power
+    | expression op=('*' | '/' | '%') expression                # MulDivMod
+    | expression op=('+' | '-') expression                      # AddSub
+    | expression op=('..=' | '..') expression                   # Range
+    | expression op=('=='|'!='|'<='|'>='|'<'|'>') expression    # Comparison
+    | member                                                    # MemberExpr
+    | literal                                                   # LiteralExpr
     ;
 
 member
@@ -115,4 +115,17 @@ BOOL : 'true' | 'false';
 NAME : [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER : '-'?[0-9]+('.'[0-9]+)?; // Float or int
 STRING : '"' ('\\'[\\"] | .)*? '"';
+MUL : '*';
+DIV : '/';
+MOD : '%';
+ADD : '+';
+SUB : '-';
+RANGE : '..';
+RANGE_INCLUSIVE : '..=';
+EQUAL : '==';
+NOT_EQUAL : '!=';
+LESS_THAN : '<';
+GREATER_THAN : '>';
+LESS_EUQAL : '<=';
+GREATER_EQUAL : '>=';
 WS : [ \t\r\n]+ -> skip;
