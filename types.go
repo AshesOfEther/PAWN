@@ -23,10 +23,7 @@ type valueP interface {
 // Object
 //--------
 type objectP struct {
-	v *[]struct{
-		name string
-		loc *valueP
-	}
+	v *[]map[string]*valueP
 }
 func (l objectP) value() {}
 
