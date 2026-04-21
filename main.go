@@ -1,7 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+
+	"github.com/antlr4-go/antlr/v4"
+
+	"pawn/parsing"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	filePath := os.Args[1]
+
+	input, _ := antlr.NewFileStream(filePath)
+	lexer := parsing.NewBoardGameLangLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	parser := parsing.NewBoardGameLangParser(stream)
+	tree := parser.StatementList()
+
+	fmt.Println(tree)
 }
