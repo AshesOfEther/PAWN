@@ -23,8 +23,9 @@ type valueP interface {
 // Object
 //--------
 type objectP struct {
-	v *struct{
-		// TODO
+	v *[]struct{
+		name string
+		loc *valueP
 	}
 }
 func (l objectP) value() {}
@@ -57,9 +58,7 @@ func (l stringP) value() {}
 // List
 //--------
 type listP struct {
-	v *struct{
-		// TODO
-	}
+	v *[]*valueP
 }
 func (l listP) value() {}
 
