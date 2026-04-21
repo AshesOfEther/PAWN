@@ -1,0 +1,13 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  build:
+    steps:
+      - uses: actions/setup-go@v6.4.0
+        with:
+          go-version-file: go.mod
+      - run: go build
