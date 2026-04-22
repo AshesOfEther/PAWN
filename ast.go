@@ -85,7 +85,7 @@ const (
 
 type FunctionCall struct {
 	Expression
-	name string
+	function Expression
 	positionalArgs []Expression
 	namedArgs []NamedArg
 	body []Statement
