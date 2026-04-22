@@ -22,7 +22,7 @@ type StatementAsValue any // TODO
 // In go, this sort of "∪" type can be done with an interface
 // where each of the types connected by ∪ is a struct that implements the interface.
 // The interface is just a single unimportant function called value.
-// To be clear, every sub-type (e.g StringP) has to implement the function "value()", and they "automatically" implement the interface.
+// To be clear, every sub-type (e.g PawnString) has to implement the function "value()", and they "automatically" implement the interface.
 
 // Source for this strategy: https://appliedgo.net/spotlight/sum-types-in-go/
 
@@ -31,72 +31,72 @@ type StatementAsValue any // TODO
 // this implementation uses pointers directly to only lists or objects.
 // The behavior should be equivalent. If it isn't, the semantics is likely wrong/unintended.
 
-type valueP interface {
+type PawnValue interface {
 	value()
 }
 
 //--------
 // Boolean
 //--------
-type booleanP struct {
+type PawnBoolean struct {
 	v bool
 }
-func (l booleanP) value() {}
+func (l PawnBoolean) value() {}
 
 //--------
 // Object
 //--------
-type objectP struct {
-	v map[string]*valueP // The map and pointer here shouldn't be nil
+type PawnObject struct {
+	v map[string]*PawnValue // The map and pointer here shouldn't be nil
 }
-func (l objectP) value() {}
+func (l PawnObject) value() {}
 
 //--------
 // Int
 //--------
-type intP struct {
+type PawnInt struct {
 	v int64
 }
-func (l intP) value() {}
+func (l PawnInt) value() {}
 
 //--------
 // Float
 //--------
-type floatP struct {
+type PawnFloat struct {
 	v float64
 }
-func (l floatP) value() {}
+func (l PawnFloat) value() {}
 
 //--------
 // String
 //--------
-type stringP struct {
+type PawnString struct {
 	v string
 }
-func (l stringP) value() {}
+func (l PawnString) value() {}
 
 //--------
 // List
 //--------
-type listP struct {
-	v *[]*valueP // Both pointers here shouldn't be nil
+type PawnList struct {
+	v *[]*PawnValue // Both pointers here shouldn't be nil
 }
-func (l listP) value() {}
+func (l PawnList) value() {}
 
 //--------
 // Function
 //--------
-type functionPrimitiveP struct {
-	f func([]valueP) *valueP // Possibly nil pointer, incase there's no returned value
+type PawnFunctionPrimitive struct {
+	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
 	positionalArguments []string
 	optionalArguments map[string]ExpressionAsValue // This map shouldn't be nil
 }
-func (l functionPrimitiveP) value() {}
+func (l PawnFunctionPrimitive) value() {}
 
-type functionUserP struct {
+type PawnFunctionUser struct {
 	environment EnvironmentAsValue
 	positionalArguments []string
 	optionalArguments map[string]ExpressionAsValue // This map shouldn't be nil
 	body StatementAsValue
 }
-func (l functionUserP) value() {}
+func (l PawnFunctionUser) value() {}
