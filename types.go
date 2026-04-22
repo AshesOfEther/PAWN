@@ -1,5 +1,21 @@
 package main
 
+// ----------------------------------
+// # Syntax representations for values
+//
+// The abstract syntax tree could choose to represent expressions and statements
+// in a way that's very unoptimal to use as values directly. Instead, these could be converted
+// to the types under this header.
+// ----------------------------------
+
+type EnvironmentAsValue map[string]*valueP
+type ExpressionAsValue any // TODO
+type StatementAsValue any // TODO
+
+// ----------------------------------
+// # Value definition
+// ----------------------------------
+
 // Value in the semantics is, as of writing, defined as
 // V = Loc ∪ Object ∪ Int ∪ Float ∪ String ∪ List ∪ Function ∪ Boolean
 
@@ -20,10 +36,18 @@ type valueP interface {
 }
 
 //--------
+// Boolean
+//--------
+type booleanP struct {
+	v bool
+}
+func (l booleanP) value() {}
+
+//--------
 // Object
 //--------
 type objectP struct {
-	v *[]map[string]*valueP
+	v *[]map[string]*valueP // Both pointers here shouldn't be nil
 }
 func (l objectP) value() {}
 
@@ -55,22 +79,24 @@ func (l stringP) value() {}
 // List
 //--------
 type listP struct {
-	v *[]*valueP
+	v *[]*valueP // Both pointers here shouldn't be nil
 }
 func (l listP) value() {}
 
 //--------
 // Function
 //--------
-type functionP struct {
-	// TODO
+type functionPrimitiveP struct {
+	f func([]valueP) *valueP // Possibly nil pointer, incase there's no returned value
+	positionalArguments []string
+	optionalArguments map[string]ExpressionAsValue
 }
-func (l functionP) value() {}
+func (l functionPrimitiveP) value() {}
 
-//--------
-// Boolean
-//--------
-type booleanP struct {
-	v bool
+type functionUserP struct {
+	environment EnvironmentAsValue
+	positionalArguments []string
+	optionalArguments map[string]ExpressionAsValue
+	body StatementAsValue
 }
-func (l booleanP) value() {}
+func (l functionUserP) value() {}
