@@ -8,9 +8,9 @@ package main
 // to the types under this header.
 // ----------------------------------
 
-type EnvironmentAsValue map[string]*PawnValue
-type ExpressionAsValue any // TODO
-type StatementAsValue any // TODO
+type PawnEnvironmentAsValue map[string]*PawnValue
+type PawnExpressionAsValue any // TODO
+type PawnStatementAsValue any // TODO
 
 // ----------------------------------
 // # Value definition
@@ -89,14 +89,14 @@ func (l PawnList) value() {}
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
 	positionalArguments []string
-	optionalArguments map[string]ExpressionAsValue // This map shouldn't be nil
+	optionalArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
 }
 func (l PawnFunctionPrimitive) value() {}
 
 type PawnFunctionUser struct {
-	environment EnvironmentAsValue
+	environment PawnEnvironmentAsValue
 	positionalArguments []string
-	optionalArguments map[string]ExpressionAsValue // This map shouldn't be nil
-	body StatementAsValue
+	optionalArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
+	body PawnStatementAsValue
 }
 func (l PawnFunctionUser) value() {}
