@@ -47,7 +47,7 @@ func (l booleanP) value() {}
 // Object
 //--------
 type objectP struct {
-	v *[]map[string]*valueP // Both pointers here shouldn't be nil
+	v map[string]*valueP // The map and pointer here shouldn't be nil
 }
 func (l objectP) value() {}
 
@@ -89,14 +89,14 @@ func (l listP) value() {}
 type functionPrimitiveP struct {
 	f func([]valueP) *valueP // Possibly nil pointer, incase there's no returned value
 	positionalArguments []string
-	optionalArguments map[string]ExpressionAsValue
+	optionalArguments map[string]ExpressionAsValue // This map shouldn't be nil
 }
 func (l functionPrimitiveP) value() {}
 
 type functionUserP struct {
 	environment EnvironmentAsValue
 	positionalArguments []string
-	optionalArguments map[string]ExpressionAsValue
+	optionalArguments map[string]ExpressionAsValue // This map shouldn't be nil
 	body StatementAsValue
 }
 func (l functionUserP) value() {}
