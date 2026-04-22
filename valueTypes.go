@@ -8,7 +8,7 @@ package main
 // to the types under this header.
 // ----------------------------------
 
-type PawnEnvironmentAsValue map[string]*PawnValue
+type PawnEnvironmentAsValue map[string]*PawnValue // The map and pointer shouldn't be nil
 type PawnExpressionAsValue any // TODO
 type PawnStatementAsValue any // TODO
 
@@ -47,7 +47,7 @@ func (l PawnBoolean) value() {}
 // Object
 //--------
 type PawnObject struct {
-	v map[string]*PawnValue // The map and pointer here shouldn't be nil
+	v map[string]*PawnValue // The map and pointer shouldn't be nil
 }
 func (l PawnObject) value() {}
 
