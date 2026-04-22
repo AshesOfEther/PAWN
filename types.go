@@ -8,7 +8,7 @@ package main
 // to the types under this header.
 // ----------------------------------
 
-type EnvironmentAsValue map[string]*valueP
+type EnvironmentAsValue map[string]*PawnValue
 type ExpressionAsValue any // TODO
 type StatementAsValue any // TODO
 
