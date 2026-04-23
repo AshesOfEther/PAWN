@@ -81,6 +81,7 @@ const (
 	Multiply
 	Divide
 	Modulo
+	Power
 	And
 	Or
 )
