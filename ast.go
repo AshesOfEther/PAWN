@@ -54,7 +54,9 @@ type ExpressionStatement struct {
 	expression Expression
 }
 
-type Expression struct {}
+type Expression struct {
+	AstNode
+}
 
 type BinaryOp struct {
 	Expression
