@@ -10,7 +10,7 @@ type If struct {
 	Statement
 	condition Expression
 	body []Statement
-	else_ Statement
+	else_ []Statement
 }
 
 type While struct {
