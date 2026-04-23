@@ -1,69 +1,74 @@
 package main
 
-type AstNode struct {}
-
-type Statement struct {
-	AstNode
+type Statement interface {
+	statementNode()
 }
 
 type If struct {
-	Statement
 	condition Expression
 	body []Statement
 	else_ []Statement
 }
 
+func (If) statementNode() {}
+
 type While struct {
-	Statement
 	condition Expression
 	body []Statement
 }
 
+func (While) statementNode() {}
+
 type Apply struct {
-	Statement
 	subject Expression
 	body []Statement
 }
 
+func (Apply) statementNode() {}
+
 type FunctionDecl struct {
-	Statement
 	name string
 	positionalArgs []string
 	namedArgs []NamedArg
 }
 
+func (FunctionDecl) statementNode() {}
+
 type NamedArg struct {
-	Statement
 	name string
 	defaultValue Expression
 }
 
 type Return struct {
-	Statement
 	value *Expression
 }
 
+func (Return) statementNode() {}
+
 type Assignment struct {
-	Statement
 	destination Member
 	value Expression
 }
 
+func (Assignment) statementNode() {}
+
 type ExpressionStatement struct {
-	Statement
 	expression Expression
 }
 
-type Expression struct {
-	AstNode
+func (ExpressionStatement) statementNode() {}
+
+type Expression interface {
+	expressionNode()
 }
 
 type BinaryOp struct {
-	Expression
 	left Expression
 	right Expression
 	operator Operator
 }
+
+func (BinaryOp) expressionNode() {}
 
 type Operator int
 
@@ -87,19 +92,21 @@ const (
 )
 
 type FunctionCall struct {
-	Expression
 	function Expression
 	positionalArgs []Expression
 	namedArgs []NamedArg
 	body []Statement
 }
 
+func (FunctionCall) expressionNode() {}
+
 type List struct {
 	elements []Expression
 }
 
+func (List) expressionNode() {}
+
 type Literal[T any] struct {
-	Expression
 	Value T
 }
 
@@ -108,26 +115,37 @@ type IntLiteral Literal[int64]
 type BooleanLiteral Literal[bool]
 type StringLiteral Literal[string]
 
+func (FloatLiteral) expressionNode() {}
+func (IntLiteral) expressionNode() {}
+func (BooleanLiteral) expressionNode() {}
+func (StringLiteral) expressionNode() {}
+
 type MemberExpression struct {
-	Expression
 	member Member
 }
 
-type Member struct {}
+func (MemberExpression) expressionNode() {}
+
+type Member interface {
+	memberNode()
+}
 
 type Name struct {
-	Member
 	name string
 }
 
+func (Name) memberNode() {}
+
 type Property struct {
-	Member
 	object Expression
 	property string
 }
 
+func (Property) memberNode() {}
+
 type Index struct {
-	Member
 	list Expression
 	index []Expression
 }
+
+func (Index) memberNode() {}
