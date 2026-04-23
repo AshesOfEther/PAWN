@@ -126,5 +126,5 @@ type Property struct {
 type Index struct {
 	Member
 	list Expression
-	index Expression
+	index []Expression
 }
