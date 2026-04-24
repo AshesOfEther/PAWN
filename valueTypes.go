@@ -9,6 +9,10 @@ package main
 // ----------------------------------
 
 type PawnEnvironmentAsValue map[string]*PawnValue // The map and pointer shouldn't be nil
+type PawnStackAsValue struct {
+	env PawnEnvironmentAsValue
+	next *PawnStackAsValue
+}
 type PawnExpressionAsValue any // TODO
 type PawnStatementAsValue any // TODO
 
@@ -94,7 +98,7 @@ type PawnFunctionPrimitive struct {
 func (l PawnFunctionPrimitive) value() {}
 
 type PawnFunctionUser struct {
-	environment PawnEnvironmentAsValue
+	environmentStack PawnStackAsValue
 	positionalArguments []string
 	namedArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
 	body PawnStatementAsValue
