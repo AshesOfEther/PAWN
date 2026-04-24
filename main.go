@@ -12,7 +12,10 @@ import (
 func main() {
 	filePath := os.Args[1]
 
-	input, _ := antlr.NewFileStream(filePath)
+	input, err := antlr.NewFileStream(filePath)
+	if err != nil {
+		panic("Failed reading file")
+	}
 	lexer := parsing.NewBoardGameLangLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 	parser := parsing.NewBoardGameLangParser(stream)
