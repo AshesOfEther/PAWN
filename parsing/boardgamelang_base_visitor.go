@@ -47,15 +47,27 @@ func (v *BaseBoardGameLangVisitor) VisitPower(ctx *PowerContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseBoardGameLangVisitor) VisitMember(ctx *MemberContext) interface{} {
+func (v *BaseBoardGameLangVisitor) VisitProperty(ctx *PropertyContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseBoardGameLangVisitor) VisitLiteral(ctx *LiteralContext) interface{} {
+func (v *BaseBoardGameLangVisitor) VisitName(ctx *NameContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BaseBoardGameLangVisitor) VisitList(ctx *ListContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseBoardGameLangVisitor) VisitBool(ctx *BoolContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseBoardGameLangVisitor) VisitNumber(ctx *NumberContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseBoardGameLangVisitor) VisitString(ctx *StringContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -79,10 +91,6 @@ func (v *BaseBoardGameLangVisitor) VisitStatementList(ctx *StatementListContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseBoardGameLangVisitor) VisitStatement(ctx *StatementContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseBoardGameLangVisitor) VisitApply(ctx *ApplyContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -99,6 +107,18 @@ func (v *BaseBoardGameLangVisitor) VisitFunctionDecl(ctx *FunctionDeclContext) i
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseBoardGameLangVisitor) VisitReturn(ctx *ReturnContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseBoardGameLangVisitor) VisitExpressionStatement(ctx *ExpressionStatementContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseBoardGameLangVisitor) VisitAssignment(ctx *AssignmentContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseBoardGameLangVisitor) VisitFunctionDeclArgs(ctx *FunctionDeclArgsContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -112,13 +132,5 @@ func (v *BaseBoardGameLangVisitor) VisitNamedArgsDeclList(ctx *NamedArgsDeclList
 }
 
 func (v *BaseBoardGameLangVisitor) VisitNamedArgDecl(ctx *NamedArgDeclContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseBoardGameLangVisitor) VisitReturn(ctx *ReturnContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseBoardGameLangVisitor) VisitAssignment(ctx *AssignmentContext) interface{} {
 	return v.VisitChildren(ctx)
 }

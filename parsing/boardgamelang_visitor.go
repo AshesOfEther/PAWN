@@ -37,14 +37,23 @@ type BoardGameLangVisitor interface {
 	// Visit a parse tree produced by BoardGameLangParser#Power.
 	VisitPower(ctx *PowerContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#member.
-	VisitMember(ctx *MemberContext) interface{}
+	// Visit a parse tree produced by BoardGameLangParser#Property.
+	VisitProperty(ctx *PropertyContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#literal.
-	VisitLiteral(ctx *LiteralContext) interface{}
+	// Visit a parse tree produced by BoardGameLangParser#Name.
+	VisitName(ctx *NameContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#list.
+	// Visit a parse tree produced by BoardGameLangParser#List.
 	VisitList(ctx *ListContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#Bool.
+	VisitBool(ctx *BoolContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#Number.
+	VisitNumber(ctx *NumberContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#String.
+	VisitString(ctx *StringContext) interface{}
 
 	// Visit a parse tree produced by BoardGameLangParser#argList.
 	VisitArgList(ctx *ArgListContext) interface{}
@@ -61,20 +70,26 @@ type BoardGameLangVisitor interface {
 	// Visit a parse tree produced by BoardGameLangParser#statementList.
 	VisitStatementList(ctx *StatementListContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#statement.
-	VisitStatement(ctx *StatementContext) interface{}
-
-	// Visit a parse tree produced by BoardGameLangParser#apply.
+	// Visit a parse tree produced by BoardGameLangParser#Apply.
 	VisitApply(ctx *ApplyContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#while.
+	// Visit a parse tree produced by BoardGameLangParser#While.
 	VisitWhile(ctx *WhileContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#if.
+	// Visit a parse tree produced by BoardGameLangParser#If.
 	VisitIf(ctx *IfContext) interface{}
 
-	// Visit a parse tree produced by BoardGameLangParser#functionDecl.
+	// Visit a parse tree produced by BoardGameLangParser#FunctionDecl.
 	VisitFunctionDecl(ctx *FunctionDeclContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#Return.
+	VisitReturn(ctx *ReturnContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#ExpressionStatement.
+	VisitExpressionStatement(ctx *ExpressionStatementContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#Assignment.
+	VisitAssignment(ctx *AssignmentContext) interface{}
 
 	// Visit a parse tree produced by BoardGameLangParser#functionDeclArgs.
 	VisitFunctionDeclArgs(ctx *FunctionDeclArgsContext) interface{}
@@ -87,10 +102,4 @@ type BoardGameLangVisitor interface {
 
 	// Visit a parse tree produced by BoardGameLangParser#namedArgDecl.
 	VisitNamedArgDecl(ctx *NamedArgDeclContext) interface{}
-
-	// Visit a parse tree produced by BoardGameLangParser#return.
-	VisitReturn(ctx *ReturnContext) interface{}
-
-	// Visit a parse tree produced by BoardGameLangParser#assignment.
-	VisitAssignment(ctx *AssignmentContext) interface{}
 }
