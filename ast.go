@@ -5,9 +5,14 @@ type Statement interface {
 }
 
 type If struct {
-	condition Expression
-	body []Statement
+	first IfSingle
+	rest []IfSingle
 	else_ []Statement
+}
+
+type IfSingle struct {
+	condition Expression
+	body []Statement 
 }
 
 func (If) statementNode() {}
