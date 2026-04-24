@@ -80,23 +80,41 @@ func (s *BaseBoardGameLangListener) EnterPower(ctx *PowerContext) {}
 // ExitPower is called when production Power is exited.
 func (s *BaseBoardGameLangListener) ExitPower(ctx *PowerContext) {}
 
-// EnterMember is called when production member is entered.
-func (s *BaseBoardGameLangListener) EnterMember(ctx *MemberContext) {}
+// EnterProperty is called when production Property is entered.
+func (s *BaseBoardGameLangListener) EnterProperty(ctx *PropertyContext) {}
 
-// ExitMember is called when production member is exited.
-func (s *BaseBoardGameLangListener) ExitMember(ctx *MemberContext) {}
+// ExitProperty is called when production Property is exited.
+func (s *BaseBoardGameLangListener) ExitProperty(ctx *PropertyContext) {}
 
-// EnterLiteral is called when production literal is entered.
-func (s *BaseBoardGameLangListener) EnterLiteral(ctx *LiteralContext) {}
+// EnterName is called when production Name is entered.
+func (s *BaseBoardGameLangListener) EnterName(ctx *NameContext) {}
 
-// ExitLiteral is called when production literal is exited.
-func (s *BaseBoardGameLangListener) ExitLiteral(ctx *LiteralContext) {}
+// ExitName is called when production Name is exited.
+func (s *BaseBoardGameLangListener) ExitName(ctx *NameContext) {}
 
-// EnterList is called when production list is entered.
+// EnterList is called when production List is entered.
 func (s *BaseBoardGameLangListener) EnterList(ctx *ListContext) {}
 
-// ExitList is called when production list is exited.
+// ExitList is called when production List is exited.
 func (s *BaseBoardGameLangListener) ExitList(ctx *ListContext) {}
+
+// EnterBool is called when production Bool is entered.
+func (s *BaseBoardGameLangListener) EnterBool(ctx *BoolContext) {}
+
+// ExitBool is called when production Bool is exited.
+func (s *BaseBoardGameLangListener) ExitBool(ctx *BoolContext) {}
+
+// EnterNumber is called when production Number is entered.
+func (s *BaseBoardGameLangListener) EnterNumber(ctx *NumberContext) {}
+
+// ExitNumber is called when production Number is exited.
+func (s *BaseBoardGameLangListener) ExitNumber(ctx *NumberContext) {}
+
+// EnterString is called when production String is entered.
+func (s *BaseBoardGameLangListener) EnterString(ctx *StringContext) {}
+
+// ExitString is called when production String is exited.
+func (s *BaseBoardGameLangListener) ExitString(ctx *StringContext) {}
 
 // EnterArgList is called when production argList is entered.
 func (s *BaseBoardGameLangListener) EnterArgList(ctx *ArgListContext) {}
@@ -128,35 +146,47 @@ func (s *BaseBoardGameLangListener) EnterStatementList(ctx *StatementListContext
 // ExitStatementList is called when production statementList is exited.
 func (s *BaseBoardGameLangListener) ExitStatementList(ctx *StatementListContext) {}
 
-// EnterStatement is called when production statement is entered.
-func (s *BaseBoardGameLangListener) EnterStatement(ctx *StatementContext) {}
-
-// ExitStatement is called when production statement is exited.
-func (s *BaseBoardGameLangListener) ExitStatement(ctx *StatementContext) {}
-
-// EnterApply is called when production apply is entered.
+// EnterApply is called when production Apply is entered.
 func (s *BaseBoardGameLangListener) EnterApply(ctx *ApplyContext) {}
 
-// ExitApply is called when production apply is exited.
+// ExitApply is called when production Apply is exited.
 func (s *BaseBoardGameLangListener) ExitApply(ctx *ApplyContext) {}
 
-// EnterWhile is called when production while is entered.
+// EnterWhile is called when production While is entered.
 func (s *BaseBoardGameLangListener) EnterWhile(ctx *WhileContext) {}
 
-// ExitWhile is called when production while is exited.
+// ExitWhile is called when production While is exited.
 func (s *BaseBoardGameLangListener) ExitWhile(ctx *WhileContext) {}
 
-// EnterIf is called when production if is entered.
+// EnterIf is called when production If is entered.
 func (s *BaseBoardGameLangListener) EnterIf(ctx *IfContext) {}
 
-// ExitIf is called when production if is exited.
+// ExitIf is called when production If is exited.
 func (s *BaseBoardGameLangListener) ExitIf(ctx *IfContext) {}
 
-// EnterFunctionDecl is called when production functionDecl is entered.
+// EnterFunctionDecl is called when production FunctionDecl is entered.
 func (s *BaseBoardGameLangListener) EnterFunctionDecl(ctx *FunctionDeclContext) {}
 
-// ExitFunctionDecl is called when production functionDecl is exited.
+// ExitFunctionDecl is called when production FunctionDecl is exited.
 func (s *BaseBoardGameLangListener) ExitFunctionDecl(ctx *FunctionDeclContext) {}
+
+// EnterReturn is called when production Return is entered.
+func (s *BaseBoardGameLangListener) EnterReturn(ctx *ReturnContext) {}
+
+// ExitReturn is called when production Return is exited.
+func (s *BaseBoardGameLangListener) ExitReturn(ctx *ReturnContext) {}
+
+// EnterExpressionStatement is called when production ExpressionStatement is entered.
+func (s *BaseBoardGameLangListener) EnterExpressionStatement(ctx *ExpressionStatementContext) {}
+
+// ExitExpressionStatement is called when production ExpressionStatement is exited.
+func (s *BaseBoardGameLangListener) ExitExpressionStatement(ctx *ExpressionStatementContext) {}
+
+// EnterAssignment is called when production Assignment is entered.
+func (s *BaseBoardGameLangListener) EnterAssignment(ctx *AssignmentContext) {}
+
+// ExitAssignment is called when production Assignment is exited.
+func (s *BaseBoardGameLangListener) ExitAssignment(ctx *AssignmentContext) {}
 
 // EnterFunctionDeclArgs is called when production functionDeclArgs is entered.
 func (s *BaseBoardGameLangListener) EnterFunctionDeclArgs(ctx *FunctionDeclArgsContext) {}
@@ -181,15 +211,3 @@ func (s *BaseBoardGameLangListener) EnterNamedArgDecl(ctx *NamedArgDeclContext) 
 
 // ExitNamedArgDecl is called when production namedArgDecl is exited.
 func (s *BaseBoardGameLangListener) ExitNamedArgDecl(ctx *NamedArgDeclContext) {}
-
-// EnterReturn is called when production return is entered.
-func (s *BaseBoardGameLangListener) EnterReturn(ctx *ReturnContext) {}
-
-// ExitReturn is called when production return is exited.
-func (s *BaseBoardGameLangListener) ExitReturn(ctx *ReturnContext) {}
-
-// EnterAssignment is called when production assignment is entered.
-func (s *BaseBoardGameLangListener) EnterAssignment(ctx *AssignmentContext) {}
-
-// ExitAssignment is called when production assignment is exited.
-func (s *BaseBoardGameLangListener) ExitAssignment(ctx *AssignmentContext) {}

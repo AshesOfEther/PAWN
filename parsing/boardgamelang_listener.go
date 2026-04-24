@@ -37,14 +37,23 @@ type BoardGameLangListener interface {
 	// EnterPower is called when entering the Power production.
 	EnterPower(c *PowerContext)
 
-	// EnterMember is called when entering the member production.
-	EnterMember(c *MemberContext)
+	// EnterProperty is called when entering the Property production.
+	EnterProperty(c *PropertyContext)
 
-	// EnterLiteral is called when entering the literal production.
-	EnterLiteral(c *LiteralContext)
+	// EnterName is called when entering the Name production.
+	EnterName(c *NameContext)
 
-	// EnterList is called when entering the list production.
+	// EnterList is called when entering the List production.
 	EnterList(c *ListContext)
+
+	// EnterBool is called when entering the Bool production.
+	EnterBool(c *BoolContext)
+
+	// EnterNumber is called when entering the Number production.
+	EnterNumber(c *NumberContext)
+
+	// EnterString is called when entering the String production.
+	EnterString(c *StringContext)
 
 	// EnterArgList is called when entering the argList production.
 	EnterArgList(c *ArgListContext)
@@ -61,20 +70,26 @@ type BoardGameLangListener interface {
 	// EnterStatementList is called when entering the statementList production.
 	EnterStatementList(c *StatementListContext)
 
-	// EnterStatement is called when entering the statement production.
-	EnterStatement(c *StatementContext)
-
-	// EnterApply is called when entering the apply production.
+	// EnterApply is called when entering the Apply production.
 	EnterApply(c *ApplyContext)
 
-	// EnterWhile is called when entering the while production.
+	// EnterWhile is called when entering the While production.
 	EnterWhile(c *WhileContext)
 
-	// EnterIf is called when entering the if production.
+	// EnterIf is called when entering the If production.
 	EnterIf(c *IfContext)
 
-	// EnterFunctionDecl is called when entering the functionDecl production.
+	// EnterFunctionDecl is called when entering the FunctionDecl production.
 	EnterFunctionDecl(c *FunctionDeclContext)
+
+	// EnterReturn is called when entering the Return production.
+	EnterReturn(c *ReturnContext)
+
+	// EnterExpressionStatement is called when entering the ExpressionStatement production.
+	EnterExpressionStatement(c *ExpressionStatementContext)
+
+	// EnterAssignment is called when entering the Assignment production.
+	EnterAssignment(c *AssignmentContext)
 
 	// EnterFunctionDeclArgs is called when entering the functionDeclArgs production.
 	EnterFunctionDeclArgs(c *FunctionDeclArgsContext)
@@ -87,12 +102,6 @@ type BoardGameLangListener interface {
 
 	// EnterNamedArgDecl is called when entering the namedArgDecl production.
 	EnterNamedArgDecl(c *NamedArgDeclContext)
-
-	// EnterReturn is called when entering the return production.
-	EnterReturn(c *ReturnContext)
-
-	// EnterAssignment is called when entering the assignment production.
-	EnterAssignment(c *AssignmentContext)
 
 	// ExitCall is called when exiting the Call production.
 	ExitCall(c *CallContext)
@@ -124,14 +133,23 @@ type BoardGameLangListener interface {
 	// ExitPower is called when exiting the Power production.
 	ExitPower(c *PowerContext)
 
-	// ExitMember is called when exiting the member production.
-	ExitMember(c *MemberContext)
+	// ExitProperty is called when exiting the Property production.
+	ExitProperty(c *PropertyContext)
 
-	// ExitLiteral is called when exiting the literal production.
-	ExitLiteral(c *LiteralContext)
+	// ExitName is called when exiting the Name production.
+	ExitName(c *NameContext)
 
-	// ExitList is called when exiting the list production.
+	// ExitList is called when exiting the List production.
 	ExitList(c *ListContext)
+
+	// ExitBool is called when exiting the Bool production.
+	ExitBool(c *BoolContext)
+
+	// ExitNumber is called when exiting the Number production.
+	ExitNumber(c *NumberContext)
+
+	// ExitString is called when exiting the String production.
+	ExitString(c *StringContext)
 
 	// ExitArgList is called when exiting the argList production.
 	ExitArgList(c *ArgListContext)
@@ -148,20 +166,26 @@ type BoardGameLangListener interface {
 	// ExitStatementList is called when exiting the statementList production.
 	ExitStatementList(c *StatementListContext)
 
-	// ExitStatement is called when exiting the statement production.
-	ExitStatement(c *StatementContext)
-
-	// ExitApply is called when exiting the apply production.
+	// ExitApply is called when exiting the Apply production.
 	ExitApply(c *ApplyContext)
 
-	// ExitWhile is called when exiting the while production.
+	// ExitWhile is called when exiting the While production.
 	ExitWhile(c *WhileContext)
 
-	// ExitIf is called when exiting the if production.
+	// ExitIf is called when exiting the If production.
 	ExitIf(c *IfContext)
 
-	// ExitFunctionDecl is called when exiting the functionDecl production.
+	// ExitFunctionDecl is called when exiting the FunctionDecl production.
 	ExitFunctionDecl(c *FunctionDeclContext)
+
+	// ExitReturn is called when exiting the Return production.
+	ExitReturn(c *ReturnContext)
+
+	// ExitExpressionStatement is called when exiting the ExpressionStatement production.
+	ExitExpressionStatement(c *ExpressionStatementContext)
+
+	// ExitAssignment is called when exiting the Assignment production.
+	ExitAssignment(c *AssignmentContext)
 
 	// ExitFunctionDeclArgs is called when exiting the functionDeclArgs production.
 	ExitFunctionDeclArgs(c *FunctionDeclArgsContext)
@@ -174,10 +198,4 @@ type BoardGameLangListener interface {
 
 	// ExitNamedArgDecl is called when exiting the namedArgDecl production.
 	ExitNamedArgDecl(c *NamedArgDeclContext)
-
-	// ExitReturn is called when exiting the return production.
-	ExitReturn(c *ReturnContext)
-
-	// ExitAssignment is called when exiting the assignment production.
-	ExitAssignment(c *AssignmentContext)
 }

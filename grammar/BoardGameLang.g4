@@ -15,19 +15,15 @@ expression
     ;
 
 member
-    : member '.' NAME
-    | NAME
+    : member '.' NAME    # Property
+    | NAME               # Name
     ;
 
 literal
-    : list
-    | BOOL
-    | NUMBER
-    | STRING
-    ;
-
-list
-    : '[' (expression (',' expression)* ','?)? ']'
+    : '[' (expression (',' expression)* ','?)? ']'    # List
+    | BOOL                                            # Bool
+    | NUMBER                                          # Number
+    | STRING                                          # String
     ;
 
 argList
@@ -54,31 +50,15 @@ statementList
     ;
 
 statement
-    : apply
-    | while
-    | if
-    | functionDecl
-    | return ';'
-    | expression ';'
-    | assignment ';'
-    ;
-
-apply
-    : 'apply' expression '{' statementList '}'
-    ;
-
-while
-    : 'while' expression '{' statementList '}'
-    ;
-
-if
-    : 'if' expression '{' statementList '}'
+    : 'apply' expression '{' statementList '}'            # Apply
+    | 'while' expression '{' statementList '}'            # While
+    | 'if' expression '{' statementList '}'
         ('else' 'if' expression '{' statementList '}' )*
-        ('else' '{' statementList '}')?
-    ;
-
-functionDecl
-    : 'fn' NAME functionDeclArgs '{' statementList '}'
+        ('else' '{' statementList '}')?                   # If
+    | 'fn' NAME functionDeclArgs '{' statementList '}'    # FunctionDecl
+    | 'return' expression                                 # Return
+    | expression ';'                                      # ExpressionStatement
+    | NAME '=' expression                                 # Assignment
     ;
 
 functionDeclArgs
@@ -98,15 +78,6 @@ namedArgsDeclList
 namedArgDecl
     : NAME '=' expression
     ;
-
-return
-    : 'return' expression
-    ;
-
-assignment
-    : NAME '=' expression
-    ;
-
 
 // Lexer rules
 LINE_COMMENT : '#' .*? '\r'? '\n' -> skip;
