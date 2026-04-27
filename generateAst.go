@@ -256,6 +256,7 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 			ctx.NAME().GetText(),
 			positionalArgs,
 			namedArgs,
+			generateStatements(ctx.StatementList().AllStatement()),
 		}
 
 	case *parsing.ReturnContext:

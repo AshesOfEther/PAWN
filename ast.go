@@ -35,6 +35,7 @@ type FunctionDecl struct {
 	name string
 	positionalArgs []string
 	namedArgs []NamedArg
+	body []Statement
 }
 
 func (FunctionDecl) statementNode() {}
