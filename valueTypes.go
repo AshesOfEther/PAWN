@@ -1,17 +1,9 @@
 package main
 
-// ----------------------------------
-// # Syntax representations for values
-//
-// The abstract syntax tree could choose to represent expressions and statements
-// in a way that's very unoptimal to use as values directly. Instead, these could be converted
-// to the types under this header.
-// ----------------------------------
-
-type PawnEnvironmentAsValue map[string]*PawnValue // The map and pointer shouldn't be nil
-type PawnStackAsValue struct {
-	env PawnEnvironmentAsValue
-	next *PawnStackAsValue
+// The environment is used by functions to read variables that were in their scope when they're called.
+type Environment struct {
+  variables map[string]*PawnValue // The map and pointer shouldn't be nil
+  parent *Environment
 }
 
 // ----------------------------------
@@ -61,12 +53,13 @@ func (l PawnList) value() {}
 //--------
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
+	positionalArgCount uint
 	namedArguments map[string]Expression // This map shouldn't be nil
 }
 func (l PawnFunctionPrimitive) value() {}
 
 type PawnFunctionUser struct {
-	environmentStack PawnStackAsValue
+	environment Environment
 	positionalArguments []string
 	namedArguments map[string]Expression // This map shouldn't be nil
 	body Statement
