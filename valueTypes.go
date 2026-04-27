@@ -13,8 +13,6 @@ type PawnStackAsValue struct {
 	env PawnEnvironmentAsValue
 	next *PawnStackAsValue
 }
-type PawnExpressionAsValue any // TODO
-type PawnStatementAsValue any // TODO
 
 // ----------------------------------
 // # Value definition
@@ -63,14 +61,14 @@ func (l PawnList) value() {}
 //--------
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
-	namedArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
+	namedArguments map[string]Expression // This map shouldn't be nil
 }
 func (l PawnFunctionPrimitive) value() {}
 
 type PawnFunctionUser struct {
 	environmentStack PawnStackAsValue
 	positionalArguments []string
-	namedArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
-	body PawnStatementAsValue
+	namedArguments map[string]Expression // This map shouldn't be nil
+	body Statement
 }
 func (l PawnFunctionUser) value() {}
