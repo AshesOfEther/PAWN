@@ -17,17 +17,19 @@ func generateExpression(ctx parsing.IExpressionContext) Expression {
 	case *parsing.CallContext:
 		argList := ctx.ArgList()
 
-		var positionalArguments []Expression = nil
+		var positionalArguments []Expression
 		if argList.ExpressionList() != nil {
 			expressions := argList.ExpressionList().AllExpression()
 			positionalArguments = make([]Expression, len(expressions))
 			for i, expression := range expressions {
 				positionalArguments[i] = generateExpression(expression)
 			}
+		} else {
+			positionalArguments = make([]Expression, 0)
 		}
 
 		originalNamedArgs := argList.NamedArgs().AllNamedArg()
-		var namedArguments []NamedArg = nil
+		var namedArguments []NamedArg
 		if argList.NamedArgs() != nil {
 			namedArguments = make([]NamedArg, len(originalNamedArgs))
 			for i, namedArg := range originalNamedArgs {
@@ -36,11 +38,15 @@ func generateExpression(ctx parsing.IExpressionContext) Expression {
 					generateExpression(namedArg.Expression()),
 				}
 			}
+		} else {
+			namedArguments = make([]NamedArg, 0)
 		}
 
-		var body []Statement = nil
+		var body []Statement
 		if ctx.StatementList() != nil {
 			body = generateStatements(ctx.StatementList().AllStatement())
+		} else {
+			body = make([]Statement, 0)
 		}
 
 		return FunctionCall{
@@ -215,9 +221,11 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 			}
 		}
 
-		var else_ []Statement = nil
+		var else_ []Statement
 		if len(bodies) > len(conditions) {
 			else_ = generateStatements(bodies[len(bodies)-1].AllStatement())
+		} else {
+			else_ = make([]Statement, 0)
 		}
 
 		return If{
@@ -250,6 +258,8 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 					generateExpression(declaration.Expression()),
 				}
 			}
+		} else {
+			namedArgs = make([]NamedArg, 0)
 		}
 
 		return FunctionDecl{
