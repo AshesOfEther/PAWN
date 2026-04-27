@@ -39,52 +39,23 @@ type PawnValue interface {
 	value()
 }
 
-//--------
-// Boolean
-//--------
-type PawnBoolean struct {
-	v bool
+// Used to define Bool, Int, Float, String, List, and Object.
+type BasicValue[T any] struct {
+	v T
 }
+
+type PawnBoolean BasicValue[bool]
+type PawnObject BasicValue[map[string]*PawnValue] // The map and pointer shouldn't be nil
+type PawnInt BasicValue[int64]
+type PawnFloat BasicValue[float64]
+type PawnString BasicValue[string]
+type PawnList BasicValue[*[]*PawnValue] // Both pointers here shouldn't be nil
+
 func (l PawnBoolean) value() {}
-
-//--------
-// Object
-//--------
-type PawnObject struct {
-	v map[string]*PawnValue // The map and pointer shouldn't be nil
-}
 func (l PawnObject) value() {}
-
-//--------
-// Int
-//--------
-type PawnInt struct {
-	v int64
-}
 func (l PawnInt) value() {}
-
-//--------
-// Float
-//--------
-type PawnFloat struct {
-	v float64
-}
 func (l PawnFloat) value() {}
-
-//--------
-// String
-//--------
-type PawnString struct {
-	v string
-}
 func (l PawnString) value() {}
-
-//--------
-// List
-//--------
-type PawnList struct {
-	v *[]*PawnValue // Both pointers here shouldn't be nil
-}
 func (l PawnList) value() {}
 
 //--------
@@ -92,7 +63,6 @@ func (l PawnList) value() {}
 //--------
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
-	positionalArguments []string
 	namedArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
 }
 func (l PawnFunctionPrimitive) value() {}
