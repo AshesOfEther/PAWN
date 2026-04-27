@@ -5,12 +5,12 @@ type Statement interface {
 }
 
 type If struct {
-	first IfSingle
-	rest []IfSingle
+	first IfClause
+	rest []IfClause
 	else_ []Statement
 }
 
-type IfSingle struct {
+type IfClause struct {
 	condition Expression
 	body []Statement 
 }

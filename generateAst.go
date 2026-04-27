@@ -202,14 +202,14 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 		conditions := ctx.AllExpression()
 		bodies := ctx.AllStatementList()
 
-		first := IfSingle{
+		first := IfClause{
 			generateExpression(conditions[0]),
 			generateStatements(bodies[0].AllStatement()),
 		}
 
-		rest := make([]IfSingle, len(conditions)-1)
+		rest := make([]IfClause, len(conditions)-1)
 		for i, condition := range conditions[1:] {
-			rest[i] = IfSingle{
+			rest[i] = IfClause{
 				generateExpression(condition),
 				generateStatements(bodies[i+1].AllStatement()),
 			}
