@@ -18,5 +18,5 @@ func main() {
 	parser := parsing.NewBoardGameLangParser(stream)
 	tree := parser.StatementList()
 
-	fmt.Println(tree)
+	fmt.Printf("%#v\n", generateStatements(tree.AllStatement()))
 }
