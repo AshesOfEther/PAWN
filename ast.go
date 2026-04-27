@@ -46,7 +46,7 @@ type NamedArg struct {
 }
 
 type Return struct {
-	value *Expression
+	value *Expression // Can be nil
 }
 
 func (Return) statementNode() {}
