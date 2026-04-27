@@ -12,7 +12,7 @@ type If struct {
 
 type IfClause struct {
 	condition Expression
-	body []Statement 
+	body []Statement
 }
 
 func (If) statementNode() {}
