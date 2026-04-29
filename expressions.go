@@ -3,6 +3,8 @@ package main
 import ()
 
 func add(Value1 PawnValue, Value2 PawnValue) PawnValue {
+	var todo PawnString
+
 	switch v1 := Value1.(type) {
 	case PawnInt:
 		switch v2 := Value2.(type) {
@@ -11,7 +13,7 @@ func add(Value1 PawnValue, Value2 PawnValue) PawnValue {
 		case PawnFloat:
 			return PawnFloat{float64(v1.v) + v2.v}
 		default:
-			return
+			return todo
 		}
 
 	case PawnFloat:
@@ -21,9 +23,9 @@ func add(Value1 PawnValue, Value2 PawnValue) PawnValue {
 		case PawnFloat:
 			return PawnFloat{v1.v + v2.v}
 		default:
-			return
+			return todo
 		}
 	default:
-		return
+		return todo
 	}
 }
