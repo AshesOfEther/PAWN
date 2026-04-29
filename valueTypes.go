@@ -1,16 +1,10 @@
 package main
 
-// ----------------------------------
-// # Syntax representations for values
-//
-// The abstract syntax tree could choose to represent expressions and statements
-// in a way that's very unoptimal to use as values directly. Instead, these could be converted
-// to the types under this header.
-// ----------------------------------
-
-type PawnEnvironmentAsValue map[string]*PawnValue // The map and pointer shouldn't be nil
-type PawnExpressionAsValue any // TODO
-type PawnStatementAsValue any // TODO
+// The environment is used by functions to read variables that were in their scope when they're called.
+type Environment struct {
+  variables map[string]*PawnValue // The map and pointer shouldn't be nil
+  parent *Environment
+}
 
 // ----------------------------------
 // # Value definition
@@ -35,52 +29,23 @@ type PawnValue interface {
 	value()
 }
 
-//--------
-// Boolean
-//--------
-type PawnBoolean struct {
-	v bool
+// Used to define Bool, Int, Float, String, List, and Object.
+type BasicValue[T any] struct {
+	v T
 }
+
+type PawnBoolean BasicValue[bool]
+type PawnObject BasicValue[map[string]*PawnValue] // The map and pointer shouldn't be nil
+type PawnInt BasicValue[int64]
+type PawnFloat BasicValue[float64]
+type PawnString BasicValue[string]
+type PawnList BasicValue[*[]*PawnValue] // Both pointers here shouldn't be nil
+
 func (l PawnBoolean) value() {}
-
-//--------
-// Object
-//--------
-type PawnObject struct {
-	v map[string]*PawnValue // The map and pointer shouldn't be nil
-}
 func (l PawnObject) value() {}
-
-//--------
-// Int
-//--------
-type PawnInt struct {
-	v int64
-}
 func (l PawnInt) value() {}
-
-//--------
-// Float
-//--------
-type PawnFloat struct {
-	v float64
-}
 func (l PawnFloat) value() {}
-
-//--------
-// String
-//--------
-type PawnString struct {
-	v string
-}
 func (l PawnString) value() {}
-
-//--------
-// List
-//--------
-type PawnList struct {
-	v *[]*PawnValue // Both pointers here shouldn't be nil
-}
 func (l PawnList) value() {}
 
 //--------
@@ -88,15 +53,15 @@ func (l PawnList) value() {}
 //--------
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
-	positionalArguments []string
-	optionalArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
+	positionalArgCount uint
+	namedArguments map[string]Expression // This map shouldn't be nil
 }
 func (l PawnFunctionPrimitive) value() {}
 
 type PawnFunctionUser struct {
-	environment PawnEnvironmentAsValue
+	environment Environment
 	positionalArguments []string
-	optionalArguments map[string]PawnExpressionAsValue // This map shouldn't be nil
-	body PawnStatementAsValue
+	namedArguments map[string]Expression // This map shouldn't be nil
+	body Statement
 }
 func (l PawnFunctionUser) value() {}
