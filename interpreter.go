@@ -39,7 +39,7 @@ func evaluateExpression(expression Expression, environment Environment) PawnValu
 	}
 }
 
-func evaluateBinaryOp(expression BinaryOp, environment Environment) PawnValue{
+func evaluateBinaryOp(expression BinaryOp, environment Environment) PawnValue {
 	leftValue := evaluateExpression(expression.left, environment)
 	rightValue := evaluateExpression(expression.right, environment)
 	
@@ -97,7 +97,12 @@ func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		)	
 }
 
-func numberOperation(leftValue PawnValue, rightValue PawnValue, intHandler func(a int64, b int64) PawnValue, floatHandler func(a float64, b float64) PawnValue) PawnValue {
+func numberOperation(
+	leftValue PawnValue,
+	rightValue PawnValue,
+	intHandler func(a int64, b int64) PawnValue,
+	floatHandler func(a float64, b float64) PawnValue,
+) PawnValue {
 		switch a := leftValue.(type) {
 			case PawnInt:
 				switch b := rightValue.(type) {
@@ -145,7 +150,7 @@ func evaluateStatement(statement Statement, environment Environment) {
 	}
 }
 
-func evaluateIf(statement If, environment Environment){
+func evaluateIf(statement If, environment Environment) {
 	if evaluateIfClause(statement.first, environment) {
 		return
 	}
@@ -172,7 +177,6 @@ func evaluateIfClause(clause IfClause, environment Environment) bool {
 	} else {
 		panic(typeError("boolean", conditionValue))
 	}
-	
 }
 
 func evaluateStatements(statements []Statement, environment Environment) {
