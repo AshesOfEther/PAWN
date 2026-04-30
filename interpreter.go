@@ -4,7 +4,7 @@ import "fmt"
 
 type Environment struct {
 	variables map[string]PawnValue
-	parent *Environment
+	parent *Environment // Can be nil
 }
 
 func newEnvironment(parent *Environment) Environment {
