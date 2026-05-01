@@ -8,6 +8,7 @@ import (
 	"github.com/antlr4-go/antlr/v4"
 
 	"pawn/ast"
+	"pawn/interpreter"
 	"pawn/parsing"
 )
 
@@ -17,7 +18,7 @@ func main() {
 
 func repl() {
 	reader := bufio.NewReader(os.Stdin)
-	environment := newEnvironment(nil)
+	environment := interpreter.NewEnvironment(nil)
 
 	for true {
 		fmt.Print("> ")
@@ -34,11 +35,11 @@ func repl() {
 	}
 }
 
-func execute(tree []ast.Statement, environment Environment) {
+func execute(tree []ast.Statement, environment interpreter.Environment) {
 	defer func() {
 		if r := recover(); r != nil {
-			if pawnError, ok := r.(PawnError); ok {
-				fmt.Printf("ERROR: %s\n", pawnError.message)
+			if pawnError, ok := r.(interpreter.PawnError); ok {
+				fmt.Printf("ERROR: %s\n", pawnError.Message)
 			} else {
 				panic(r)
 			}
@@ -47,10 +48,10 @@ func execute(tree []ast.Statement, environment Environment) {
 
 	for _, statement := range tree {
 		if expressionStatement, ok := statement.(ast.ExpressionStatement); ok {
-			result := evaluateExpression(expressionStatement.Expression, environment)
+			result := interpreter.EvaluateExpression(expressionStatement.Expression, environment)
 			fmt.Println(result)
 		} else {
-			evaluateStatement(statement, environment)
+			interpreter.EvaluateStatement(statement, environment)
 		}
 	}
 }
