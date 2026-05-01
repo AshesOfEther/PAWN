@@ -1,12 +1,6 @@
-package main
+package interpreter
 
 import "pawn/ast"
-
-// The environment is used by functions to read variables that were in their scope when they're called.
-type Environment struct {
-  variables map[string]*PawnValue // The map and pointer shouldn't be nil
-  parent *Environment
-}
 
 // ----------------------------------
 // # Value definition

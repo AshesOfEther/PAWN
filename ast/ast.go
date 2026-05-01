@@ -5,61 +5,61 @@ type Statement interface {
 }
 
 type If struct {
-	first IfClause
-	rest []IfClause
-	else_ []Statement
+	First IfClause
+	Rest []IfClause
+	Else_ []Statement
 }
 
 type IfClause struct {
-	condition Expression
-	body []Statement
+	Condition Expression
+	Body []Statement
 }
 
 func (If) statementNode() {}
 
 type While struct {
-	condition Expression
-	body []Statement
+	Condition Expression
+	Body []Statement
 }
 
 func (While) statementNode() {}
 
 type Apply struct {
-	subject Expression
-	body []Statement
+	Subject Expression
+	Body []Statement
 }
 
 func (Apply) statementNode() {}
 
 type FunctionDecl struct {
-	name string
-	positionalArgs []string
-	namedArgs []NamedArg
-	body []Statement
+	Name string
+	PositionalArgs []string
+	NamedArgs []NamedArg
+	Body []Statement
 }
 
 func (FunctionDecl) statementNode() {}
 
 type NamedArg struct {
-	name string
-	defaultValue Expression
+	Name string
+	DefaultValue Expression
 }
 
 type Return struct {
-	value *Expression // Can be nil
+	Value *Expression // Can be nil
 }
 
 func (Return) statementNode() {}
 
 type Assignment struct {
-	destination Member
-	value Expression
+	Destination Member
+	Value Expression
 }
 
 func (Assignment) statementNode() {}
 
 type ExpressionStatement struct {
-	expression Expression
+	Expression Expression
 }
 
 func (ExpressionStatement) statementNode() {}
@@ -69,9 +69,9 @@ type Expression interface {
 }
 
 type BinaryOp struct {
-	left Expression
-	right Expression
-	operator Operator
+	Left Expression
+	Right Expression
+	Operator Operator
 }
 
 func (BinaryOp) expressionNode() {}
@@ -98,16 +98,16 @@ const (
 )
 
 type FunctionCall struct {
-	function Expression
-	positionalArgs []Expression
-	namedArgs []NamedArg
-	body []Statement
+	Function Expression
+	PositionalArgs []Expression
+	NamedArgs []NamedArg
+	Body []Statement
 }
 
 func (FunctionCall) expressionNode() {}
 
 type List struct {
-	elements []Expression
+	Elements []Expression
 }
 
 func (List) expressionNode() {}
@@ -127,7 +127,7 @@ func (BooleanLiteral) expressionNode() {}
 func (StringLiteral) expressionNode() {}
 
 type MemberExpression struct {
-	member Member
+	Member Member
 }
 
 func (MemberExpression) expressionNode() {}
@@ -137,21 +137,21 @@ type Member interface {
 }
 
 type Name struct {
-	name string
+	Name string
 }
 
 func (Name) memberNode() {}
 
 type Property struct {
-	object Expression
-	property string
+	Object Expression
+	Property string
 }
 
 func (Property) memberNode() {}
 
 type Index struct {
-	list Expression
-	index []Expression
+	List Expression
+	Index []Expression
 }
 
 func (Index) memberNode() {}
