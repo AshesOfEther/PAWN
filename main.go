@@ -6,6 +6,7 @@ import (
 
 	"github.com/antlr4-go/antlr/v4"
 
+	"pawn/ast"
 	"pawn/parsing"
 )
 
@@ -18,5 +19,5 @@ func main() {
 	parser := parsing.NewBoardGameLangParser(stream)
 	tree := parser.StatementList()
 
-	fmt.Printf("%#v\n", generateStatements(tree.AllStatement()))
+	fmt.Printf("%#v\n", ast.GenerateStatements(tree.AllStatement()))
 }

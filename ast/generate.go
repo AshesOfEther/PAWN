@@ -1,4 +1,4 @@
-package main
+package ast
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ func generateExpression(ctx parsing.IExpressionContext) Expression {
 
 		var body []Statement
 		if ctx.StatementList() != nil {
-			body = generateStatements(ctx.StatementList().AllStatement())
+			body = GenerateStatements(ctx.StatementList().AllStatement())
 		} else {
 			body = make([]Statement, 0)
 		}
@@ -195,13 +195,13 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 	case *parsing.ApplyContext:
 		return Apply{
 			generateExpression(ctx.Expression()),
-			generateStatements(ctx.StatementList().AllStatement()),
+			GenerateStatements(ctx.StatementList().AllStatement()),
 		}
 
 	case *parsing.WhileContext:
 		return While{
 			generateExpression(ctx.Expression()),
-			generateStatements(ctx.StatementList().AllStatement()),
+			GenerateStatements(ctx.StatementList().AllStatement()),
 		}
 
 	case *parsing.IfContext:
@@ -210,20 +210,20 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 
 		first := IfClause{
 			generateExpression(conditions[0]),
-			generateStatements(bodies[0].AllStatement()),
+			GenerateStatements(bodies[0].AllStatement()),
 		}
 
 		rest := make([]IfClause, len(conditions)-1)
 		for i, condition := range conditions[1:] {
 			rest[i] = IfClause{
 				generateExpression(condition),
-				generateStatements(bodies[i+1].AllStatement()),
+				GenerateStatements(bodies[i+1].AllStatement()),
 			}
 		}
 
 		var else_ []Statement
 		if len(bodies) > len(conditions) {
-			else_ = generateStatements(bodies[len(bodies)-1].AllStatement())
+			else_ = GenerateStatements(bodies[len(bodies)-1].AllStatement())
 		} else {
 			else_ = make([]Statement, 0)
 		}
@@ -266,7 +266,7 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 			ctx.NAME().GetText(),
 			positionalArgs,
 			namedArgs,
-			generateStatements(ctx.StatementList().AllStatement()),
+			GenerateStatements(ctx.StatementList().AllStatement()),
 		}
 
 	case *parsing.ReturnContext:
@@ -294,7 +294,7 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 	panic(fmt.Sprintf("[Internal error] Unexpected statement type: %#v", ctx))
 }
 
-func generateStatements(list []parsing.IStatementContext) []Statement {
+func GenerateStatements(list []parsing.IStatementContext) []Statement {
 	result := make([]Statement, len(list))
 	for i, statement := range list {
 		result[i] = generateStatement(statement)

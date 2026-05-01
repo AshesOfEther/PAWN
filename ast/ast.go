@@ -1,4 +1,4 @@
-package main
+package ast
 
 type Statement interface {
 	statementNode()

@@ -1,5 +1,7 @@
 package main
 
+import "pawn/ast"
+
 // The environment is used by functions to read variables that were in their scope when they're called.
 type Environment struct {
   variables map[string]*PawnValue // The map and pointer shouldn't be nil
@@ -54,14 +56,14 @@ func (l PawnList) value() {}
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
 	positionalArgCount uint
-	namedArguments map[string]Expression // This map shouldn't be nil
+	namedArguments map[string]ast.Expression // This map shouldn't be nil
 }
 func (l PawnFunctionPrimitive) value() {}
 
 type PawnFunctionUser struct {
 	environment Environment
 	positionalArguments []string
-	namedArguments map[string]Expression // This map shouldn't be nil
-	body Statement
+	namedArguments map[string]ast.Expression // This map shouldn't be nil
+	body ast.Statement
 }
 func (l PawnFunctionUser) value() {}
