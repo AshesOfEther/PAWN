@@ -3,72 +3,71 @@ package interpreter
 import (
 	"fmt"
 	"math"
-
 	"pawn/ast"
 )
 
 func EvaluateExpression(expression ast.Expression, environment Environment) PawnValue {
 	switch expression := expression.(type) {
-	case ast.BinaryOp:
-		return evaluateBinaryOp(expression, environment)
-	case ast.FunctionCall:
-		panic("TODO")
-	case ast.List:
-		panic("TODO")
-	case ast.FloatLiteral:
-		return PawnFloat{expression.Value}
-	case ast.IntLiteral:
-		return PawnInt{expression.Value}
-	case ast.BooleanLiteral:
-		return PawnBoolean{expression.Value}
-	case ast.StringLiteral:
-		return PawnString{expression.Value}
-	case ast.MemberExpression:
-		panic("TODO")
-	default:
-		panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
+		case ast.BinaryOp:
+			return evaluateBinaryOp(expression, environment)
+		case ast.FunctionCall:
+			panic("TODO")
+		case ast.List:
+			panic("TODO")
+		case ast.FloatLiteral:
+			return PawnFloat{expression.Value}
+		case ast.IntLiteral:
+			return PawnInt{expression.Value}
+		case ast.BooleanLiteral:
+			return PawnBoolean{expression.Value}
+		case ast.StringLiteral:
+			return PawnString{expression.Value}
+		case ast.MemberExpression:
+			panic("TODO")
+		default:
+			panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
 	}
 }
 
 func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValue {
 	leftValue := EvaluateExpression(expression.Left, environment)
 	rightValue := EvaluateExpression(expression.Right, environment)
-
-	switch expression.Operator {
-	case ast.Equal:
-		return evaluateEqual(leftValue, rightValue)
-	case ast.NotEqual:
-		return evaluateNotEqual(leftValue, rightValue)
-	case ast.GreaterThan:
-		return evaluateGreaterThan(leftValue, rightValue)
-	case ast.Add:
-		return add(leftValue, rightValue)
-	case ast.And:
-		panic("TODO")
-	case ast.Divide:
-		return divide(leftValue, rightValue)
-	case ast.GreaterOrEqual:
-		panic("TODO")
-	case ast.LessOrEqual:
-		panic("TODO")
-	case ast.LessThan:
-		panic("TODO")
-	case ast.Modulo:
-		return modulo(leftValue, rightValue)
-	case ast.Multiply:
-		return multiple(leftValue, rightValue)
-	case ast.Or:
-		panic("TODO")
-	case ast.Power:
-		return power(leftValue, rightValue)
-	case ast.Range:
-		panic("TODO")
-	case ast.RangeInclusive:
-		panic("TODO")
-	case ast.Subtract:
-		return subtract(leftValue, rightValue)
-	default:
-		panic(fmt.Sprintf("unexpected ast.Operator: %#v", expression.Operator))
+	
+	switch expression.Operator{
+		case ast.Equal:
+			return evaluateEqual(leftValue, rightValue)
+		case ast.NotEqual:
+			return evaluateNotEqual(leftValue, rightValue)
+		case ast.GreaterThan:
+			return evaluateGreaterThan(leftValue, rightValue)
+		case ast.Add:
+			return add(leftValue, rightValue)
+		case ast.And:
+			panic("TODO")
+		case ast.Divide:
+			return divide(leftValue, rightValue)
+		case ast.GreaterOrEqual:
+			panic("TODO")
+		case ast.LessOrEqual:
+			panic("TODO")
+		case ast.LessThan:
+			panic("TODO")
+		case ast.Modulo:
+			return modulo(leftValue, rightValue)
+		case ast.Multiply:
+			return multiple(leftValue, rightValue)
+		case ast.Or:
+			panic("TODO")
+		case ast.Power:
+			return power(leftValue, rightValue)
+		case ast.Range:
+			panic("TODO")
+		case ast.RangeInclusive:
+			panic("TODO")
+		case ast.Subtract:
+			return subtract(leftValue, rightValue)
+		default:
+			panic(fmt.Sprintf("unexpected ast.Operator: %#v", expression.Operator))
 	}
 }
 
@@ -81,11 +80,11 @@ func evaluateNotEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 }
 
 func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
-	return numberOperation(
-		leftValue, rightValue,
-		func(a int64, b int64) PawnValue { return PawnBoolean{a > b} },
-		func(a float64, b float64) PawnValue { return PawnBoolean{a > b} },
-	)
+		return numberOperation(
+			leftValue, rightValue,
+			func(a int64, b int64) PawnValue { return PawnBoolean{a > b} },
+			func(a float64, b float64) PawnValue { return PawnBoolean{a > b} },
+		)	
 }
 
 func numberOperation(
@@ -94,28 +93,28 @@ func numberOperation(
 	intHandler func(a int64, b int64) PawnValue,
 	floatHandler func(a float64, b float64) PawnValue,
 ) PawnValue {
-	switch a := leftValue.(type) {
-	case PawnInt:
-		switch b := rightValue.(type) {
-		case PawnInt:
-			return intHandler(a.v, b.v)
-		case PawnFloat:
-			return floatHandler(float64(a.v), b.v)
-		default:
-			panic(typeError("int or float", b))
+		switch a := leftValue.(type) {
+			case PawnInt:
+				switch b := rightValue.(type) {
+					case PawnInt:
+						return intHandler(a.v, b.v)
+					case PawnFloat:
+						return floatHandler(float64(a.v), b.v)
+					default:
+						panic(typeError("int or float", b))
+				}
+			case PawnFloat:
+				switch b := rightValue.(type) {
+					case PawnInt:
+						return floatHandler(a.v, float64(b.v))
+					case PawnFloat:
+						return floatHandler(a.v, b.v)
+					default:
+						panic(typeError("int or float", b))
+				}			
+			default:
+				panic(typeError("int or float", a))
 		}
-	case PawnFloat:
-		switch b := rightValue.(type) {
-		case PawnInt:
-			return floatHandler(a.v, float64(b.v))
-		case PawnFloat:
-			return floatHandler(a.v, b.v)
-		default:
-			panic(typeError("int or float", b))
-		}
-	default:
-		panic(typeError("int or float", a))
-	}
 }
 
 func add(value1 PawnValue, value2 PawnValue) PawnValue {
