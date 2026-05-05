@@ -31,7 +31,7 @@ func evaluateIf(statement ast.If, environment Environment) {
 	if evaluateIfClause(statement.First, environment) {
 		return
 	}
-	
+
 	for _, clause := range statement.Rest {
 		if evaluateIfClause(clause, environment) {
 			return
@@ -40,7 +40,7 @@ func evaluateIf(statement ast.If, environment Environment) {
 
 	innerEnvironment := NewEnvironment(&environment)
 	EvaluateStatements(statement.Else_, innerEnvironment)
-	
+
 }
 
 func evaluateIfClause(clause ast.IfClause, environment Environment) bool {

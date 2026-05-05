@@ -2,7 +2,7 @@ package interpreter
 
 import (
 	"fmt"
-	
+
 	"pawn/ast"
 )
 
@@ -32,7 +32,7 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValue {
 	leftValue := EvaluateExpression(expression.Left, environment)
 	rightValue := EvaluateExpression(expression.Right, environment)
-	
+
 	switch expression.Operator{
 		case ast.Equal:
 			return evaluateEqual(leftValue, rightValue)
@@ -84,7 +84,7 @@ func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
 			leftValue, rightValue,
 			func(a int64, b int64) PawnValue { return PawnBoolean{a > b} },
 			func(a float64, b float64) PawnValue { return PawnBoolean{a > b} },
-		)	
+		)
 }
 
 func numberOperation(
@@ -111,7 +111,7 @@ func numberOperation(
 						return floatHandler(a.v, b.v)
 					default:
 						panic(typeError("int or float", b))
-				}			
+				}
 			default:
 				panic(typeError("int or float", a))
 		}
