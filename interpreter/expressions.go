@@ -2,7 +2,9 @@ package interpreter
 
 import (
 	"fmt"
-	
+	"reflect"
+	"unsafe"
+
 	"pawn/ast"
 )
 
@@ -97,11 +99,21 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		}
 	case PawnList:
 		if right, ok := rightValue.(PawnList); ok {
-			_ = right // TODO
+			result = left.v == right.v
 		}
 	case PawnFunctionPrimitive:
 		if right, ok := rightValue.(PawnFunctionPrimitive); ok {
-			_ = right // TODO
+			result = reflect.ValueOf(left.f).Pointer() == reflect.ValueOf(right.f).Pointer()
+
+			if result {
+				if left.positionalArgCount != right.positionalArgCount {
+					panic("Primitive functions were equal, but had different argument count")
+				}
+				if unsafe.SliceData(left.namedArguments) != unsafe.SliceData(right.namedArguments) {
+					panic("Primitive functions were equal, but had different arguments")
+				}
+			}
+
 		}
 	case PawnFunctionUser:
 		if right, ok := rightValue.(PawnFunctionUser); ok {
