@@ -50,7 +50,7 @@ func (l PawnList) value() {}
 type PawnFunctionPrimitive struct {
 	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
 	positionalArgCount uint
-	namedArguments map[string]ast.Expression // This map shouldn't be nil
+	namedArguments []string
 }
 func (l PawnFunctionPrimitive) value() {}
 
