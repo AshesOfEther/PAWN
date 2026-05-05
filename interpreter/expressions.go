@@ -74,38 +74,38 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	result := false
 
-	switch leftValue.(type) {
+	switch left := leftValue.(type) {
 	case PawnBoolean:
 		if right, ok := rightValue.(PawnBoolean); ok {
-			_ = right
+			result = left.v == right.v
 		}
 	case PawnObject:
 		if right, ok := rightValue.(PawnObject); ok {
-			_ = right
+			_ = right // TODO
 		}
 	case PawnInt:
 		if right, ok := rightValue.(PawnInt); ok {
-			_ = right
+			result = left.v == right.v
 		}
 	case PawnFloat:
 		if right, ok := rightValue.(PawnFloat); ok {
-			_ = right
+			result = left.v == right.v
 		}
 	case PawnString:
 		if right, ok := rightValue.(PawnString); ok {
-			_ = right
+			result = left.v == right.v
 		}
 	case PawnList:
 		if right, ok := rightValue.(PawnList); ok {
-			_ = right
+			_ = right // TODO
 		}
 	case PawnFunctionPrimitive:
 		if right, ok := rightValue.(PawnFunctionPrimitive); ok {
-			_ = right
+			_ = right // TODO
 		}
 	case PawnFunctionUser:
 		if right, ok := rightValue.(PawnFunctionUser); ok {
-			_ = right
+			_ = right // TODO
 		}
 	default:
 		panic(fmt.Sprint("Unexpected invalid type: ", leftValue))
