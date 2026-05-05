@@ -102,7 +102,7 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		}
 	case PawnFunctionPrimitive:
 		if right, ok := rightValue.(PawnFunctionPrimitive); ok {
-			result = reflect.ValueOf(left.f).Pointer() == reflect.ValueOf(right.f).Pointer()
+			_ = right // TODO
 		}
 	case PawnFunctionUser:
 		if right, ok := rightValue.(PawnFunctionUser); ok {
