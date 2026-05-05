@@ -2,7 +2,6 @@ package interpreter
 
 import (
 	"fmt"
-	"reflect"
 
 	"pawn/ast"
 )
