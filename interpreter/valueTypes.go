@@ -47,17 +47,20 @@ func (l PawnList) value() {}
 //--------
 // Function
 //--------
-type PawnFunctionPrimitive struct {
-	f func([]PawnValue) *PawnValue // Possibly nil pointer, incase there's no returned value
+type PawnFunctionPrimitiveInner struct {
+	f func([]PawnValue) *PawnValue // Possibly nil result pointer, incase there's no returned value
 	positionalArgCount uint
 	namedArguments []string
 }
-func (l PawnFunctionPrimitive) value() {}
-
-type PawnFunctionUser struct {
+type PawnFunctionUserInner struct {
 	environment Environment
 	positionalArguments []string
 	namedArguments map[string]ast.Expression
 	body ast.Statement
 }
+
+type PawnFunctionPrimitive BasicValue[*PawnFunctionPrimitiveInner]
+type PawnFunctionUser BasicValue[*PawnFunctionUserInner]
+
+func (l PawnFunctionPrimitive) value() {}
 func (l PawnFunctionUser) value() {}
