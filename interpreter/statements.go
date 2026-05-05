@@ -68,6 +68,8 @@ func evaluateWhile(whileStmt ast.While, environment Environment) {
 		}
 		if booleanValue.v {
 			EvaluateStatements(whileStmt.Body, innerEnvironment)
+		} else {
+			return
 		}
 	}
 }
