@@ -3,7 +3,6 @@ package interpreter
 import (
 	"fmt"
 	"reflect"
-	"unsafe"
 
 	"pawn/ast"
 )
