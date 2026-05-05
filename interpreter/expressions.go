@@ -116,3 +116,27 @@ func numberOperation(
 				panic(typeError("int or float", a))
 		}
 }
+
+
+
+func evaluateAnd(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	if leftValue.Value {
+		if rightValue.Value {
+			return PawnBoolean{true}
+		}
+	} else {
+		return PawnBoolean{false}
+	}
+}
+
+
+func evaluateOr(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	if leftValue.Value {
+		return PawnBoolean{true}
+	}
+	if rightValue.Value {
+		return PawnBoolean{true}
+	} else {
+		return PawnBoolean{false}
+	}
+}
