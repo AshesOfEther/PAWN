@@ -55,7 +55,7 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.Modulo:
 			return modulo(leftValue, rightValue)
 		case ast.Multiply:
-			return multiple(leftValue, rightValue)
+			return multiply(leftValue, rightValue)
 		case ast.Or:
 			panic("TODO")
 		case ast.Power:
@@ -133,7 +133,7 @@ func subtract(value1 PawnValue, value2 PawnValue) PawnValue {
 	)
 }
 
-func multiple(value1 PawnValue, value2 PawnValue) PawnValue {
+func multiply(value1 PawnValue, value2 PawnValue) PawnValue {
 	return numberOperation(
 		value1, value2,
 		func(a int64, b int64) PawnValue { return PawnInt{a * b} },

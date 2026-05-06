@@ -27,7 +27,7 @@ func TestGreaterThanFloat(t *testing.T) {
 
 func TestNumberOperationCoerceIntToFloat(t *testing.T) {
 	assert.Equal(
-		t, numberOperation(PawnInt{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler),	PawnInt{0},
+		t, numberOperation(PawnInt{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler), PawnInt{0},
 	)
 	assert.Equal(
 		t, numberOperation(PawnFloat{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler), PawnFloat{0},
@@ -41,7 +41,7 @@ func TestNumberOperationCoerceIntToFloat(t *testing.T) {
 }
 
 func TestNumberOperationRejectNonNumber(t *testing.T) {
-	// Only the type is important here. The fields don't need to be valid. 
+	// Only the type is important here. The fields don't need to be valid.
 	values := []PawnValue{
 		PawnBoolean{},
 		PawnObject{},
@@ -49,11 +49,11 @@ func TestNumberOperationRejectNonNumber(t *testing.T) {
 		PawnList{},
 		PawnFunctionPrimitive{},
 		PawnFunctionUser{},
-	};
+	}
 
 	for _, value := range values {
 		panicValue := typeError("int or float", value)
-		
+
 		assert.PanicsWithValue(t, panicValue, func() {
 			numberOperation(PawnInt{0}, value, dummyIntHandler, dummyFloatHandler)
 		})
@@ -72,3 +72,39 @@ func TestNumberOperationRejectNonNumber(t *testing.T) {
 	}
 }
 
+// Testing for all arithmetic operations
+func TestAdd(t *testing.T) {
+	assert.Equal(t, add(PawnInt{1}, PawnInt{1}), PawnInt{2})
+	assert.Equal(t, add(PawnInt{1}, PawnFloat{1.1}), PawnFloat{2.1})
+	assert.Equal(t, add(PawnFloat{1.1}, PawnFloat{1.1}), PawnFloat{2.2})
+}
+
+func TestSubtract(t *testing.T) {
+	assert.Equal(t, subtract(PawnInt{1}, PawnInt{1}), PawnInt{0})
+	assert.Equal(t, subtract(PawnInt{1}, PawnFloat{2.1}), PawnFloat{-1.1})
+	assert.Equal(t, subtract(PawnFloat{1.1}, PawnFloat{1.1}), PawnFloat{0})
+}
+
+func TestMultiply(t *testing.T) {
+	assert.Equal(t, multiply(PawnInt{1}, PawnInt{1}), PawnInt{1})
+	assert.Equal(t, multiply(PawnInt{1}, PawnFloat{2.1}).(PawnFloat).v, 2.1)
+	assert.InEpsilon(t, 1.21, multiply(PawnFloat{1.1}, PawnFloat{1.1}).(PawnFloat).v, 0.001)
+}
+
+func TestDivide(t *testing.T) {
+	assert.Equal(t, divide(PawnInt{10}, PawnInt{5}), PawnInt{2})
+	assert.InEpsilon(t, 0.4761904761904762, divide(PawnInt{1}, PawnFloat{2.1}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, 2.058823529411765, divide(PawnFloat{10.5}, PawnFloat{5.1}).(PawnFloat).v, 0.001)
+}
+
+func TestModulo(t *testing.T) {
+	assert.Equal(t, modulo(PawnInt{1}, PawnInt{1}), PawnInt{0})
+	assert.InEpsilon(t, 10, modulo(PawnInt{10}, PawnFloat{100}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, 10, modulo(PawnFloat{10}, PawnFloat{100}).(PawnFloat).v, 0.001)
+}
+
+func TestPower(t *testing.T) {
+	assert.Equal(t, power(PawnInt{10}, PawnInt{5}), PawnInt{100000})
+	assert.InEpsilon(t, 1, power(PawnInt{1}, PawnFloat{2.1}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, 161460.17737759, power(PawnFloat{10.5}, PawnFloat{5.1}).(PawnFloat).v, 0.001)
+}
