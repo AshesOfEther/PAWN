@@ -8,31 +8,31 @@ import (
 
 func EvaluateExpression(expression ast.Expression, environment Environment) PawnValue {
 	switch expression := expression.(type) {
-	case ast.BinaryOp:
-		return evaluateBinaryOp(expression, environment)
-	case ast.FunctionCall:
-		panic("TODO")
-	case ast.List:
-		panic("TODO")
-	case ast.FloatLiteral:
-		return PawnFloat{expression.Value}
-	case ast.IntLiteral:
-		return PawnInt{expression.Value}
-	case ast.BooleanLiteral:
-		return PawnBoolean{expression.Value}
-	case ast.StringLiteral:
-		return PawnString{expression.Value}
-	case ast.MemberExpression:
-		panic("TODO")
-	default:
-		panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
+		case ast.BinaryOp:
+			return evaluateBinaryOp(expression, environment)
+		case ast.FunctionCall:
+			panic("TODO")
+		case ast.List:
+			panic("TODO")
+		case ast.FloatLiteral:
+			return PawnFloat{expression.Value}
+		case ast.IntLiteral:
+			return PawnInt{expression.Value}
+		case ast.BooleanLiteral:
+			return PawnBoolean{expression.Value}
+		case ast.StringLiteral:
+			return PawnString{expression.Value}
+		case ast.MemberExpression:
+			panic("TODO")
+		default:
+			panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
 	}
 }
 
 func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValue {
 	leftValue := EvaluateExpression(expression.Left, environment)
 	rightValue := EvaluateExpression(expression.Right, environment)
-	
+
 	switch expression.Operator{
 		case ast.Equal:
 			return evaluateEqual(leftValue, rightValue)
@@ -119,19 +119,16 @@ func numberOperation(
 
 func evaluateAnd(leftValue PawnValue, rightValue PawnValue) PawnBoolean {
 	if leftBool, ok := leftValue.(PawnBoolean); ok {
-		if leftBool.v {
-			if rightBool, ok := rightValue.(PawnBoolean); ok {
-				if rightBool.v {
-					return PawnBoolean{true}
-				} else {
-					return PawnBoolean{false}
-				}
+		if rightBool, ok := rightValue.(PawnBoolean); ok {
+			if leftBool.v && rightBool.v {
+				return PawnBoolean{true}
 			} else {
-				panic(typeError("bool", rightBool))
+				return PawnBoolean{false}
 			}
 		} else {
-			return PawnBoolean{false}
+			panic(typeError("bool", rightBool))
 		}
+		 
 	} else {
 		panic(typeError("bool", leftBool))
 	}
@@ -139,20 +136,18 @@ func evaluateAnd(leftValue PawnValue, rightValue PawnValue) PawnBoolean {
 
 func evaluateOr(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	if leftBool, ok := leftValue.(PawnBoolean); ok {
-		if leftBool.v {
-			return PawnBoolean{true}
+		if rightBool, ok := rightValue.(PawnBoolean); ok {
+			if leftBool.v || rightBool.v {
+				return PawnBoolean{true}
+			} else {
+				return PawnBoolean{false}
+			}
+		} else {
+			panic(typeError("bool", rightBool))
 		}
+		 
 	} else {
 		panic(typeError("bool", leftBool))
-	}
-	if rightBool, ok := rightValue.(PawnBoolean); ok {
-		if rightBool.v {
-			return PawnBoolean{true}
-		} else {
-			return PawnBoolean{false}
-		}
-	} else {
-		panic(typeError("bool", rightBool))
 	}
 
 }
