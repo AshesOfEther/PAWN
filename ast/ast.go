@@ -150,7 +150,7 @@ type Property struct {
 func (Property) memberNode() {}
 
 type Index struct {
-	List Expression
+	List Member
 	Index []Expression
 }
 
