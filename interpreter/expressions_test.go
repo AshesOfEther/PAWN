@@ -105,6 +105,7 @@ func TestModulo(t *testing.T) {
 
 func TestPower(t *testing.T) {
 	assert.Equal(t, evaluatePower(PawnInt{10}, PawnInt{5}), PawnInt{100000})
+	assert.Equal(t, evaluatePower(PawnInt{0}, PawnInt{0}), PawnInt{1})
 	assert.InEpsilon(t, 1, evaluatePower(PawnInt{1}, PawnFloat{2.1}).(PawnFloat).v, 0.001)
 	assert.InEpsilon(t, 161460.17737759, evaluatePower(PawnFloat{10.5}, PawnFloat{5.1}).(PawnFloat).v, 0.001)
 }
