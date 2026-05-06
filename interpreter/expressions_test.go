@@ -27,7 +27,7 @@ func TestGreaterThanFloat(t *testing.T) {
 
 func TestNumberOperationCoerceIntToFloat(t *testing.T) {
 	assert.Equal(
-		t, numberOperation(PawnInt{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler),	PawnInt{0},
+		t, numberOperation(PawnInt{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler), PawnInt{0},
 	)
 	assert.Equal(
 		t, numberOperation(PawnFloat{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler), PawnFloat{0},
@@ -49,7 +49,7 @@ func TestNumberOperationRejectNonNumber(t *testing.T) {
 		PawnList{},
 		PawnFunctionPrimitive{},
 		PawnFunctionUser{},
-	};
+	}
 
 	for _, value := range values {
 		panicValue := typeError("int or float", value)
@@ -70,4 +70,18 @@ func TestNumberOperationRejectNonNumber(t *testing.T) {
 			numberOperation(value, value, dummyIntHandler, dummyFloatHandler)
 		})
 	}
+}
+
+func TestEvaluateAnd(t *testing.T) {
+	assert.Equal(t, evaluateAnd(PawnBoolean{true}, PawnBoolean{true}), PawnBoolean{true})
+	assert.Equal(t, evaluateAnd(PawnBoolean{true}, PawnBoolean{false}), PawnBoolean{false})
+	assert.Equal(t, evaluateAnd(PawnBoolean{false}, PawnBoolean{true}), PawnBoolean{false})
+	assert.Equal(t, evaluateAnd(PawnBoolean{false}, PawnBoolean{false}), PawnBoolean{false})
+}
+
+func TestEvaluateOr(t *testing.T) {
+	assert.Equal(t, evaluateOr(PawnBoolean{true}, PawnBoolean{true}), PawnBoolean{true})
+	assert.Equal(t, evaluateOr(PawnBoolean{true}, PawnBoolean{false}), PawnBoolean{true})
+	assert.Equal(t, evaluateOr(PawnBoolean{false}, PawnBoolean{true}), PawnBoolean{true})
+	assert.Equal(t, evaluateOr(PawnBoolean{false}, PawnBoolean{false}), PawnBoolean{false})
 }

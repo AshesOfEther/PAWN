@@ -43,7 +43,7 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.Add:
 			panic("TODO")
 		case ast.And:
-			panic("TODO")
+			return evaluateAnd(leftValue, rightValue) 
 		case ast.Divide:
 			panic("TODO")
 		case ast.GreaterOrEqual:
@@ -57,7 +57,7 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.Multiply:
 			panic("TODO")
 		case ast.Or:
-			panic("TODO")
+			return evaluateOr(leftValue, rightValue)
 		case ast.Power:
 			panic("TODO")
 		case ast.Range:
@@ -115,4 +115,39 @@ func numberOperation(
 			default:
 				panic(typeError("int or float", a))
 		}
+}
+
+func evaluateAnd(leftValue PawnValue, rightValue PawnValue) PawnBoolean {
+	if leftBool, ok := leftValue.(PawnBoolean); ok {
+		if rightBool, ok := rightValue.(PawnBoolean); ok {
+			if leftBool.v && rightBool.v {
+				return PawnBoolean{true}
+			} else {
+				return PawnBoolean{false}
+			}
+		} else {
+			panic(typeError("bool", rightBool))
+		}
+		 
+	} else {
+		panic(typeError("bool", leftBool))
+	}
+}
+
+func evaluateOr(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	if leftBool, ok := leftValue.(PawnBoolean); ok {
+		if rightBool, ok := rightValue.(PawnBoolean); ok {
+			if leftBool.v || rightBool.v {
+				return PawnBoolean{true}
+			} else {
+				return PawnBoolean{false}
+			}
+		} else {
+			panic(typeError("bool", rightBool))
+		}
+		 
+	} else {
+		panic(typeError("bool", leftBool))
+	}
+
 }
