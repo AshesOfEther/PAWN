@@ -15,7 +15,7 @@ func EvaluateStatement(statement ast.Statement, environment Environment) {
 		case ast.Apply:
 			panic("TODO")
 		case ast.FunctionDecl:
-			panic("TODO")
+			evaluateFunctionDeclaration(statement, environment)
 		case ast.Return:
 			panic("TODO")
 		case ast.Assignment:
@@ -53,6 +53,24 @@ func evaluateIfClause(clause ast.IfClause, environment Environment) bool {
 		return booleanValue.v
 	} else {
 		panic(typeError("boolean", conditionValue))
+	}
+}
+
+func evaluateFunctionDeclaration(statement ast.FunctionDecl, environment Environment) {
+	namedArgsMap := map[string]ast.Expression{}
+	for _, namedArg := range statement.NamedArgs {
+		if _, ok := namedArgsMap[namedArg.Name]; ok {
+			panic(duplicateNamedArgumentDeclarationError(namedArg.Name))
+		}
+		namedArgsMap[namedArg.Name] = namedArg.DefaultValue
+	}
+	environment.variables[statement.Name] = PawnFunctionUser{
+		&PawnFunctionUserInner{
+			environment,
+			statement.PositionalArgs,
+			namedArgsMap,
+			statement.Body,
+		},
 	}
 }
 
