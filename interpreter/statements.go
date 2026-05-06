@@ -57,7 +57,6 @@ func evaluateIfClause(clause ast.IfClause, environment Environment) bool {
 }
 
 func evaluateWhile(whileStmt ast.While, environment Environment) {
-
 	innerEnvironment := NewEnvironment(&environment)
 
 	for {
