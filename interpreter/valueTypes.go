@@ -35,7 +35,7 @@ type PawnObject BasicValue[map[string]*PawnValue]
 type PawnInt BasicValue[int64]
 type PawnFloat BasicValue[float64]
 type PawnString BasicValue[string]
-type PawnList BasicValue[*[]*PawnValue]
+type PawnList BasicValue[*[]PawnValue]
 
 func (l PawnBoolean) value() {}
 func (l PawnObject) value() {}
