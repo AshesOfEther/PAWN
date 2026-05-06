@@ -3,6 +3,9 @@ package interpreter
 import (
 	"pawn/ast"
 	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWhile(t *testing.T) {
@@ -12,5 +15,11 @@ func TestWhile(t *testing.T) {
 		Body: []ast.Statement{},
 	}
 
-	evaluateWhile(whileAST, dummyEnv)
+	done := false
+	go func() {
+		evaluateWhile(whileAST, dummyEnv)
+		done = true
+	}()
+	time.Sleep(time.Second / 20)
+	assert.True(t, done)
 }
