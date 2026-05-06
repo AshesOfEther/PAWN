@@ -26,16 +26,16 @@ type PawnValue interface {
 }
 
 // Used to define Bool, Int, Float, String, List, and Object.
-type BasicValue[T any] struct {
+type BasicPawnValue[T any] struct {
 	v T
 }
 
-type PawnBoolean BasicValue[bool]
-type PawnObject BasicValue[map[string]PawnValue]
-type PawnInt BasicValue[int64]
-type PawnFloat BasicValue[float64]
-type PawnString BasicValue[string]
-type PawnList BasicValue[*[]PawnValue]
+type PawnBoolean BasicPawnValue[bool]
+type PawnObject BasicPawnValue[map[string]PawnValue]
+type PawnInt BasicPawnValue[int64]
+type PawnFloat BasicPawnValue[float64]
+type PawnString BasicPawnValue[string]
+type PawnList BasicPawnValue[*[]PawnValue]
 
 func (l PawnBoolean) value() {}
 func (l PawnObject) value() {}
@@ -59,8 +59,8 @@ type PawnFunctionUserInner struct {
 	body ast.Statement
 }
 
-type PawnFunctionPrimitive BasicValue[*PawnFunctionPrimitiveInner]
-type PawnFunctionUser BasicValue[*PawnFunctionUserInner]
+type PawnFunctionPrimitive BasicPawnValue[*PawnFunctionPrimitiveInner]
+type PawnFunctionUser BasicPawnValue[*PawnFunctionUserInner]
 
 func (l PawnFunctionPrimitive) value() {}
 func (l PawnFunctionUser) value() {}
