@@ -40,3 +40,15 @@ func typeError(expectedType string, gotValue PawnValue) PawnError {
 		fmt.Sprintf("expected %s, got %s: %v", expectedType, gotType, gotValue),
 	}
 }
+
+func negetivePowerError(Gotvalue int64) PawnError {
+	return PawnError{
+		fmt.Sprintf("negitive y is not valid with integer power: got %#v", Gotvalue),
+	}
+}
+
+func devideError(Gotvalue int64) PawnError {
+	return PawnError{
+		fmt.Sprintf("value b is not allow to be 0: got %#v", Gotvalue),
+	}
+}

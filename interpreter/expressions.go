@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"fmt"
+
 	"math"
 	"math/big"
 	"pawn/ast"
@@ -112,12 +113,28 @@ func evaluateMultiply(value1 PawnValue, value2 PawnValue) PawnValue {
 	)
 }
 
+//Helper func for evaluateDivide for the case where b=0
+func isZero(v PawnValue) bool {
+	switch val := v.(type) {
+	case PawnInt:
+		return val.v == 0
+	case PawnFloat:
+		return val.v == 0
+	default:
+		return false
+	}
+}
+
 func evaluateDivide(value1 PawnValue, value2 PawnValue) PawnValue {
-	return numberOperation(
-		value1, value2,
-		func(a int64, b int64) PawnValue { return PawnInt{a / b} },
-		func(a float64, b float64) PawnValue { return PawnFloat{a / b} },
-	)
+	if isZero(value2) {
+		panic(devideError(0))
+	} else {
+		return numberOperation(
+			value1, value2,
+			func(a int64, b int64) PawnValue { return PawnInt{a / b} },
+			func(a float64, b float64) PawnValue { return PawnFloat{a / b} },
+		)
+	}
 }
 
 func evaluateModulo(value1 PawnValue, value2 PawnValue) PawnValue {
@@ -131,9 +148,7 @@ func evaluateModulo(value1 PawnValue, value2 PawnValue) PawnValue {
 // helper func for using int64
 func powInt(x, y int64) int64 {
 	if y < 0 {
-		panic(fmt.Sprintf("negitive y is not valid with integer power: got %#v",y))
-	} else if y == 0 && x == 0 {
-		return 1
+		panic(negetivePowerError(y))
 	} else {
 		return big.NewInt(0).Exp(big.NewInt(x), big.NewInt(y), nil).Int64()
 	}	
