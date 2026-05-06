@@ -113,12 +113,10 @@ func evaluateMultiply(value1 PawnValue, value2 PawnValue) PawnValue {
 	)
 }
 
-//Helper func for evaluateDivide for the case where b=0
+// Helper func for evaluateDivide for the case where b=0
 func isZero(v PawnValue) bool {
 	switch val := v.(type) {
 	case PawnInt:
-		return val.v == 0
-	case PawnFloat:
 		return val.v == 0
 	default:
 		return false
