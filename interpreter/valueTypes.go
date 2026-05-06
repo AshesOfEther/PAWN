@@ -31,7 +31,7 @@ type BasicValue[T any] struct {
 }
 
 type PawnBoolean BasicValue[bool]
-type PawnObject BasicValue[*map[string]PawnValue]
+type PawnObject BasicValue[map[string]PawnValue]
 type PawnInt BasicValue[int64]
 type PawnFloat BasicValue[float64]
 type PawnString BasicValue[string]
