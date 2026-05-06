@@ -57,8 +57,6 @@ func evaluateIfClause(clause ast.IfClause, environment Environment) bool {
 }
 
 func evaluateWhile(whileStmt ast.While, environment Environment) {
-	innerEnvironment := NewEnvironment(&environment)
-
 	for {
 		conditionValue := EvaluateExpression(whileStmt.Condition, environment)
 		booleanValue, ok := conditionValue.(PawnBoolean)
@@ -66,7 +64,7 @@ func evaluateWhile(whileStmt ast.While, environment Environment) {
 			panic(typeError("boolean", conditionValue))
 		}
 		if booleanValue.v {
-			EvaluateStatements(whileStmt.Body, innerEnvironment)
+			EvaluateStatements(whileStmt.Body, NewEnvironment(&environment))
 		} else {
 			return
 		}
