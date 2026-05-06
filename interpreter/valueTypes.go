@@ -56,7 +56,7 @@ type PawnFunctionUserInner struct {
 	environment Environment
 	positionalArguments []string
 	namedArguments map[string]ast.Expression
-	body ast.Statement
+	body []ast.Statement
 }
 
 type PawnFunctionPrimitive BasicValue[*PawnFunctionPrimitiveInner]
