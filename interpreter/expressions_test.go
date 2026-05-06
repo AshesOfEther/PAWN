@@ -41,7 +41,7 @@ func TestNumberOperationCoerceIntToFloat(t *testing.T) {
 }
 
 func TestNumberOperationRejectNonNumber(t *testing.T) {
-	// Only the type is important here. The fields don't need to be valid. 
+	// Only the type is important here. The fields don't need to be valid.
 	values := []PawnValue{
 		PawnBoolean{},
 		PawnObject{},
@@ -53,7 +53,7 @@ func TestNumberOperationRejectNonNumber(t *testing.T) {
 
 	for _, value := range values {
 		panicValue := typeError("int or float", value)
-		
+
 		assert.PanicsWithValue(t, panicValue, func() {
 			numberOperation(PawnInt{0}, value, dummyIntHandler, dummyFloatHandler)
 		})
@@ -71,4 +71,3 @@ func TestNumberOperationRejectNonNumber(t *testing.T) {
 		})
 	}
 }
-
