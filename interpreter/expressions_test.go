@@ -1,6 +1,7 @@
 package interpreter
 
 import (
+	"pawn/ast"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -84,4 +85,49 @@ func TestEvaluateOr(t *testing.T) {
 	assert.Equal(t, evaluateOr(PawnBoolean{true}, PawnBoolean{false}), PawnBoolean{true})
 	assert.Equal(t, evaluateOr(PawnBoolean{false}, PawnBoolean{true}), PawnBoolean{true})
 	assert.Equal(t, evaluateOr(PawnBoolean{false}, PawnBoolean{false}), PawnBoolean{false})
+}
+
+func TestErrorOnCallingNonFunction(t *testing.T) {
+	assert.PanicsWithValue(t, typeError("function", PawnInt{0}), func() {
+		evaluateFunctionCall(ast.FunctionCall{
+			ast.IntLiteral{0},
+			[]ast.Expression{},
+			[]ast.NamedArg{},
+			[]ast.Statement{},
+		}, NewEnvironment(nil))
+	})
+}
+
+func dummyValidateNamedArg(name string) bool {
+	return name == "foo" || name == "bar"
+}
+
+var oneNamedArg []ast.NamedArg = []ast.NamedArg{
+	ast.NamedArg{"foo", ast.IntLiteral{0}},
+}
+
+func TestValidateArgumentsCorrect(t *testing.T) {
+	validateFunctionArguments(3, 3, oneNamedArg, dummyValidateNamedArg)
+}
+
+func TestValidateArgumentsNotEnoughPositional(t *testing.T) {
+	assert.PanicsWithValue(t, mismatchedArgumentCountError(3, 1), func() {
+		validateFunctionArguments(1, 3, oneNamedArg, dummyValidateNamedArg)
+	})
+}
+
+func TestValidateArgumentsTooManyPositional(t *testing.T) {
+	assert.PanicsWithValue(t, mismatchedArgumentCountError(3, 5), func() {
+		validateFunctionArguments(5, 3, oneNamedArg, dummyValidateNamedArg)
+	})
+}
+
+func TestValidateArgumentsUnexpectedNamedArg(t *testing.T) {
+	assert.PanicsWithValue(t, unexpectedNamedArgumentsError([]string{"baz"}), func() {
+		validateFunctionArguments(3, 3, []ast.NamedArg{
+			ast.NamedArg{"foo", ast.IntLiteral{0}},
+			ast.NamedArg{"bar", ast.IntLiteral{1}},
+			ast.NamedArg{"baz", ast.IntLiteral{2}},
+		}, dummyValidateNamedArg)
+	})
 }
