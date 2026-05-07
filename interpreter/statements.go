@@ -11,7 +11,7 @@ func EvaluateStatement(statement ast.Statement, environment Environment) {
 		case ast.If:
 			evaluateIf(statement, environment)
 		case ast.While:
-			panic("TODO")
+			evaluateWhile(statement, environment)
 		case ast.Apply:
 			panic("TODO")
 		case ast.FunctionDecl:
@@ -77,5 +77,20 @@ func evaluateFunctionDeclaration(statement ast.FunctionDecl, environment Environ
 func EvaluateStatements(statements []ast.Statement, environment Environment) {
 	for _, statement := range statements {
 		EvaluateStatement(statement, environment)
+	}
+}
+
+func evaluateWhile(whileStmt ast.While, environment Environment) {
+	for {
+		conditionValue := EvaluateExpression(whileStmt.Condition, environment)
+		booleanValue, ok := conditionValue.(PawnBoolean)
+		if !ok {
+			panic(typeError("boolean", conditionValue))
+		}
+		if booleanValue.v {
+			EvaluateStatements(whileStmt.Body, NewEnvironment(&environment))
+		} else {
+			return
+		}
 	}
 }
