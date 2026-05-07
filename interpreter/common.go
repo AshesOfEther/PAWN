@@ -66,7 +66,7 @@ func unexpectedNamedArgumentsError(unexpectedNames []string) PawnError {
 	}
 	return PawnError{
 		fmt.Sprintf(
-			"unexpected named %s provided to function '': %s",
+			"unexpected named %s provided to function: %s",
 			argumentString, strings.Join(unexpectedNames, ", "),
 		),
 	}
