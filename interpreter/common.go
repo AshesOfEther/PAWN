@@ -1,6 +1,9 @@
 package interpreter
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Environment struct {
 	variables map[string]PawnValue
@@ -44,5 +47,33 @@ func typeError(expectedType string, gotValue PawnValue) PawnError {
 func duplicateNamedArgumentDeclarationError(name string) PawnError {
 	return PawnError{
 		fmt.Sprintf("named argument '%s' is declared more than once", name),
+	}
+}
+
+func mismatchedArgumentCountError(expectedCount int, gotCount int) PawnError {
+	return PawnError{
+		fmt.Sprintf(
+			"function expects %d positional arguments, but %d were provided",
+			expectedCount, gotCount,
+		),
+	}
+}
+
+func unexpectedNamedArgumentsError(unexpectedNames []string) PawnError {
+	argumentString := "arguments were"
+	if len(unexpectedNames) == 1 {
+		argumentString = "argument was"
+	}
+	return PawnError{
+		fmt.Sprintf(
+			"unexpected named %s provided to function: %s",
+			argumentString, strings.Join(unexpectedNames, ", "),
+		),
+	}
+}
+
+func usedVoidReturnValue() PawnError {
+	return PawnError{
+		"tried to use return value of function call that did not return anything",
 	}
 }

@@ -2,16 +2,24 @@ package interpreter
 
 import (
 	"fmt"
+	"slices"
 
 	"pawn/ast"
 )
 
+// Errors when evaluating a function call without a return value. If this is
+// undesired, the caller should call `evaluateFunctionCall` directly for function
+// calls.
 func EvaluateExpression(expression ast.Expression, environment Environment) PawnValue {
 	switch expression := expression.(type) {
 		case ast.BinaryOp:
 			return evaluateBinaryOp(expression, environment)
 		case ast.FunctionCall:
-			panic("TODO")
+			result := evaluateFunctionCall(expression, environment)
+			if result == nil {
+				panic(usedVoidReturnValue())
+			}
+			return result
 		case ast.List:
 			panic("TODO")
 		case ast.FloatLiteral:
@@ -85,6 +93,60 @@ func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
 			func(a int64, b int64) PawnValue { return PawnBoolean{a > b} },
 			func(a float64, b float64) PawnValue { return PawnBoolean{a > b} },
 		)
+}
+
+// This function can return nil to indicate that the function that was called did
+// not return anything.
+func evaluateFunctionCall(expression ast.FunctionCall, environment Environment) PawnValue {
+	callee := EvaluateExpression(expression.Function, environment)
+	switch function := callee.(type) {
+		case PawnFunctionUser:
+			validateFunctionArguments(
+				len(expression.PositionalArgs),
+				len(function.v.positionalArguments),
+				expression.NamedArgs,
+				func(name string) bool {
+					_, ok := function.v.namedArguments[name]
+					return ok
+				},
+			)
+			panic("TODO: Call the function")
+		case PawnFunctionPrimitive:
+			validateFunctionArguments(
+				len(expression.PositionalArgs),
+				int(function.v.positionalArgCount),
+				expression.NamedArgs,
+				func(name string) bool {
+					return slices.Contains(function.v.namedArguments, name)
+				},
+			)
+			panic("TODO: Call the function")
+		default:
+			panic(typeError("function", callee))
+	}
+}
+
+func validateFunctionArguments(
+	providedPositionalArgumentCount int,
+	expectedPositionalArgumentCount int,
+	providedNamedArgs []ast.NamedArg,
+	validateNamedArg func(string) bool,
+) {
+	 if providedPositionalArgumentCount != expectedPositionalArgumentCount {
+		panic(mismatchedArgumentCountError(
+			expectedPositionalArgumentCount, providedPositionalArgumentCount,
+		))
+	 }
+
+	 unexpectedNames := []string{}
+	 for _, argument := range providedNamedArgs {
+	 	if !validateNamedArg(argument.Name) {
+			unexpectedNames = append(unexpectedNames, argument.Name)
+	 	}
+	 }
+	 if len(unexpectedNames) != 0 {
+		panic(unexpectedNamedArgumentsError(unexpectedNames))
+	 }
 }
 
 func numberOperation(
