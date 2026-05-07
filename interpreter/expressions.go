@@ -113,26 +113,17 @@ func evaluateMultiply(value1 PawnValue, value2 PawnValue) PawnValue {
 	)
 }
 
-// Helper func for evaluateDivide for the case where b=0
-func isZero(v PawnValue) bool {
-	switch val := v.(type) {
-	case PawnInt:
-		return val.v == 0
-	default:
-		return false
-	}
-}
-
 func evaluateDivide(value1 PawnValue, value2 PawnValue) PawnValue {
-	if isZero(value2) {
-		panic(devideError(0))
-	} else {
-		return numberOperation(
-			value1, value2,
-			func(a int64, b int64) PawnValue { return PawnInt{a / b} },
-			func(a float64, b float64) PawnValue { return PawnFloat{a / b} },
-		)
-	}
+	return numberOperation(
+		value1, value2,
+			func(a int64, b int64) PawnValue { 
+				if b == 0 {
+					panic(devideError(0))
+				}
+				return PawnInt{a / b}	
+			},
+		func(a float64, b float64) PawnValue { return PawnFloat{a / b} },
+	)
 }
 
 func evaluateModulo(value1 PawnValue, value2 PawnValue) PawnValue {
