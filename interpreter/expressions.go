@@ -124,7 +124,7 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 }
 
 func evaluateNotEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
-	return PawnBoolean{leftValue != rightValue}
+	panic("TODO")
 }
 
 func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
