@@ -2,7 +2,7 @@ package interpreter
 
 import (
 	"fmt"
-	"slices
+	"slices"
 
 	"pawn/ast"
 )
