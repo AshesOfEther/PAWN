@@ -2,9 +2,9 @@ package interpreter
 
 import (
 	"fmt"
-
 	"math"
 	"math/big"
+
 	"pawn/ast"
 )
 
@@ -118,7 +118,7 @@ func evaluateDivide(value1 PawnValue, value2 PawnValue) PawnValue {
 		value1, value2,
 			func(a int64, b int64) PawnValue { 
 				if b == 0 {
-					panic(devideError(0))
+					panic(divideByZeroError())
 				}
 				return PawnInt{a / b}	
 			},
@@ -137,7 +137,7 @@ func evaluateModulo(value1 PawnValue, value2 PawnValue) PawnValue {
 // helper func for using int64
 func powInt(x, y int64) int64 {
 	if y < 0 {
-		panic(negetivePowerError(y))
+		panic(negativePowerError(y))
 	} else {
 		return big.NewInt(0).Exp(big.NewInt(x), big.NewInt(y), nil).Int64()
 	}	

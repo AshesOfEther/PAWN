@@ -41,14 +41,14 @@ func typeError(expectedType string, gotValue PawnValue) PawnError {
 	}
 }
 
-func negetivePowerError(Gotvalue int64) PawnError {
+func negativePowerError(gotPower int64) PawnError {
 	return PawnError{
-		fmt.Sprintf("negitive y is not valid with integer power: got %#v", Gotvalue),
+		fmt.Sprintf("expected non-negative power for integer exponentiation, got %v", gotPower),
 	}
 }
 
-func devideError(Gotvalue int64) PawnError {
+func divideByZeroError() PawnError {
 	return PawnError{
-		fmt.Sprintf("value b is not allow to be 0: got %#v", Gotvalue),
+		("expected non-zero divisor for integer division, got zero"),
 	}
 }
