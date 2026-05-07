@@ -95,15 +95,18 @@ func TestDivide(t *testing.T) {
 	assert.Equal(t, evaluateDivide(PawnInt{10}, PawnInt{5}), PawnInt{2})
 	assert.InEpsilon(t, 0.4761904761904762, evaluateDivide(PawnInt{1}, PawnFloat{2.1}).(PawnFloat).v, 0.001)
 	assert.InEpsilon(t, 2.058823529411765, evaluateDivide(PawnFloat{10.5}, PawnFloat{5.1}).(PawnFloat).v, 0.001)
-	assert.PanicsWithValue(t, divideByZeroError(), func() {evaluateDivide(PawnInt{1}, PawnInt{0})})
 }
 
+//For negative int and float deivisor go uses truncated devision
 func TestModulo(t *testing.T) {
 	assert.Equal(t, evaluateModulo(PawnInt{1}, PawnInt{1}), PawnInt{0})
-	assert.Equal(t, evaluateModulo(PawnInt{-1}, PawnInt{1}), PawnInt{0})
-	assert.Equal(t, evaluateModulo(PawnInt{-1}, PawnInt{-1}), PawnInt{0})
-	assert.InEpsilon(t, 10, evaluateModulo(PawnInt{10}, PawnFloat{100}).(PawnFloat).v, 0.001)
-	assert.InEpsilon(t, 10, evaluateModulo(PawnFloat{10}, PawnFloat{100}).(PawnFloat).v, 0.001)	
+	assert.Equal(t, evaluateModulo(PawnInt{-1}, PawnInt{2}), PawnInt{-1})
+	assert.Equal(t, evaluateModulo(PawnInt{1}, PawnInt{-2}), PawnInt{1})
+	assert.InEpsilon(t, 2, evaluateModulo(PawnInt{5}, PawnFloat{3}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, 2, evaluateModulo(PawnFloat{5}, PawnFloat{3}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, -2, evaluateModulo(PawnFloat{-5}, PawnFloat{3}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, 2, evaluateModulo(PawnFloat{5}, PawnFloat{-3}).(PawnFloat).v, 0.001)
+	assert.InEpsilon(t, -2, evaluateModulo(PawnFloat{-5}, PawnFloat{-3}).(PawnFloat).v, 0.001)
 }
 
 func TestPower(t *testing.T) {
@@ -111,5 +114,9 @@ func TestPower(t *testing.T) {
 	assert.Equal(t, evaluatePower(PawnInt{0}, PawnInt{0}), PawnInt{1})
 	assert.InEpsilon(t, 1, evaluatePower(PawnInt{1}, PawnFloat{2.1}).(PawnFloat).v, 0.001)
 	assert.InEpsilon(t, 161460.17737759, evaluatePower(PawnFloat{10.5}, PawnFloat{5.1}).(PawnFloat).v, 0.001)
+}
+
+func TestArithmeticErrors(t *testing.T)  {
+	assert.PanicsWithValue(t, divideByZeroError(), func() {evaluateDivide(PawnInt{1}, PawnInt{0})})
 	assert.PanicsWithValue(t, negativePowerError(-1), func() {evaluatePower(PawnInt{1}, PawnInt{-1})})
 }
