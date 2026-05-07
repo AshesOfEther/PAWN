@@ -3,6 +3,7 @@ package interpreter
 import (
 	"fmt"
 	"slices"
+	"unsafe"
 
 	"pawn/ast"
 )
@@ -90,7 +91,7 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		}
 	case PawnObject:
 		if right, ok := rightValue.(PawnObject); ok {
-			_ = right // TODO
+			result = unsafe.Pointer(&left) == unsafe.Pointer(&right)
 		}
 	case PawnInt:
 		if right, ok := rightValue.(PawnInt); ok {
