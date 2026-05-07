@@ -3,6 +3,7 @@ package interpreter
 import (
 	"fmt"
 	"slices"
+	"reflect"
 
 	"pawn/ast"
 )
@@ -90,7 +91,7 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		}
 	case PawnObject:
 		if right, ok := rightValue.(PawnObject); ok {
-			result = &left == &right
+			result = reflect.ValueOf(left.v) == reflect.ValueOf(right.v)
 		}
 	case PawnInt:
 		if right, ok := rightValue.(PawnInt); ok {
