@@ -57,11 +57,11 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.Divide:
 			return evaluateDivide(leftValue, rightValue)
 		case ast.GreaterOrEqual:
-			panic("TODO")
+			return evaluateGreaterOrEqual(leftValue, rightValue)
 		case ast.LessOrEqual:
-			panic("TODO")
+			return evaluateLessOrEqual(leftValue, rightValue)
 		case ast.LessThan:
-			panic("TODO")
+			return evaluateLessThan(leftValue, rightValue)
 		case ast.Modulo:
 			return evaluateModulo(leftValue, rightValue)
 		case ast.Multiply:
@@ -95,6 +95,30 @@ func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
 			func(a int64, b int64) PawnValue { return PawnBoolean{a > b} },
 			func(a float64, b float64) PawnValue { return PawnBoolean{a > b} },
 		)
+}
+
+func evaluateLessThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	return numberOperation(
+		leftValue, rightValue,
+		func(a int64, b int64) PawnValue { return PawnBoolean{a < b} },
+		func(a float64, b float64) PawnValue { return PawnBoolean{a < b} },
+	)
+}
+
+func evaluateLessOrEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	return numberOperation(
+		leftValue, rightValue,
+		func(a int64, b int64) PawnValue { return PawnBoolean{a >= b} },
+		func(a float64, b float64) PawnValue { return PawnBoolean{a >= b} },
+	)
+}
+
+func evaluateGreaterOrEqual(leftValue PawnValue, rightValue PawnValue) PawnValue  {
+	return numberOperation(
+		leftValue, rightValue,
+		func(a int64, b int64) PawnValue { return PawnBoolean{a >= b} },
+		func(a float64, b float64) PawnValue { return PawnBoolean{a >= b} },
+	)
 }
 
 // This function can return nil to indicate that the function that was called did
