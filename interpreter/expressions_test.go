@@ -3,6 +3,7 @@ package interpreter
 import (
 	"pawn/ast"
 	"testing"
+	"math"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -130,4 +131,70 @@ func TestValidateArgumentsUnexpectedNamedArg(t *testing.T) {
 			ast.NamedArg{"baz", ast.IntLiteral{2}},
 		}, dummyValidateNamedArg)
 	})
+}
+
+func TestEvaluateEqual(t *testing.T) {
+
+	// Except for floats, the total amount of cases is 3*amountOfTypes
+	// Two values T1 T2 of each type T to compare 3 cases,
+	// where T1 != T2 in the most non-trivial way.
+	// 1. a1 == a1 is true
+	// 2. a1 == a2 is false
+	// 3. a1 == b1 is false
+
+	emptyStringList := []string{}
+	PrimitiveFunctionForTest := func (x []PawnValue) *PawnValue {
+		return nil
+	}
+	env := NewEnvironment(nil)
+	emptyBody := []ast.Statement{}
+	noOptionalArgs := map[string]ast.Expression{}
+
+	// Values
+	B1 := PawnBoolean{true}
+	B2 := PawnBoolean{false} // false since that's the only other case of this type
+	O1 := PawnObject{map[string]PawnValue{}}
+	O2 := PawnObject{map[string]PawnValue{}} // Maps are equal in content but have different reference
+	F1 := PawnFloat{0.3}
+	F2 := PawnFloat{float64(0.1)+float64(0.2)} // Floats round
+	L1 := PawnList{&[]PawnValue{}}
+	L2 := PawnList{&[]PawnValue{}} // Lists are equal in content but have different reference
+	P1 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgCount: 0, namedArguments: emptyStringList}}
+	P2 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgCount: 0, namedArguments: emptyStringList}} // Functions are equal in content but have different reference
+	U1 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
+	U2 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
+
+	// Float nans are special, they aren't equal to themselves
+	F3 := PawnFloat{math.NaN()}
+
+	// Bool
+	assert.True(t,  evaluateEqual(B1, B1).(PawnBoolean).v)  // a1 == a1
+	assert.True(t, !evaluateEqual(B1, B2).(PawnBoolean).v)  // a1 != a2
+	assert.True(t, !evaluateEqual(B1, U1).(PawnBoolean).v)  // a1 != b1
+
+	// Object
+	assert.True(t,  evaluateEqual(O1, O1).(PawnBoolean).v)  // a1 == a1
+	assert.True(t, !evaluateEqual(O1, O2).(PawnBoolean).v)  // a1 != a2
+	assert.True(t, !evaluateEqual(O1, B1).(PawnBoolean).v)  // a1 != b1
+
+	// Float
+	assert.True(t,  evaluateEqual(F1, F1).(PawnBoolean).v)  // a1 == a1
+	assert.True(t, !evaluateEqual(F1, F2).(PawnBoolean).v)  // a1 != a2
+	assert.True(t, !evaluateEqual(F1, O1).(PawnBoolean).v)  // a1 != b1
+	assert.True(t, !evaluateEqual(F3, F3).(PawnBoolean).v)  // a1 == a1
+
+	// List
+	assert.True(t,  evaluateEqual(L1, L1).(PawnBoolean).v)  // a1 == a1
+	assert.True(t, !evaluateEqual(L1, L2).(PawnBoolean).v)  // a1 != a2
+	assert.True(t, !evaluateEqual(L1, F1).(PawnBoolean).v)  // a1 != b1
+
+	// Primtitive
+	assert.True(t,  evaluateEqual(P1, P1).(PawnBoolean).v)  // a1 == a1
+	assert.True(t, !evaluateEqual(P1, P2).(PawnBoolean).v)  // a1 != a2
+	assert.True(t, !evaluateEqual(P1, L1).(PawnBoolean).v)  // a1 != b1
+
+	// User
+	assert.True(t,  evaluateEqual(U1, U1).(PawnBoolean).v)  // a1 == a1
+	assert.True(t, !evaluateEqual(U1, U2).(PawnBoolean).v)  // a1 != a2
+	assert.True(t, !evaluateEqual(U1, P1).(PawnBoolean).v)  // a1 != b1
 }
