@@ -26,6 +26,42 @@ func TestGreaterThanFloat(t *testing.T) {
 	assert.Equal(t, evaluateGreaterThan(PawnFloat{1}, PawnFloat{1}), PawnBoolean{false})
 }
 
+func TestLessThanInt(t *testing.T)  {
+	assert.Equal(t, evaluateLessThan(PawnInt{2}, PawnInt{1}), PawnBoolean{false})
+	assert.Equal(t, evaluateLessThan(PawnInt{1}, PawnInt{2}), PawnBoolean{true})
+	assert.Equal(t, evaluateLessThan(PawnInt{1}, PawnInt{1}), PawnBoolean{false})
+}
+
+func TestLessThanFloat(t *testing.T)  {
+	assert.Equal(t, evaluateLessThan(PawnFloat{2}, PawnFloat{1}), PawnBoolean{false})
+	assert.Equal(t, evaluateLessThan(PawnFloat{1}, PawnFloat{2}), PawnBoolean{true})
+	assert.Equal(t, evaluateLessThan(PawnFloat{1}, PawnFloat{1}), PawnBoolean{false})
+}
+
+func TestLessOrEqualInt(t *testing.T)  {
+	assert.Equal(t, evaluateLessOrEqual(PawnInt{2}, PawnInt{1}), PawnBoolean{false})
+	assert.Equal(t, evaluateLessOrEqual(PawnInt{1}, PawnInt{2}), PawnBoolean{true})
+	assert.Equal(t, evaluateLessOrEqual(PawnInt{1}, PawnInt{1}), PawnBoolean{true})
+}
+
+func TestLessOrEqualFloat(t *testing.T)  {
+	assert.Equal(t, evaluateLessOrEqual(PawnFloat{2}, PawnFloat{1}), PawnBoolean{false})
+	assert.Equal(t, evaluateLessOrEqual(PawnFloat{1}, PawnFloat{2}), PawnBoolean{true})
+	assert.Equal(t, evaluateLessOrEqual(PawnFloat{1}, PawnFloat{1}), PawnBoolean{true})
+}
+
+func TestGreaterOrEqualInt(t *testing.T)  {
+	assert.Equal(t, evaluateGreaterOrEqual(PawnInt{2}, PawnInt{1}), PawnBoolean{true})
+	assert.Equal(t, evaluateGreaterOrEqual(PawnInt{1}, PawnInt{2}), PawnBoolean{false})
+	assert.Equal(t, evaluateGreaterOrEqual(PawnInt{1}, PawnInt{1}), PawnBoolean{true})
+}
+
+func TestGreaterOrEqualFloat(t *testing.T)  {
+	assert.Equal(t, evaluateGreaterOrEqual(PawnFloat{2}, PawnFloat{1}), PawnBoolean{true})
+	assert.Equal(t, evaluateGreaterOrEqual(PawnFloat{1}, PawnFloat{2}), PawnBoolean{false})
+	assert.Equal(t, evaluateGreaterOrEqual(PawnFloat{1}, PawnFloat{1}), PawnBoolean{true})
+}
+
 func TestNumberOperationCoerceIntToFloat(t *testing.T) {
 	assert.Equal(
 		t, numberOperation(PawnInt{0}, PawnInt{0}, dummyIntHandler, dummyFloatHandler), PawnInt{0},
