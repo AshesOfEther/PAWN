@@ -77,3 +77,15 @@ func usedVoidReturnValue() PawnError {
 		"tried to use return value of function call that did not return anything",
 	}
 }
+
+func negativePowerError(gotPower int64) PawnError {
+	return PawnError{
+		fmt.Sprintf("expected non-negative power for integer exponentiation, got %v", gotPower),
+	}
+}
+
+func divideByZeroError() PawnError {
+	return PawnError{
+		("expected non-zero divisor for integer division, got zero"),
+	}
+}

@@ -2,6 +2,8 @@ package interpreter
 
 import (
 	"fmt"
+	"math"
+	"math/big"
 	"slices"
 
 	"pawn/ast"
@@ -49,11 +51,11 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.GreaterThan:
 			return evaluateGreaterThan(leftValue, rightValue)
 		case ast.Add:
-			panic("TODO")
+			return evaluateAdd(leftValue, rightValue)
 		case ast.And:
 			return evaluateAnd(leftValue, rightValue) 
 		case ast.Divide:
-			panic("TODO")
+			return evaluateDivide(leftValue, rightValue)
 		case ast.GreaterOrEqual:
 			panic("TODO")
 		case ast.LessOrEqual:
@@ -61,19 +63,19 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.LessThan:
 			panic("TODO")
 		case ast.Modulo:
-			panic("TODO")
+			return evaluateModulo(leftValue, rightValue)
 		case ast.Multiply:
-			panic("TODO")
+			return evaluateMultiply(leftValue, rightValue)
 		case ast.Or:
 			return evaluateOr(leftValue, rightValue)
 		case ast.Power:
-			panic("TODO")
+			return evaluatePower(leftValue, rightValue)
 		case ast.Range:
 			panic("TODO")
 		case ast.RangeInclusive:
 			panic("TODO")
 		case ast.Subtract:
-			panic("TODO")
+			return evaluateSubtract(leftValue, rightValue)
 		default:
 			panic(fmt.Sprintf("unexpected ast.Operator: %#v", expression.Operator))
 	}
@@ -212,4 +214,66 @@ func evaluateOr(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		panic(typeError("bool", leftBool))
 	}
 
+}
+
+func evaluateAdd(value1 PawnValue, value2 PawnValue) PawnValue {
+	return numberOperation(
+		value1, value2,
+		func(a int64, b int64) PawnValue { return PawnInt{a + b} },
+		func(a float64, b float64) PawnValue { return PawnFloat{a + b} },
+	)
+}
+
+func evaluateSubtract(value1 PawnValue, value2 PawnValue) PawnValue {
+	return numberOperation(
+		value1, value2,
+		func(a int64, b int64) PawnValue { return PawnInt{a - b} },
+		func(a float64, b float64) PawnValue { return PawnFloat{a - b} },
+	)
+}
+
+func evaluateMultiply(value1 PawnValue, value2 PawnValue) PawnValue {
+	return numberOperation(
+		value1, value2,
+		func(a int64, b int64) PawnValue { return PawnInt{a * b} },
+		func(a float64, b float64) PawnValue { return PawnFloat{a * b} },
+	)
+}
+
+func evaluateDivide(value1 PawnValue, value2 PawnValue) PawnValue {
+	return numberOperation(
+		value1, value2,
+			func(a int64, b int64) PawnValue { 
+				if b == 0 {
+					panic(divideByZeroError())
+				}
+				return PawnInt{a / b}	
+			},
+		func(a float64, b float64) PawnValue { return PawnFloat{a / b} },
+	)
+}
+
+func evaluateModulo(value1 PawnValue, value2 PawnValue) PawnValue {
+	return numberOperation(
+		value1, value2,
+		func(a int64, b int64) PawnValue { return PawnInt{a % b} },
+		func(a float64, b float64) PawnValue { return PawnFloat{math.Mod(a, b)} },
+	)
+}
+
+// helper func for using int64
+func powInt(x, y int64) int64 {
+	if y < 0 {
+		panic(negativePowerError(y))
+	} else {
+		return big.NewInt(0).Exp(big.NewInt(x), big.NewInt(y), nil).Int64()
+	}	
+}
+
+func evaluatePower(value1 PawnValue, value2 PawnValue) PawnValue {
+	return numberOperation(
+		value1, value2,
+		func(a int64, b int64) PawnValue { return PawnInt{powInt(a, b)} },
+		func(a float64, b float64) PawnValue { return PawnFloat{math.Pow(a, b)} },
+	)
 }
