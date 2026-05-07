@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"fmt"
+	"container/list"
 	"math"
 	"math/big"
 	"slices"
@@ -300,4 +301,29 @@ func evaluatePower(value1 PawnValue, value2 PawnValue) PawnValue {
 		func(a int64, b int64) PawnValue { return PawnInt{powInt(a, b)} },
 		func(a float64, b float64) PawnValue { return PawnFloat{math.Pow(a, b)} },
 	)
+}
+
+func evaluateRange(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	return numberOperation(
+		leftValue, rightValue,
+		func(a int64, b int64) PawnValue { 
+			if b <= a {
+				return PawnList{[]list{}} //not sure if this is right
+			} else {
+				rangeList := make([]PawnList, b-a)
+
+				for i := a; i < b; i++ {
+					rangeList[i-a] = i
+				}
+
+				return rangeList
+			}
+		 },
+		 func(a float64, b float64) PawnValue { panic(typeError("int", PawnFloat{})) },
+	)
+}
+
+
+func evaluateRangeInclusive()  {
+	
 }
