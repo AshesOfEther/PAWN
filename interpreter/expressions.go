@@ -110,11 +110,11 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		}
 	case PawnFunctionPrimitive:
 		if right, ok := rightValue.(PawnFunctionPrimitive); ok {
-			_ = right // TODO
+			result = left.v == right.v
 		}
 	case PawnFunctionUser:
 		if right, ok := rightValue.(PawnFunctionUser); ok {
-			_ = right // TODO
+			result = left.v == right.v
 		}
 	default:
 		panic(fmt.Sprint("Unexpected invalid type: ", leftValue))
