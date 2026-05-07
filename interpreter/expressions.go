@@ -108,8 +108,8 @@ func evaluateLessThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
 func evaluateLessOrEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	return numberOperation(
 		leftValue, rightValue,
-		func(a int64, b int64) PawnValue { return PawnBoolean{a >= b} },
-		func(a float64, b float64) PawnValue { return PawnBoolean{a >= b} },
+		func(a int64, b int64) PawnValue { return PawnBoolean{a <= b} },
+		func(a float64, b float64) PawnValue { return PawnBoolean{a <= b} },
 	)
 }
 
