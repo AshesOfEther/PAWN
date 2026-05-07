@@ -40,3 +40,9 @@ func typeError(expectedType string, gotValue PawnValue) PawnError {
 		fmt.Sprintf("expected %s, got %s: %v", expectedType, gotType, gotValue),
 	}
 }
+
+func duplicateNamedArgumentDeclarationError(name string) PawnError {
+	return PawnError{
+		fmt.Sprintf("named argument '%s' is declared more than once", name),
+	}
+}
