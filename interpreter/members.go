@@ -17,7 +17,7 @@ type MemberReturnedMap struct {
 }
 
 type MemberReturnedList struct {
-	list []PawnValue
+	list PawnList
 }
 
 type MemberReturnedIndex struct {
@@ -94,7 +94,7 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 					outputList[i] = (*listPawn.v)[v]
 				}
 
-				return MemberReturnedList{outputList}
+				return MemberReturnedList{PawnList{&outputList}}
 			}
 
 		default:
