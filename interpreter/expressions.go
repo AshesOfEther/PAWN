@@ -342,7 +342,7 @@ func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue
 					panic(PawnError(maxIntError()))
 				}
 
-				makeList := make([]PawnValue, b-a)
+				makeList := make([]PawnValue, (b-a)+1)
 				rangeList := PawnList{&makeList}
 
 				for i := a; i <= b; i++ {
