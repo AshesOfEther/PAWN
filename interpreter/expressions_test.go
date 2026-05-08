@@ -1,7 +1,6 @@
 package interpreter
 
 import (
-	"math"
 	"pawn/ast"
 	"testing"
 
