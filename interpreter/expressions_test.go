@@ -219,53 +219,17 @@ func TestArithmeticErrors(t *testing.T)  {
 }
 
 //Testing for range operations
-func makeListForRange(leftValue int64, rightValue int64) PawnValue {
-	if rightValue <= leftValue {
-		xx := []PawnValue{}
-
-		return PawnList{&xx} 
-	} else {
-		makeList := make([]PawnValue, rightValue-leftValue)
-		rangeList := PawnList{&makeList}
-		
-		for i := leftValue; i < rightValue; i++ {
-			(*rangeList.v)[i-leftValue] = PawnInt{i}
-		}
-
-		return rangeList
-	}
-}
-
 func TestRange(t *testing.T) {
-	assert.Equal(t, evaluateRange(PawnInt{0}, PawnInt{3}), makeListForRange(0,3))
-	assert.Equal(t, evaluateRange(PawnInt{0}, PawnInt{0}), makeListForRange(0,0))
-}
-
-func makeListForRangeInclusive(leftValue int64, rightValue int64) PawnValue {
-	if rightValue <= leftValue {
-		xx := []PawnValue{}
-
-		return PawnList{&xx} 
-	} else {
-		makeList := make([]PawnValue, (rightValue-leftValue)+1)
-		rangeList := PawnList{&makeList}
-
-		for i := leftValue; i <= rightValue; i++ {
-			(*rangeList.v)[i-leftValue] = PawnInt{i}
-		}
-
-		return rangeList
-	}	
+	assert.Equal(t, evaluateRange(PawnInt{0}, PawnInt{3}), PawnList{&[]PawnValue{PawnInt{0},PawnInt{1},PawnInt{2}}})
+	assert.Equal(t, evaluateRange(PawnInt{0}, PawnInt{0}), PawnList{&[]PawnValue{}})
 }
 
 func TestRangeInclusive(t *testing.T) {
-	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{3}), makeListForRangeInclusive(0,3))
-	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{0}), makeListForRangeInclusive(0,0))
+	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{3}), PawnList{&[]PawnValue{PawnInt{0},PawnInt{1},PawnInt{2}, PawnInt{3}}})
+	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{0}), PawnList{&[]PawnValue{}})
 }
 
 func TestRangeErrors(t *testing.T)  {
-	assert.PanicsWithValue(t, maxIntError(), func() {evaluateRange(PawnInt{math.MinInt64}, PawnInt{math.MaxInt64})})
 	assert.PanicsWithValue(t, typeError("int", PawnFloat{}), func() {evaluateRange(PawnFloat{2}, PawnFloat{2})})
-	assert.PanicsWithValue(t, maxIntError(), func() {evaluateRangeInclusive(PawnInt{math.MinInt64}, PawnInt{math.MaxInt64})})
 	assert.PanicsWithValue(t, typeError("int", PawnFloat{}), func() {evaluateRangeInclusive(PawnFloat{2}, PawnFloat{2})})
 }

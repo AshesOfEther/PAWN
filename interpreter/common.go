@@ -90,8 +90,8 @@ func divideByZeroError() PawnError {
 	}
 }
 
-func maxIntError() PawnError {
+func rangeFloatError() PawnError {
 	return PawnError{
-		("expected integer within the possible values but got a value outside"),
+		("Range was givin float"),
 	}
 }

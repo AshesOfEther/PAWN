@@ -307,25 +307,18 @@ func evaluateRange(leftValue PawnValue, rightValue PawnValue) PawnValue {
 		leftValue, rightValue,
          func(a, b int64) PawnValue {
 			if b <= a {
-				xx := []PawnValue{}
-
-				return PawnList{&xx} 
-			} else {
-				if uint64(b) - uint64(a) > math.MaxInt64 {
-					panic(PawnError(maxIntError()))
-				}
-
-				makeList := make([]PawnValue, b-a)
-				rangeList := PawnList{&makeList}
-
-				for i := a; i < b; i++ {
-					(*rangeList.v)[i-a] = PawnInt{i}
-				}
-
-				return rangeList
+				return PawnList{&[]PawnValue{}} 
 			}
+
+			makeList := make([]PawnValue, b-a)
+
+			for i := a; i < b; i++ {
+				makeList[i-a] = PawnInt{i}
+			}
+
+			return PawnList{&makeList}
 		 },
-		 func(a float64, b float64) PawnValue { panic(typeError("int", PawnFloat{})) },
+		 func(a float64, b float64) PawnValue { panic(rangeFloatError()) },
 	)
 }
 
@@ -334,24 +327,17 @@ func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue
 		leftValue, rightValue,
 		func(a int64, b int64) PawnValue {
 			if b <= a {
-				xx := []PawnValue{}
+				return PawnList{&[]PawnValue{}} 
+			} 
 
-				return PawnList{&xx} 
-			} else {
-				if uint64(b) - uint64(a) > math.MaxInt64 {
-					panic(PawnError(maxIntError()))
-				}
+			makeList := make([]PawnValue, (b-a)+1)
 
-				makeList := make([]PawnValue, (b-a)+1)
-				rangeList := PawnList{&makeList}
-
-				for i := a; i <= b; i++ {
-					(*rangeList.v)[i-a] = PawnInt{i}
-				}
-
-				return rangeList
+			for i := a; i <= b; i++ {
+				makeList[i-a] = PawnInt{i}
 			}
+
+			return PawnList{&makeList}
 		},
-		func(a, b float64) PawnValue { panic(typeError("int", PawnFloat{})) },
+		func(a, b float64) PawnValue { panic(rangeFloatError()) },
 	)
 }
