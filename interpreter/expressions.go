@@ -2,7 +2,6 @@ package interpreter
 
 import (
 	"fmt"
-	"container/list"
 	"math"
 	"math/big"
 	"slices"
@@ -72,9 +71,9 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.Power:
 			return evaluatePower(leftValue, rightValue)
 		case ast.Range:
-			panic("TODO")
+			return evaluateRange(leftValue, rightValue)
 		case ast.RangeInclusive:
-			panic("TODO")
+			return evaluateRangeInclusive(leftValue, rightValue)
 		case ast.Subtract:
 			return evaluateSubtract(leftValue, rightValue)
 		default:
@@ -306,14 +305,21 @@ func evaluatePower(value1 PawnValue, value2 PawnValue) PawnValue {
 func evaluateRange(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	return numberOperation(
 		leftValue, rightValue,
-		func(a int64, b int64) PawnValue { 
+         func(a, b int64) PawnValue {
 			if b <= a {
-				return PawnList{[]list{}} //not sure if this is right
+				xx := []PawnValue{}
+
+				return PawnList{&xx} 
 			} else {
-				rangeList := make([]PawnList, b-a)
+				if uint64(b) - uint64(a) > math.MaxInt64 {
+					panic(PawnError(maxIntError()))
+				}
+
+				makeList := make([]PawnValue, b-a)
+				rangeList := PawnList{&makeList}
 
 				for i := a; i < b; i++ {
-					rangeList[i-a] = i
+					(*rangeList.v)[i-a] = PawnInt{i}
 				}
 
 				return rangeList
@@ -323,7 +329,29 @@ func evaluateRange(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	)
 }
 
+func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	return numberOperation(
+		leftValue, rightValue,
+		func(a int64, b int64) PawnValue {
+			if b <= a {
+				xx := []PawnValue{}
 
-func evaluateRangeInclusive()  {
-	
+				return PawnList{&xx} 
+			} else {
+				if uint64(b) - uint64(a) > math.MaxInt64 {
+					panic(PawnError(maxIntError()))
+				}
+
+				makeList := make([]PawnValue, b-a)
+				rangeList := PawnList{&makeList}
+
+				for i := a; i <= b; i++ {
+					(*rangeList.v)[i-a] = PawnInt{i}
+				}
+
+				return rangeList
+			}
+		},
+		func(a, b float64) PawnValue { panic(typeError("int", PawnFloat{})) },
+	)
 }

@@ -89,3 +89,9 @@ func divideByZeroError() PawnError {
 		("expected non-zero divisor for integer division, got zero"),
 	}
 }
+
+func maxIntError() PawnError {
+	return PawnError{
+		("expected integer within the possible values but got a value outside"),
+	}
+}
