@@ -33,7 +33,17 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 		case ast.StringLiteral:
 			return PawnString{expression.Value}
 		case ast.MemberExpression:
-			panic("TODO")
+			member := EvaluateMember(expression.Member, environment)
+			switch member := member.(type) {
+				case MemberReturnedMap:
+					return member.mutateMe[member.nameToMutateAt]
+				case MemberReturnedList:
+					return member.list
+				case MemberReturnedIndex:
+					return member.list[member.indexToMutateAt]
+				default:
+					panic(fmt.Sprintf("Unexpected invalid Member return value: %t", member))
+			}
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
 	}
