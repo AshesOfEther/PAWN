@@ -124,7 +124,7 @@ func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	return PawnBoolean{result}
 }
 
-func evaluateNotEqual(leftValue PawnValue, rightValue PawnValue) PawnValue{
+func evaluateNotEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
 	return PawnBoolean{!evaluateEqual(leftValue, rightValue).(PawnBoolean).v}
 }
 
