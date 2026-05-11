@@ -7,10 +7,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//func TestEvaluateMemberIndex(t *testing.T) {
-//	memberStmt := ast.Index{}
-//	EvaluateMember(memberStmt, NewEnvironment(nil))
-//}
+func TestEvaluateMemberIndex(t *testing.T) {
+	env := NewEnvironment(nil)
+	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{&[]PawnValue{}}}}
+	env.variables["varForList"] = list
+
+	listAsVar := ast.MemberExpression{
+		Member: ast.Name{Name: "varForList"},
+	}
+
+	indexInBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}}}
+	indexOutOfBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{3}}}
+
+	assert.Equal(t, MemberReturnedIndex{env.variables["varForList"].(PawnList).v, 1}, EvaluateMember(indexInBounds, env))
+	assert.PanicsWithValue(t,
+		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
+		func () {EvaluateMember(indexOutOfBounds, env)},
+	)
+}
 
 func TestEvaluateMemberListIndex(t *testing.T) {
 	env := NewEnvironment(nil)
