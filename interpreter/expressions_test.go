@@ -189,7 +189,12 @@ func TestMemberIndexInExpression(t *testing.T) {
 
 func TestMemberIndeciesInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
-	env.variables["varForList"] = PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{false}}}
+	env.variables["varForList"] = PawnList{
+		&[]PawnValue{
+			PawnBoolean{true},
+			PawnBoolean{false},
+		},
+	}
 
 	indexInExpression := ast.MemberExpression{ast.Index{
 		ast.MemberExpression{
