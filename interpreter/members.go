@@ -2,7 +2,6 @@ package interpreter
 
 import (
 	"fmt"
-	"slices"
 
 	"pawn/ast"
 )
@@ -21,7 +20,7 @@ type MemberReturnedList struct {
 }
 
 type MemberReturnedIndex struct {
-	list []PawnValue
+	list *[]PawnValue // Pointer so you can modify original list, not a new one
 	indexToMutateAt int64
 }
 
@@ -67,36 +66,39 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 				maybeIndex := EvaluateExpression(member.Index[0], environment)
 
 				if indexPawn, ok := maybeIndex.(PawnInt); ok {
-					return MemberReturnedIndex{slices.Clone(*listPawn.v), indexPawn.v}
-				} else {
+					return MemberReturnedIndex{listPawn.v, indexPawn.v}
+				}
+				panic(PawnError{
+					fmt.Sprint("Cannot index with a non-integer: ", maybeIndex),
+				})
+			}
+
+			outputList := make([]PawnValue, len(member.Index))
+
+			for i, v := range member.Index {
+				maybeIndex := EvaluateExpression(v, environment)
+
+				indexPawn, ok := maybeIndex.(PawnInt)
+				if !ok {
 					panic(PawnError{
 						fmt.Sprint("Tried indexing with non-integer: ", maybeIndex),
 					})
 				}
-			} else {
-				indices := make([]int64, len(member.Index))
-
-				for i, v := range member.Index {
-					maybeIndex := EvaluateExpression(v, environment)
-
-					if indexPawn, ok := maybeIndex.(PawnInt); ok {
-						indices[i] = indexPawn.v
-					} else {
-						panic(PawnError{
-							fmt.Sprint("Tried indexing with non-integer: ", maybeIndex),
-						})
-					}
+				if indexPawn.v < 0 {
+					panic(PawnError{
+						fmt.Sprint("Cannot index with a negative integer: ", indexPawn.v),
+					})
 				}
-
-				outputList := make([]PawnValue, len(indices))
-
-				for i, v := range indices {
-					outputList[i] = (*listPawn.v)[v]
+				if indexPawn.v >= int64(len(*listPawn.v)) {
+					panic(PawnError{
+						fmt.Sprint("Cannot index with the integer ", indexPawn.v, " because it is not less than the list's size ", len(*listPawn.v)),
+					})
 				}
-
-				return MemberReturnedList{PawnList{&outputList}}
+				println(*listPawn.v, indexPawn.v)
+				outputList[i] = (*listPawn.v)[indexPawn.v]
 			}
 
+			return MemberReturnedList{PawnList{&outputList}}
 		default:
 			panic(fmt.Sprint("Unexpected invalid Member: ", member))
 	}

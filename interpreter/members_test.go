@@ -11,11 +11,34 @@ import (
 //	memberStmt := ast.Index{}
 //	EvaluateMember(memberStmt, NewEnvironment(nil))
 //}
-//
-//func TestEvaluateMemberListIndex(t *testing.T) {
-//	memberStmt := ast.Index{}
-//	EvaluateMember(memberStmt, NewEnvironment(nil))
-//}
+
+func TestEvaluateMemberListIndex(t *testing.T) {
+	env := NewEnvironment(nil)
+	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{}}}
+	(*list.v)[1] = list // Recursive list
+	env.variables["varForList"] = list
+	listAsVar := ast.MemberExpression{
+		Member: ast.Name{Name: "varForList"},
+	}
+
+	// 0-length empty indexing
+	memberIndexListEmpty := ast.Index{List: listAsVar, Index: []ast.Expression{}}
+	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{}}}, EvaluateMember(memberIndexListEmpty, env))
+
+	// duplicate index
+	memberIndexListDuplicate := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 0}}}
+	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}}, EvaluateMember(memberIndexListDuplicate, env))
+
+	// 3-value indexing
+	memberIndexList3Values := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 1}, ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 1}}}
+	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}}, EvaluateMember(memberIndexList3Values, env))
+
+	// Index not found
+	memberIndexListNotFound := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 2}}}
+	assert.PanicsWithValue(t, PawnError{"Cannot index with the integer 2 because it is not less than the list's size 2"}, func () {
+		EvaluateMember(memberIndexListNotFound, env)
+	})
+}
 
 func TestEvaluateMemberProperty(t *testing.T) {
 	env := NewEnvironment(nil)
