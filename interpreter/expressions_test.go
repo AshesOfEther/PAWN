@@ -179,7 +179,7 @@ func TestMemberIndexInExpression(t *testing.T) {
 		},
 		[]ast.Expression{ast.IntLiteral{1}},
 	}}
-	assert.Equal(t, PawnList{&[]PawnValue{}}, EvaluateExpression(indexInExpression, env))
+	assert.Equal(t, PawnList{&[]PawnValue{}}, evaluateMemberExpression(indexInExpression, env))
 }
 
 func TestMemberIndeciesInExpression(t *testing.T) {
@@ -193,7 +193,7 @@ func TestMemberIndeciesInExpression(t *testing.T) {
 		},
 		[]ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}},
 	}}
-	assert.Equal(t, PawnList{&[]PawnValue{PawnBoolean{false}, PawnBoolean{true}}}, EvaluateExpression(indexInExpression, env))
+	assert.Equal(t, PawnList{&[]PawnValue{PawnBoolean{false}, PawnBoolean{true}}}, evaluateMemberExpression(indexInExpression, env))
 }
 
 func TestMemberPropertyInExpression(t *testing.T) {
@@ -207,7 +207,7 @@ func TestMemberPropertyInExpression(t *testing.T) {
 		},
 		"one",
 	}}
-	assert.Equal(t, PawnBoolean{true}, EvaluateExpression(indexInExpression, env))
+	assert.Equal(t, PawnBoolean{true}, evaluateMemberExpression(indexInExpression, env))
 }
 
 
