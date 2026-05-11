@@ -171,8 +171,10 @@ func TestValidateArgumentsUnexpectedNamedArg(t *testing.T) {
 func TestMemberIndexInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
 	env.variables["varForList"] = PawnList{
-		&[]PawnValue{PawnBoolean{true},
-		PawnList{&[]PawnValue{}}},
+		&[]PawnValue{
+			PawnBoolean{true},
+			PawnList{&[]PawnValue{}},
+		},
 	}
 
 	indexInExpression := ast.MemberExpression{ast.Index{
