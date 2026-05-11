@@ -170,7 +170,10 @@ func TestValidateArgumentsUnexpectedNamedArg(t *testing.T) {
 
 func TestMemberIndexInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
-	env.variables["varForList"] = PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{&[]PawnValue{}}}}
+	env.variables["varForList"] = PawnList{
+		&[]PawnValue{PawnBoolean{true},
+		PawnList{&[]PawnValue{}}},
+	}
 
 	indexInExpression := ast.MemberExpression{ast.Index{
 		ast.MemberExpression{
@@ -202,7 +205,12 @@ func TestMemberIndeciesInExpression(t *testing.T) {
 
 func TestMemberPropertyInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
-	env.variables["varForObj"] = PawnObject{map[string]PawnValue{"one": PawnBoolean{true}, "two": PawnBoolean{false}}}
+	env.variables["varForObj"] = PawnObject{
+		map[string]PawnValue{
+			"one": PawnBoolean{true},
+			"two": PawnBoolean{false},
+		},
+	}
 
 	indexInExpression := ast.MemberExpression{ast.Property{
 		ast.MemberExpression{
@@ -212,7 +220,7 @@ func TestMemberPropertyInExpression(t *testing.T) {
 	}}
 	assert.Equal(t,
 		PawnBoolean{true},
-		evaluateMemberExpression(indexInExpression, env)
+		evaluateMemberExpression(indexInExpression, env),
 	)
 }
 
