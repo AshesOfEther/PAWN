@@ -19,19 +19,19 @@ func TestEvaluateMemberIndex(t *testing.T) {
 	indexInBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}}}
 	indexOutOfBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{3}}}
 
-	assert.Equal(t, MemberReturnedIndex{*env.variables["varForList"].(PawnList).v, 1}, EvaluateMember(indexInBounds, env))
+	assert.Equal(t, MemberReturnedIndex{*env.variables["varForList"].(PawnList).v, 1}, evaluateMemberIndex(indexInBounds, env))
 	assert.PanicsWithValue(t,
 		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
-		func () {EvaluateMember(indexOutOfBounds, env)},
+		func () {evaluateMemberIndex(indexOutOfBounds, env)},
 	)
 	assert.PanicsWithValue(t,
 		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
-		func () {EvaluateMember(indexOutOfBounds, env)},
+		func () {evaluateMemberIndex(indexOutOfBounds, env)},
 	)
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{3}}}
 	assert.PanicsWithValue(t,
 		PawnError{"Tried indexing non-list: {true}"},
-		func () {EvaluateMember(indexNonList, env)},
+		func () {evaluateMemberIndex(indexNonList, env)},
 	)
 }
 
@@ -46,27 +46,27 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 
 	// 0-length empty indexing
 	memberIndexListEmpty := ast.Index{List: listAsVar, Index: []ast.Expression{}}
-	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{}}}, EvaluateMember(memberIndexListEmpty, env))
+	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{}}}, evaluateMemberIndex(memberIndexListEmpty, env))
 
 	// duplicate index
 	memberIndexListDuplicate := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 0}}}
-	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}}, EvaluateMember(memberIndexListDuplicate, env))
+	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}}, evaluateMemberIndex(memberIndexListDuplicate, env))
 
 	// 3-value indexing
 	memberIndexList3Values := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 1}, ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 1}}}
-	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}}, EvaluateMember(memberIndexList3Values, env))
+	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}}, evaluateMemberIndex(memberIndexList3Values, env))
 
 	// Index not found
 	memberIndexListNotFound := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 2}}}
 	assert.PanicsWithValue(t, PawnError{"Cannot index with the integer 2 because it is not less than the list's size 2"}, func () {
-		EvaluateMember(memberIndexListNotFound, env)
+		evaluateMemberIndex(memberIndexListNotFound, env)
 	})
 
 	// Multi-indexing non-list
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{1}}}
 	assert.PanicsWithValue(t,
 		PawnError{"Tried indexing non-list: {true}"},
-		func () {EvaluateMember(indexNonList, env)},
+		func () {evaluateMemberIndex(indexNonList, env)},
 	)
 
 	// TODO After implementing call completely, test changing list in second arg while indexing.
@@ -80,15 +80,15 @@ func TestEvaluateMemberProperty(t *testing.T) {
 	objectAsVar := ast.MemberExpression{
 		Member: ast.Name{Name: "varForObject"},
 	}
-	assert.Equal(t, MemberReturnedMap{object.v, "property"}, EvaluateMember(ast.Property{Object: objectAsVar, Property: "property"}, env))
+	assert.Equal(t, MemberReturnedMap{object.v, "property"}, evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "property"}, env))
 	assert.PanicsWithValue(t, PawnError{"Field \"notProperty\" doesn't exist in object"}, func() {
-		EvaluateMember(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
+		evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
 	})
 
 	accesssNonObject := ast.Property{ast.BooleanLiteral{true}, "property"}
 	assert.PanicsWithValue(t,
 		PawnError{"Tried accessing property of non-object: {map[]}"},
-		func () {EvaluateMember(accesssNonObject, env)},
+		func () {evaluateMemberProperty(accesssNonObject, env)},
 	)
 }
 
@@ -102,13 +102,13 @@ func TestEvaluateMemberEnvironmentName(t *testing.T) {
 
 	// Var doesn't exist, shallow and deep search:
 	assert.PanicsWithValue(t, PawnError{"Variable \"notVar\" doesn't exist"}, func() {
-		EvaluateMember(memberNameNotFound, env)
+		evaluateMemberName(memberNameNotFound, env)
 	})
 	assert.PanicsWithValue(t, PawnError{"Variable \"notVar\" doesn't exist"}, func() {
-		EvaluateMember(memberNameNotFound, envDeep)
+		evaluateMemberName(memberNameNotFound, envDeep)
 	})
 
 	// Var exists, shallow and deep search:
-	assert.Equal(t, MemberReturnedMap{env.variables, "var"}, EvaluateMember(memberNameFound, env))
-	assert.Equal(t, MemberReturnedMap{env.variables, "var"}, EvaluateMember(memberNameFound, envDeep))
+	assert.Equal(t, MemberReturnedMap{env.variables, "var"}, evaluateMemberName(memberNameFound, env))
+	assert.Equal(t, MemberReturnedMap{env.variables, "var"}, evaluateMemberName(memberNameFound, envDeep))
 }
