@@ -33,19 +33,7 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 		case ast.StringLiteral:
 			return PawnString{expression.Value}
 		case ast.MemberExpression:
-			member := EvaluateMember(expression.Member, environment)
-			switch member := member.(type) {
-				case MemberReturnedMap:
-					// It is impossible for the name to not exist since MemberReturnedMap only has a valid object and field
-					return member.mutateMe[member.nameToMutateAt]
-				case MemberReturnedList:
-					return member.list
-				case MemberReturnedIndex:
-					// It is impossible to be out of bounds since MemberReturnedIndex only has a valid list and index
-					return member.list[member.indexToMutateAt]
-				default:
-					panic(fmt.Sprintf("Unexpected invalid Member return value: %t", member))
-			}
+			return evaluateMemberExpression(expression, environment)
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
 	}
@@ -364,4 +352,20 @@ func evaluateList(list ast.List, environment Environment) PawnList {
 	}
 
 	return PawnList{&newList}
+}
+
+func evaluateMemberExpression(expression ast.MemberExpression, environment Environment) PawnValue {
+	member := EvaluateMember(expression.Member, environment)
+	switch member := member.(type) {
+		case MemberReturnedMap:
+			// It is impossible for the name to not exist since MemberReturnedMap only has a valid object and field
+			return member.mutateMe[member.nameToMutateAt]
+		case MemberReturnedList:
+			return member.list
+		case MemberReturnedIndex:
+			// It is impossible to be out of bounds since MemberReturnedIndex only has a valid list and index
+			return member.list[member.indexToMutateAt]
+		default:
+			panic(fmt.Sprintf("Unexpected invalid Member return value: %t", member))
+	}
 }
