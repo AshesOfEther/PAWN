@@ -92,6 +92,6 @@ func divideByZeroError() PawnError {
 
 func rangeFloatError() PawnError {
 	return PawnError{
-		("Range was givin float"),
+		("Range was given float"),
 	}
 }
