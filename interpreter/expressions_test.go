@@ -216,3 +216,22 @@ func TestArithmeticErrors(t *testing.T)  {
 	assert.PanicsWithValue(t, divideByZeroError(), func() {evaluateDivide(PawnInt{1}, PawnInt{0})})
 	assert.PanicsWithValue(t, negativePowerError(-1), func() {evaluatePower(PawnInt{1}, PawnInt{-1})})
 }
+
+//Testing for range operations
+func TestRange(t *testing.T) {
+	assert.Equal(t, evaluateRange(PawnInt{0}, PawnInt{3}), PawnList{&[]PawnValue{PawnInt{0},PawnInt{1},PawnInt{2}}})
+	assert.Equal(t, evaluateRange(PawnInt{0}, PawnInt{0}), PawnList{&[]PawnValue{}})
+}
+
+func TestRangeInclusive(t *testing.T) {
+	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{3}), PawnList{&[]PawnValue{PawnInt{0},PawnInt{1},PawnInt{2}, PawnInt{3}}})
+	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{0}), PawnList{&[]PawnValue{PawnInt{0}}})
+}
+
+func TestRangeErrorsOnFloat(t *testing.T)  {
+	assert.PanicsWithValue(t, rangeFloatError(), func() {evaluateRange(PawnFloat{2}, PawnFloat{2})})
+}
+
+func TestRangeInclusiveErrorsOnFloat(t *testing.T) {
+	assert.PanicsWithValue(t, rangeFloatError(), func() {evaluateRangeInclusive(PawnFloat{2}, PawnFloat{2})})
+}

@@ -89,3 +89,9 @@ func divideByZeroError() PawnError {
 		("expected non-zero divisor for integer division, got zero"),
 	}
 }
+
+func rangeFloatError() PawnError {
+	return PawnError{
+		("Range was given float"),
+	}
+}

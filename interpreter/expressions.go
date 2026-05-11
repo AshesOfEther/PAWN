@@ -71,9 +71,9 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 		case ast.Power:
 			return evaluatePower(leftValue, rightValue)
 		case ast.Range:
-			panic("TODO")
+			return evaluateRange(leftValue, rightValue)
 		case ast.RangeInclusive:
-			panic("TODO")
+			return evaluateRangeInclusive(leftValue, rightValue)
 		case ast.Subtract:
 			return evaluateSubtract(leftValue, rightValue)
 		default:
@@ -299,5 +299,45 @@ func evaluatePower(value1 PawnValue, value2 PawnValue) PawnValue {
 		value1, value2,
 		func(a int64, b int64) PawnValue { return PawnInt{powInt(a, b)} },
 		func(a float64, b float64) PawnValue { return PawnFloat{math.Pow(a, b)} },
+	)
+}
+
+func evaluateRange(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	return numberOperation(
+		leftValue, rightValue,
+         func(a, b int64) PawnValue {
+			if b <= a {
+				return PawnList{&[]PawnValue{}} 
+			}
+
+			makeList := make([]PawnValue, b-a)
+
+			for i := a; i < b; i++ {
+				makeList[i-a] = PawnInt{i}
+			}
+
+			return PawnList{&makeList}
+		 },
+		 func(a float64, b float64) PawnValue { panic(rangeFloatError()) },
+	)
+}
+
+func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue {
+	return numberOperation(
+		leftValue, rightValue,
+		func(a int64, b int64) PawnValue {
+			if b <= a {
+				return PawnList{&[]PawnValue{PawnInt{b}}} 
+			} 
+
+			makeList := make([]PawnValue, (b-a)+1)
+
+			for i := a; i <= b; i++ {
+				makeList[i-a] = PawnInt{i}
+			}
+
+			return PawnList{&makeList}
+		},
+		func(a, b float64) PawnValue { panic(rangeFloatError()) },
 	)
 }
