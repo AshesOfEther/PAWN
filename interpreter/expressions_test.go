@@ -197,9 +197,17 @@ func TestMemberIndeciesInExpression(t *testing.T) {
 }
 
 func TestMemberPropertyInExpression(t *testing.T) {
-	// TODO
-	//			case MemberReturnedMap:
-	//				return member.mutateMe[member.nameToMutateAt]
+	env := NewEnvironment(nil)
+	obj := PawnObject{map[string]PawnValue{"one": PawnBoolean{true}, "two": PawnBoolean{false}}}
+	env.variables["varForObj"] = obj
+
+	indexInExpression := ast.MemberExpression{ast.Property{
+		ast.MemberExpression{
+			ast.Name{"varForObj"},
+		},
+		"one",
+	}}
+	assert.Equal(t, PawnBoolean{true}, EvaluateExpression(indexInExpression, env))
 }
 
 
