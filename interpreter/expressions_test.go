@@ -170,16 +170,18 @@ func TestValidateArgumentsUnexpectedNamedArg(t *testing.T) {
 
 func TestMemberIndexInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
-	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{&[]PawnValue{}}}}
-	env.variables["varForList"] = list
+	env.variables["varForList"] = PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{&[]PawnValue{}}}}
 
 	indexInExpression := ast.MemberExpression{ast.Index{
 		ast.MemberExpression{
-			ast.Name{Name: "varForList"},
+			ast.Name{"varForList"},
 		},
 		[]ast.Expression{ast.IntLiteral{1}},
 	}}
-	assert.Equal(t, PawnList{&[]PawnValue{}}, evaluateMemberExpression(indexInExpression, env))
+	assert.Equal(t,
+		PawnList{&[]PawnValue{}},
+		evaluateMemberExpression(indexInExpression, env),
+	)
 }
 
 func TestMemberIndeciesInExpression(t *testing.T) {
@@ -200,8 +202,7 @@ func TestMemberIndeciesInExpression(t *testing.T) {
 
 func TestMemberPropertyInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
-	obj := PawnObject{map[string]PawnValue{"one": PawnBoolean{true}, "two": PawnBoolean{false}}}
-	env.variables["varForObj"] = obj
+	env.variables["varForObj"] = PawnObject{map[string]PawnValue{"one": PawnBoolean{true}, "two": PawnBoolean{false}}}
 
 	indexInExpression := ast.MemberExpression{ast.Property{
 		ast.MemberExpression{
@@ -209,7 +210,10 @@ func TestMemberPropertyInExpression(t *testing.T) {
 		},
 		"one",
 	}}
-	assert.Equal(t, PawnBoolean{true}, evaluateMemberExpression(indexInExpression, env))
+	assert.Equal(t,
+		PawnBoolean{true},
+		evaluateMemberExpression(indexInExpression, env)
+	)
 }
 
 
