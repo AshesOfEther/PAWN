@@ -73,8 +73,7 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 				})
 			}
 
-			outputList := make([]PawnValue, len(member.Index))
-
+			indecies := make([]int64, len(member.Index))
 			for i, v := range member.Index {
 				maybeIndex := EvaluateExpression(v, environment)
 
@@ -84,18 +83,22 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 						fmt.Sprint("Tried indexing with non-integer: ", maybeIndex),
 					})
 				}
-				if indexPawn.v < 0 {
+				indecies[i] = indexPawn.v
+			}
+
+			outputList := make([]PawnValue, len(member.Index))
+			for i, v := range indecies {
+				if v < 0 {
 					panic(PawnError{
-						fmt.Sprint("Cannot index with a negative integer: ", indexPawn.v),
+						fmt.Sprint("Cannot index with a negative integer: ", v),
 					})
 				}
-				if indexPawn.v >= int64(len(*listPawn.v)) {
+				if v >= int64(len(*listPawn.v)) {
 					panic(PawnError{
-						fmt.Sprint("Cannot index with the integer ", indexPawn.v, " because it is not less than the list's size ", len(*listPawn.v)),
+						fmt.Sprint("Cannot index with the integer ", v, " because it is not less than the list's size ", len(*listPawn.v)),
 					})
 				}
-				println(*listPawn.v, indexPawn.v)
-				outputList[i] = (*listPawn.v)[indexPawn.v]
+				outputList[i] = (*listPawn.v)[v]
 			}
 
 			return MemberReturnedList{PawnList{&outputList}}
