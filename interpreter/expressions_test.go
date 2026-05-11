@@ -184,16 +184,18 @@ func TestMemberIndexInExpression(t *testing.T) {
 
 func TestMemberIndeciesInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
-	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{false}}}
-	env.variables["varForList"] = list
+	env.variables["varForList"] = PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{false}}}
 
 	indexInExpression := ast.MemberExpression{ast.Index{
 		ast.MemberExpression{
-			ast.Name{Name: "varForList"},
+			ast.Name{"varForList"},
 		},
 		[]ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}},
 	}}
-	assert.Equal(t, PawnList{&[]PawnValue{PawnBoolean{false}, PawnBoolean{true}}}, evaluateMemberExpression(indexInExpression, env))
+	assert.Equal(t,
+		PawnList{&[]PawnValue{PawnBoolean{false}, PawnBoolean{true}}},
+		evaluateMemberExpression(indexInExpression, env),
+	)
 }
 
 func TestMemberPropertyInExpression(t *testing.T) {
