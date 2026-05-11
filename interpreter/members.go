@@ -20,7 +20,10 @@ type MemberReturnedList struct {
 }
 
 type MemberReturnedIndex struct {
-	list *[]PawnValue // Pointer so you can modify original list, not a new one
+	// Not pointer to list.
+	// List only re-alocates when changing size, and
+	// the list cannot change size while MemberReturnedIndex is in use.
+	list []PawnValue
 	indexToMutateAt int64
 }
 
@@ -82,7 +85,7 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 					})
 				}
 
-				return MemberReturnedIndex{listPawn.v, index.v}
+				return MemberReturnedIndex{*listPawn.v, index.v}
 			}
 
 			indecies := make([]int64, len(member.Index))

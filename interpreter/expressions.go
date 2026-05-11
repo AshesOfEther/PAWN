@@ -40,10 +40,13 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 				case MemberReturnedList:
 					return member.list
 				case MemberReturnedIndex:
-					if int64(len(*member.list)) < member.indexToMutateAt || 0 > member.indexToMutateAt {
-						panic(PawnError{fmt.Sprint("Index out of bounds: ", member.indexToMutateAt)})
+
+					// It is impossible to be out of bounds since MemberReturnedIndex only has a valid list and index
+					if int64(len(member.list)) < member.indexToMutateAt || 0 > member.indexToMutateAt {
+						panic(fmt.Sprint("Unexpected index out of bounds: ", member.indexToMutateAt))
 					}
-					return (*member.list)[member.indexToMutateAt]
+
+					return member.list[member.indexToMutateAt]
 				default:
 					panic(fmt.Sprintf("Unexpected invalid Member return value: %t", member))
 			}

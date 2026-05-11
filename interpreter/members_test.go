@@ -19,7 +19,7 @@ func TestEvaluateMemberIndex(t *testing.T) {
 	indexInBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}}}
 	indexOutOfBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{3}}}
 
-	assert.Equal(t, MemberReturnedIndex{env.variables["varForList"].(PawnList).v, 1}, EvaluateMember(indexInBounds, env))
+	assert.Equal(t, MemberReturnedIndex{*env.variables["varForList"].(PawnList).v, 1}, EvaluateMember(indexInBounds, env))
 	assert.PanicsWithValue(t,
 		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
 		func () {EvaluateMember(indexOutOfBounds, env)},
