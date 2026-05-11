@@ -36,16 +36,12 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 			member := EvaluateMember(expression.Member, environment)
 			switch member := member.(type) {
 				case MemberReturnedMap:
+					// It is impossible for the name to not exist since MemberReturnedIndex only has a valid list and index
 					return member.mutateMe[member.nameToMutateAt]
 				case MemberReturnedList:
 					return member.list
 				case MemberReturnedIndex:
-
 					// It is impossible to be out of bounds since MemberReturnedIndex only has a valid list and index
-					if int64(len(member.list)) < member.indexToMutateAt || 0 > member.indexToMutateAt {
-						panic(fmt.Sprint("Unexpected index out of bounds: ", member.indexToMutateAt))
-					}
-
 					return member.list[member.indexToMutateAt]
 				default:
 					panic(fmt.Sprintf("Unexpected invalid Member return value: %t", member))
