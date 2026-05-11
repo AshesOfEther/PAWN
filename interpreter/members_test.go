@@ -38,6 +38,9 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 	assert.PanicsWithValue(t, PawnError{"Cannot index with the integer 2 because it is not less than the list's size 2"}, func () {
 		EvaluateMember(memberIndexListNotFound, env)
 	})
+
+	// TODO After implementing call completely, test changing list in second arg while indexing.
+	// It's supposed to index as the last step, so index errors do not happen if the non-modified list is short.
 }
 
 func TestEvaluateMemberProperty(t *testing.T) {
