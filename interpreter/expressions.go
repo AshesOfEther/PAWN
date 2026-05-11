@@ -36,7 +36,7 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 			member := EvaluateMember(expression.Member, environment)
 			switch member := member.(type) {
 				case MemberReturnedMap:
-					// It is impossible for the name to not exist since MemberReturnedIndex only has a valid list and index
+					// It is impossible for the name to not exist since MemberReturnedMap only has a valid object and field
 					return member.mutateMe[member.nameToMutateAt]
 				case MemberReturnedList:
 					return member.list
