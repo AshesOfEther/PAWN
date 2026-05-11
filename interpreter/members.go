@@ -64,13 +64,25 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 
 			if len(member.Index) == 1 {
 				maybeIndex := EvaluateExpression(member.Index[0], environment)
+				index, ok := maybeIndex.(PawnInt)
 
-				if indexPawn, ok := maybeIndex.(PawnInt); ok {
-					return MemberReturnedIndex{listPawn.v, indexPawn.v}
+				if !ok {
+					panic(PawnError{
+						fmt.Sprint("Cannot index with a non-integer: ", maybeIndex),
+					})
 				}
-				panic(PawnError{
-					fmt.Sprint("Cannot index with a non-integer: ", maybeIndex),
-				})
+				if index.v < 0 {
+					panic(PawnError{
+						fmt.Sprint("Cannot index with a negative integer: ", index.v),
+					})
+				}
+				if index.v >= int64(len(*listPawn.v)) {
+					panic(PawnError{
+						fmt.Sprint("Cannot index with the integer ", index.v, " because it is not less than the list's size ", len(*listPawn.v)),
+					})
+				}
+
+				return MemberReturnedIndex{listPawn.v, index.v}
 			}
 
 			indecies := make([]int64, len(member.Index))
