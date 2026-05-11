@@ -327,7 +327,7 @@ func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue
 		leftValue, rightValue,
 		func(a int64, b int64) PawnValue {
 			if b <= a {
-				return PawnList{&[]PawnValue{}} 
+				return PawnList{&[]PawnValue{PawnInt{b}}} 
 			} 
 
 			makeList := make([]PawnValue, (b-a)+1)

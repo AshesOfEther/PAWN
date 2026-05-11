@@ -225,10 +225,10 @@ func TestRange(t *testing.T) {
 
 func TestRangeInclusive(t *testing.T) {
 	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{3}), PawnList{&[]PawnValue{PawnInt{0},PawnInt{1},PawnInt{2}, PawnInt{3}}})
-	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{0}), PawnList{&[]PawnValue{}})
+	assert.Equal(t, evaluateRangeInclusive(PawnInt{0}, PawnInt{0}), PawnList{&[]PawnValue{PawnInt{0}}})
 }
 
 func TestRangeErrors(t *testing.T)  {
-	assert.PanicsWithValue(t, typeError("int", PawnFloat{}), func() {evaluateRange(PawnFloat{2}, PawnFloat{2})})
-	assert.PanicsWithValue(t, typeError("int", PawnFloat{}), func() {evaluateRangeInclusive(PawnFloat{2}, PawnFloat{2})})
+	assert.PanicsWithValue(t, rangeFloatError(), func() {evaluateRange(PawnFloat{2}, PawnFloat{2})})
+	assert.PanicsWithValue(t, rangeFloatError(), func() {evaluateRangeInclusive(PawnFloat{2}, PawnFloat{2})})
 }
