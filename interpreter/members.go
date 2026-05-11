@@ -47,7 +47,7 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 			object, ok := EvaluateExpression(member.Object, environment).(PawnObject)
 			if !ok {
 				panic(PawnError{
-					fmt.Sprint("Tried accessing non-existant property: ", member.Property),
+					fmt.Sprint("Tried accessing property of non-object: ", object),
 				})
 			}
 			if _, ok := object.v[member.Property]; ok {
