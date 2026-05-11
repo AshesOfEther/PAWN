@@ -45,19 +45,19 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 	}
 
 	// 0-length empty indexing
-	memberIndexListEmpty := ast.Index{List: listAsVar, Index: []ast.Expression{}}
+	memberIndexListEmpty := ast.Index{listAsVar, []ast.Expression{}}
 	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{}}}, evaluateMemberIndex(memberIndexListEmpty, env))
 
 	// duplicate index
-	memberIndexListDuplicate := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 0}}}
+	memberIndexListDuplicate := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{0}}}
 	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}}, evaluateMemberIndex(memberIndexListDuplicate, env))
 
 	// 3-value indexing
-	memberIndexList3Values := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 1}, ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 1}}}
+	memberIndexList3Values := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}, ast.IntLiteral{1}}}
 	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}}, evaluateMemberIndex(memberIndexList3Values, env))
 
 	// Index not found
-	memberIndexListNotFound := ast.Index{List: listAsVar, Index: []ast.Expression{ast.IntLiteral{Value: 0}, ast.IntLiteral{Value: 2}}}
+	memberIndexListNotFound := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{2}}}
 	assert.PanicsWithValue(t, PawnError{"Cannot index with the integer 2 because it is not less than the list's size 2"}, func () {
 		evaluateMemberIndex(memberIndexListNotFound, env)
 	})
