@@ -231,7 +231,6 @@ func TestMemberPropertyInExpression(t *testing.T) {
 	)
 }
 
-
 // Testing for all arithmetic operations
 func TestAdd(t *testing.T) {
 	assert.Equal(t, evaluateAdd(PawnInt{1}, PawnInt{1}), PawnInt{2})
