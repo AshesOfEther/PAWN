@@ -168,6 +168,41 @@ func TestValidateArgumentsUnexpectedNamedArg(t *testing.T) {
 	})
 }
 
+func TestMemberIndexInExpression(t *testing.T) {
+	env := NewEnvironment(nil)
+	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{&[]PawnValue{}}}}
+	env.variables["varForList"] = list
+
+	indexInExpression := ast.MemberExpression{ast.Index{
+		ast.MemberExpression{
+			ast.Name{Name: "varForList"},
+		},
+		[]ast.Expression{ast.IntLiteral{1}},
+	}}
+	assert.Equal(t, PawnList{&[]PawnValue{}}, EvaluateExpression(indexInExpression, env))
+}
+
+func TestMemberIndeciesInExpression(t *testing.T) {
+	env := NewEnvironment(nil)
+	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{false}}}
+	env.variables["varForList"] = list
+
+	indexInExpression := ast.MemberExpression{ast.Index{
+		ast.MemberExpression{
+			ast.Name{Name: "varForList"},
+		},
+		[]ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}},
+	}}
+	assert.Equal(t, PawnList{&[]PawnValue{PawnBoolean{false}, PawnBoolean{true}}}, EvaluateExpression(indexInExpression, env))
+}
+
+func TestMemberPropertyInExpression(t *testing.T) {
+	// TODO
+	//			case MemberReturnedMap:
+	//				return member.mutateMe[member.nameToMutateAt]
+}
+
+
 // Testing for all arithmetic operations
 func TestAdd(t *testing.T) {
 	assert.Equal(t, evaluateAdd(PawnInt{1}, PawnInt{1}), PawnInt{2})
