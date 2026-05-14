@@ -28,9 +28,9 @@ func generateExpression(ctx parsing.IExpressionContext) Expression {
 			positionalArguments = make([]Expression, 0)
 		}
 
-		originalNamedArgs := argList.NamedArgs().AllNamedArg()
 		var namedArguments []NamedArg
 		if argList.NamedArgs() != nil {
+			originalNamedArgs := argList.NamedArgs().AllNamedArg()
 			namedArguments = make([]NamedArg, len(originalNamedArgs))
 			for i, namedArg := range originalNamedArgs {
 				namedArguments[i] = NamedArg{
