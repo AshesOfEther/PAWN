@@ -85,17 +85,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 				fmt.Sprint("Cannot index with a non-integer: ", maybeIndex),
 			})
 		}
-		if index.v < 0 {
-			panic(PawnError{
-				fmt.Sprint("Cannot index with a negative integer: ", index.v),
-			})
-		}
-		if index.v >= int64(len(*pawnList.v)) {
-			panic(PawnError{
-				fmt.Sprint("Cannot index with the integer ", index.v, " because it is not less than the list's size ", len(*pawnList.v)),
-			})
-		}
-
+		validateIndex(index.v, pawnList)
 		return Index{*pawnList.v, index.v}
 	}
 
@@ -114,18 +104,22 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 
 	outputList := make([]PawnValue, len(member.Index))
 	for i, v := range indecies {
-		if v < 0 {
-			panic(PawnError{
-				fmt.Sprint("Cannot index with a negative integer: ", v),
-			})
-		}
-		if v >= int64(len(*pawnList.v)) {
-			panic(PawnError{
-				fmt.Sprint("Cannot index with the integer ", v, " because it is not less than the list's size ", len(*pawnList.v)),
-			})
-		}
+		validateIndex(v, pawnList)
 		outputList[i] = (*pawnList.v)[v]
 	}
 
 	return PawnList{&outputList}
+}
+
+func validateIndex(index int64, pawnList PawnList) {
+	if index < 0 {
+		panic(PawnError{
+			fmt.Sprint("Cannot index with a negative integer: ", index),
+		})
+	}
+	if index >= int64(len(*pawnList.v)) {
+		panic(PawnError{
+			fmt.Sprint("Cannot index with the integer ", index, " because it is not less than the list's size ", len(*pawnList.v)),
+		})
+	}
 }
