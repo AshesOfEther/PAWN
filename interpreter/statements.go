@@ -21,7 +21,7 @@ func EvaluateStatement(statement ast.Statement, environment Environment) Control
 		case ast.Assignment:
 			panic("TODO")
 		case ast.ExpressionStatement:
-			panic("TODO")
+			EvaluateExpressionStatement(statement, environment)
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Statement: %t", statement))
 	}
@@ -85,6 +85,17 @@ func evaluateReturn(statement ast.Return, environment Environment) Return {
 		value = EvaluateExpression(*statement.Value, environment)
 	}
 	return Return{value}
+}
+
+func EvaluateExpressionStatement(statement ast.ExpressionStatement, environment Environment) PawnValue {
+	// `EvaluateExpression` errors if the function doesn't return a value, because
+	// it's used in cases wwhere a value is expected. However, it's fine when the
+	// function call is an expression statement, because a value is not needed.
+	if call, ok := statement.Expression.(ast.FunctionCall); ok {
+		return evaluateFunctionCall(call, environment)
+	}
+
+	return EvaluateExpression(statement.Expression, environment)
 }
 
 func EvaluateStatements(statements []ast.Statement, environment Environment) ControlFlow {

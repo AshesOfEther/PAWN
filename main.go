@@ -48,8 +48,10 @@ func execute(tree []ast.Statement, environment interpreter.Environment) {
 
 	for _, statement := range tree {
 		if expressionStatement, ok := statement.(ast.ExpressionStatement); ok {
-			result := interpreter.EvaluateExpression(expressionStatement.Expression, environment)
-			fmt.Println(result)
+			result := interpreter.EvaluateExpressionStatement(expressionStatement, environment)
+			if result != nil {
+				fmt.Println(result)
+			}
 		} else {
 			interpreter.EvaluateStatement(statement, environment)
 		}
