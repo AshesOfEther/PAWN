@@ -189,7 +189,7 @@ func TestMemberIndexInExpression(t *testing.T) {
 	)
 }
 
-func TestMemberIndeciesInExpression(t *testing.T) {
+func TestMemberindicesInExpression(t *testing.T) {
 	env := NewEnvironment(nil)
 	env.variables["varForList"] = PawnList{
 		&[]PawnValue{
