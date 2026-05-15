@@ -24,10 +24,6 @@ func TestEvaluateMemberIndex(t *testing.T) {
 		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
 		func () {evaluateMemberIndex(indexOutOfBounds, env)},
 	)
-	assert.PanicsWithValue(t,
-		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
-		func () {evaluateMemberIndex(indexOutOfBounds, env)},
-	)
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{3}}}
 	assert.PanicsWithValue(t,
 		PawnError{"Tried indexing non-list: {true}"},
