@@ -69,7 +69,7 @@ func evaluateMemberProperty(member ast.Property, environment Environment) ListOr
 
 func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexOrPropertyOrVar {
 	maybeList := EvaluateExpression(member.List, environment)
-	listPawn, ok := maybeList.(PawnList)
+	pawnList, ok := maybeList.(PawnList)
 	if !ok {
 		panic(PawnError{
 			fmt.Sprint("Tried indexing non-list: ", maybeList),
@@ -90,13 +90,13 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 				fmt.Sprint("Cannot index with a negative integer: ", index.v),
 			})
 		}
-		if index.v >= int64(len(*listPawn.v)) {
+		if index.v >= int64(len(*pawnList.v)) {
 			panic(PawnError{
-				fmt.Sprint("Cannot index with the integer ", index.v, " because it is not less than the list's size ", len(*listPawn.v)),
+				fmt.Sprint("Cannot index with the integer ", index.v, " because it is not less than the list's size ", len(*pawnList.v)),
 			})
 		}
 
-		return Index{*listPawn.v, index.v}
+		return Index{*pawnList.v, index.v}
 	}
 
 	indecies := make([]int64, len(member.Index))
@@ -119,12 +119,12 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 				fmt.Sprint("Cannot index with a negative integer: ", v),
 			})
 		}
-		if v >= int64(len(*listPawn.v)) {
+		if v >= int64(len(*pawnList.v)) {
 			panic(PawnError{
-				fmt.Sprint("Cannot index with the integer ", v, " because it is not less than the list's size ", len(*listPawn.v)),
+				fmt.Sprint("Cannot index with the integer ", v, " because it is not less than the list's size ", len(*pawnList.v)),
 			})
 		}
-		outputList[i] = (*listPawn.v)[v]
+		outputList[i] = (*pawnList.v)[v]
 	}
 
 	return PawnList{&outputList}
