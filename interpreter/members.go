@@ -7,7 +7,7 @@ import (
 )
 
 type ListOrIndexOrPropertyOrVar interface {
-	memberReturnValue()
+	ListOrIndexOrPropertyOrVar()
 }
 
 type Index struct {
@@ -23,9 +23,9 @@ type PropertyOrVar struct {
 	key string
 }
 
-func (_ PawnList) memberReturnValue() {}
-func (_ Index) memberReturnValue() {}
-func (_ PropertyOrVar) memberReturnValue() {}
+func (_ PawnList) ListOrIndexOrPropertyOrVar() {}
+func (_ Index) ListOrIndexOrPropertyOrVar() {}
+func (_ PropertyOrVar) ListOrIndexOrPropertyOrVar() {}
 
 func evaluateMember(member ast.Member, environment Environment) ListOrIndexOrPropertyOrVar {
 	switch member := member.(type) {
