@@ -119,7 +119,7 @@ func validateIndex(index int64, pawnList PawnList) {
 	}
 	if index >= int64(len(*pawnList.v)) {
 		panic(PawnError{
-			fmt.Sprint("Cannot index with the integer ", index, " because it is not less than the list's size ", len(*pawnList.v)),
+			fmt.Sprint("Cannot index with ", index, " because it is not less than ", len(*pawnList.v),", the list's size"),
 		})
 	}
 }
