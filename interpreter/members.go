@@ -96,7 +96,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 		indexPawn, ok := maybeIndex.(PawnInt)
 		if !ok {
 			panic(PawnError{
-				fmt.Sprint("Tried indexing with non-integer: ", maybeIndex),
+				fmt.Sprint("Tried multi-indexing but value at position ",i , " was a non-integer: ", maybeIndex),
 			})
 		}
 		indecies[i] = indexPawn.v
