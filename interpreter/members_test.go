@@ -19,7 +19,7 @@ func TestEvaluateMemberIndex(t *testing.T) {
 	indexInBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}}}
 	indexOutOfBounds := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{3}}}
 
-	assert.Equal(t, MemberReturnedIndex{*env.variables["varForList"].(PawnList).v, 1}, evaluateMemberIndex(indexInBounds, env))
+	assert.Equal(t, Index{*env.variables["varForList"].(PawnList).v, 1}, evaluateMemberIndex(indexInBounds, env))
 	assert.PanicsWithValue(t,
 		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
 		func () {evaluateMemberIndex(indexOutOfBounds, env)},
@@ -46,15 +46,15 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 
 	// 0-length empty indexing
 	memberIndexListEmpty := ast.Index{listAsVar, []ast.Expression{}}
-	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{}}}, evaluateMemberIndex(memberIndexListEmpty, env))
+	assert.Equal(t, PawnList{&[]PawnValue{}}, evaluateMemberIndex(memberIndexListEmpty, env))
 
 	// duplicate index
 	memberIndexListDuplicate := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{0}}}
-	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}}, evaluateMemberIndex(memberIndexListDuplicate, env))
+	assert.Equal(t, PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}, evaluateMemberIndex(memberIndexListDuplicate, env))
 
 	// 3-value indexing
 	memberIndexList3Values := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}, ast.IntLiteral{1}}}
-	assert.Equal(t, MemberReturnedList{PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}}, evaluateMemberIndex(memberIndexList3Values, env))
+	assert.Equal(t, PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}, evaluateMemberIndex(memberIndexList3Values, env))
 
 	// Index not found
 	memberIndexListNotFound := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{2}}}
@@ -80,7 +80,7 @@ func TestEvaluateMemberProperty(t *testing.T) {
 	objectAsVar := ast.MemberExpression{
 		Member: ast.Name{Name: "varForObject"},
 	}
-	assert.Equal(t, MemberReturnedMap{object.v, "property"}, evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "property"}, env))
+	assert.Equal(t, PropertyOrVar{object.v, "property"}, evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "property"}, env))
 	assert.PanicsWithValue(t, PawnError{"Field \"notProperty\" doesn't exist in object"}, func() {
 		evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
 	})
@@ -109,6 +109,6 @@ func TestEvaluateMemberEnvironmentName(t *testing.T) {
 	})
 
 	// Var exists, shallow and deep search:
-	assert.Equal(t, MemberReturnedMap{env.variables, "var"}, evaluateMemberName(memberNameFound, env))
-	assert.Equal(t, MemberReturnedMap{env.variables, "var"}, evaluateMemberName(memberNameFound, envDeep))
+	assert.Equal(t, PropertyOrVar{env.variables, "var"}, evaluateMemberName(memberNameFound, env))
+	assert.Equal(t, PropertyOrVar{env.variables, "var"}, evaluateMemberName(memberNameFound, envDeep))
 }

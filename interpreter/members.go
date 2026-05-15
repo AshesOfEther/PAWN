@@ -6,32 +6,28 @@ import (
 	"pawn/ast"
 )
 
-type MemberReturnValue interface {
+type ListOrIndexOrPropertyOrVar interface {
 	memberReturnValue()
 }
 
-type MemberReturnedMap struct {
-	mutateMe map[string]PawnValue
-	nameToMutateAt string
-}
-
-type MemberReturnedList struct {
-	list PawnList
-}
-
-type MemberReturnedIndex struct {
+type Index struct {
 	// Not pointer to list.
 	// List only re-alocates when changing size, and
 	// the list cannot change size while MemberReturnedIndex is in use.
 	list []PawnValue
-	indexToMutateAt int64
+	index int64
 }
 
-func (_ MemberReturnedMap) memberReturnValue() {}
-func (_ MemberReturnedList) memberReturnValue() {}
-func (_ MemberReturnedIndex) memberReturnValue() {}
+type PropertyOrVar struct {
+	map_ map[string]PawnValue
+	key string
+}
 
-func EvaluateMember(member ast.Member, environment Environment) MemberReturnValue {
+func (_ PawnList) memberReturnValue() {}
+func (_ Index) memberReturnValue() {}
+func (_ PropertyOrVar) memberReturnValue() {}
+
+func EvaluateMember(member ast.Member, environment Environment) ListOrIndexOrPropertyOrVar {
 	switch member := member.(type) {
 		case ast.Name:
 			return evaluateMemberName(member, environment)
@@ -44,9 +40,9 @@ func EvaluateMember(member ast.Member, environment Environment) MemberReturnValu
 	}
 }
 
-func evaluateMemberName(member ast.Name, environment Environment) MemberReturnedMap {
+func evaluateMemberName(member ast.Name, environment Environment) ListOrIndexOrPropertyOrVar {
 	if _, ok := environment.variables[member.Name]; ok {
-		return MemberReturnedMap{environment.variables, member.Name}
+		return PropertyOrVar{environment.variables, member.Name}
 	}
 	if environment.parent != nil {
 		return evaluateMemberName(member, *environment.parent)
@@ -56,7 +52,7 @@ func evaluateMemberName(member ast.Name, environment Environment) MemberReturned
 	})
 }
 
-func evaluateMemberProperty(member ast.Property, environment Environment) MemberReturnedMap {
+func evaluateMemberProperty(member ast.Property, environment Environment) ListOrIndexOrPropertyOrVar {
 	object, ok := EvaluateExpression(member.Object, environment).(PawnObject)
 	if !ok {
 		panic(PawnError{
@@ -64,14 +60,14 @@ func evaluateMemberProperty(member ast.Property, environment Environment) Member
 		})
 	}
 	if _, ok := object.v[member.Property]; ok {
-		return MemberReturnedMap{object.v, member.Property}
+		return PropertyOrVar{object.v, member.Property}
 	}
 	panic(PawnError{
 		fmt.Sprint("Field \"", member.Property, "\" doesn't exist in object"),
 	})
 }
 
-func evaluateMemberIndex(member ast.Index, environment Environment) MemberReturnValue {
+func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexOrPropertyOrVar {
 	maybeList := EvaluateExpression(member.List, environment)
 	listPawn, ok := maybeList.(PawnList)
 	if !ok {
@@ -100,7 +96,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) MemberReturn
 			})
 		}
 
-		return MemberReturnedIndex{*listPawn.v, index.v}
+		return Index{*listPawn.v, index.v}
 	}
 
 	indecies := make([]int64, len(member.Index))
@@ -131,5 +127,5 @@ func evaluateMemberIndex(member ast.Index, environment Environment) MemberReturn
 		outputList[i] = (*listPawn.v)[v]
 	}
 
-	return MemberReturnedList{PawnList{&outputList}}
+	return PawnList{&outputList}
 }
