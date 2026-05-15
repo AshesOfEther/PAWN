@@ -206,7 +206,7 @@ func numberOperation(
 }
 
 func evaluateMemberExpression(expression ast.MemberExpression, environment Environment) PawnValue {
-	member := EvaluateMember(expression.Member, environment)
+	member := evaluateMember(expression.Member, environment)
 	switch member := member.(type) {
 		case PropertyOrVar:
 			// It is impossible for the name to not exist since MemberReturnedMap only has a valid object and field

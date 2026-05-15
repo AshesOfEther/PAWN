@@ -27,7 +27,7 @@ func (_ PawnList) memberReturnValue() {}
 func (_ Index) memberReturnValue() {}
 func (_ PropertyOrVar) memberReturnValue() {}
 
-func EvaluateMember(member ast.Member, environment Environment) ListOrIndexOrPropertyOrVar {
+func evaluateMember(member ast.Member, environment Environment) ListOrIndexOrPropertyOrVar {
 	switch member := member.(type) {
 		case ast.Name:
 			return evaluateMemberName(member, environment)
