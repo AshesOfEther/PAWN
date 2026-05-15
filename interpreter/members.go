@@ -23,9 +23,9 @@ type PropertyOrVar struct {
 	key string
 }
 
-func (_ PawnList) ListOrIndexOrPropertyOrVar() {}
-func (_ Index) ListOrIndexOrPropertyOrVar() {}
-func (_ PropertyOrVar) ListOrIndexOrPropertyOrVar() {}
+func (PawnList) ListOrIndexOrPropertyOrVar() {}
+func (Index) ListOrIndexOrPropertyOrVar() {}
+func (PropertyOrVar) ListOrIndexOrPropertyOrVar() {}
 
 func evaluateMember(member ast.Member, environment Environment) ListOrIndexOrPropertyOrVar {
 	switch member := member.(type) {
