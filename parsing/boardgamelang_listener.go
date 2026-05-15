@@ -13,6 +13,9 @@ type BoardGameLangListener interface {
 	// EnterMulDivMod is called when entering the MulDivMod production.
 	EnterMulDivMod(c *MulDivModContext)
 
+	// EnterOr is called when entering the Or production.
+	EnterOr(c *OrContext)
+
 	// EnterMemberExpr is called when entering the MemberExpr production.
 	EnterMemberExpr(c *MemberExprContext)
 
@@ -24,6 +27,9 @@ type BoardGameLangListener interface {
 
 	// EnterParens is called when entering the Parens production.
 	EnterParens(c *ParensContext)
+
+	// EnterAnd is called when entering the And production.
+	EnterAnd(c *AndContext)
 
 	// EnterLiteralExpr is called when entering the LiteralExpr production.
 	EnterLiteralExpr(c *LiteralExprContext)
@@ -109,6 +115,9 @@ type BoardGameLangListener interface {
 	// ExitMulDivMod is called when exiting the MulDivMod production.
 	ExitMulDivMod(c *MulDivModContext)
 
+	// ExitOr is called when exiting the Or production.
+	ExitOr(c *OrContext)
+
 	// ExitMemberExpr is called when exiting the MemberExpr production.
 	ExitMemberExpr(c *MemberExprContext)
 
@@ -120,6 +129,9 @@ type BoardGameLangListener interface {
 
 	// ExitParens is called when exiting the Parens production.
 	ExitParens(c *ParensContext)
+
+	// ExitAnd is called when exiting the And production.
+	ExitAnd(c *AndContext)
 
 	// ExitLiteralExpr is called when exiting the LiteralExpr production.
 	ExitLiteralExpr(c *LiteralExprContext)

@@ -15,6 +15,10 @@ func (v *BaseBoardGameLangVisitor) VisitMulDivMod(ctx *MulDivModContext) interfa
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseBoardGameLangVisitor) VisitOr(ctx *OrContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseBoardGameLangVisitor) VisitMemberExpr(ctx *MemberExprContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -28,6 +32,10 @@ func (v *BaseBoardGameLangVisitor) VisitComparison(ctx *ComparisonContext) inter
 }
 
 func (v *BaseBoardGameLangVisitor) VisitParens(ctx *ParensContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseBoardGameLangVisitor) VisitAnd(ctx *AndContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

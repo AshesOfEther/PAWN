@@ -32,6 +32,12 @@ func (s *BaseBoardGameLangListener) EnterMulDivMod(ctx *MulDivModContext) {}
 // ExitMulDivMod is called when production MulDivMod is exited.
 func (s *BaseBoardGameLangListener) ExitMulDivMod(ctx *MulDivModContext) {}
 
+// EnterOr is called when production Or is entered.
+func (s *BaseBoardGameLangListener) EnterOr(ctx *OrContext) {}
+
+// ExitOr is called when production Or is exited.
+func (s *BaseBoardGameLangListener) ExitOr(ctx *OrContext) {}
+
 // EnterMemberExpr is called when production MemberExpr is entered.
 func (s *BaseBoardGameLangListener) EnterMemberExpr(ctx *MemberExprContext) {}
 
@@ -55,6 +61,12 @@ func (s *BaseBoardGameLangListener) EnterParens(ctx *ParensContext) {}
 
 // ExitParens is called when production Parens is exited.
 func (s *BaseBoardGameLangListener) ExitParens(ctx *ParensContext) {}
+
+// EnterAnd is called when production And is entered.
+func (s *BaseBoardGameLangListener) EnterAnd(ctx *AndContext) {}
+
+// ExitAnd is called when production And is exited.
+func (s *BaseBoardGameLangListener) ExitAnd(ctx *AndContext) {}
 
 // EnterLiteralExpr is called when production LiteralExpr is entered.
 func (s *BaseBoardGameLangListener) EnterLiteralExpr(ctx *LiteralExprContext) {}

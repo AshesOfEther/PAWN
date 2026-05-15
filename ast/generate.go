@@ -114,6 +114,20 @@ func generateExpression(ctx parsing.IExpressionContext) Expression {
 			operator,
 		}
 
+	case *parsing.AndContext:
+		return BinaryOp{
+			generateExpression(ctx.Expression(0)),
+			generateExpression(ctx.Expression(1)),
+			And,
+		}
+
+	case *parsing.OrContext:
+		return BinaryOp{
+			generateExpression(ctx.Expression(0)),
+			generateExpression(ctx.Expression(1)),
+			Or,
+		}
+
 	case *parsing.ParensContext:
 		return generateExpression(ctx.Expression())
 

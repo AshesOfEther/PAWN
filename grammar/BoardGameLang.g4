@@ -10,6 +10,8 @@ expression
     | expression op=('+' | '-') expression                      # AddSub
     | expression op=('..=' | '..') expression                   # Range
     | expression op=('=='|'!='|'<='|'>='|'<'|'>') expression    # Comparison
+    | expression op='&&' expression                             # And
+    | expression op='||' expression                             # Or
     | member                                                    # MemberExpr
     | literal                                                   # LiteralExpr
     ;
