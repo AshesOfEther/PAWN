@@ -77,7 +77,7 @@ func TestEvaluateMemberProperty(t *testing.T) {
 		Member: ast.Name{Name: "varForObject"},
 	}
 	assert.Equal(t, PropertyOrVar{object.v, "property"}, evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "property"}, env))
-	assert.PanicsWithValue(t, PawnError{"Field \"notProperty\" doesn't exist in object"}, func() {
+	assert.PanicsWithValue(t, PawnError{"Field 'notProperty' doesn't exist in object"}, func() {
 		evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
 	})
 
@@ -97,10 +97,10 @@ func TestEvaluateMemberEnvironmentName(t *testing.T) {
 	envDeep := NewEnvironment(&env)
 
 	// Var doesn't exist, shallow and deep search:
-	assert.PanicsWithValue(t, PawnError{"Variable \"notVar\" doesn't exist"}, func() {
+	assert.PanicsWithValue(t, PawnError{"Variable 'notVar' doesn't exist"}, func() {
 		evaluateMemberName(memberNameNotFound, env)
 	})
-	assert.PanicsWithValue(t, PawnError{"Variable \"notVar\" doesn't exist"}, func() {
+	assert.PanicsWithValue(t, PawnError{"Variable 'notVar' doesn't exist"}, func() {
 		evaluateMemberName(memberNameNotFound, envDeep)
 	})
 

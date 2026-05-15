@@ -48,7 +48,7 @@ func evaluateMemberName(member ast.Name, environment Environment) ListOrIndexOrP
 		return evaluateMemberName(member, *environment.parent)
 	}
 	panic(PawnError{
-		fmt.Sprint("Variable \"", member.Name, "\" doesn't exist"),
+		fmt.Sprint("Variable '", member.Name, "' doesn't exist"),
 	})
 }
 
@@ -63,7 +63,7 @@ func evaluateMemberProperty(member ast.Property, environment Environment) ListOr
 		return PropertyOrVar{object.v, member.Property}
 	}
 	panic(PawnError{
-		fmt.Sprint("Field \"", member.Property, "\" doesn't exist in object"),
+		fmt.Sprint("Field '", member.Property, "' doesn't exist in object"),
 	})
 }
 
