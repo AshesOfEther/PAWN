@@ -6,8 +6,10 @@ import (
 	"pawn/ast"
 )
 
-type ListOrIndexOrPropertyOrVar interface {
-	ListOrIndexOrPropertyOrVar()
+// Currently a resolved member can be one of:
+//   List, Index, Property, or Var
+type ResolvedMember interface {
+	ResolvedMember()
 }
 
 type Index struct {
@@ -23,11 +25,11 @@ type PropertyOrVar struct {
 	key string
 }
 
-func (PawnList) ListOrIndexOrPropertyOrVar() {}
-func (Index) ListOrIndexOrPropertyOrVar() {}
-func (PropertyOrVar) ListOrIndexOrPropertyOrVar() {}
+func (PawnList) ResolvedMember() {}
+func (Index) ResolvedMember() {}
+func (PropertyOrVar) ResolvedMember() {}
 
-func evaluateMember(member ast.Member, environment Environment) ListOrIndexOrPropertyOrVar {
+func evaluateMember(member ast.Member, environment Environment) ResolvedMember {
 	switch member := member.(type) {
 		case ast.Name:
 			return evaluateMemberName(member, environment)
@@ -40,7 +42,7 @@ func evaluateMember(member ast.Member, environment Environment) ListOrIndexOrPro
 	}
 }
 
-func evaluateMemberName(member ast.Name, environment Environment) ListOrIndexOrPropertyOrVar {
+func evaluateMemberName(member ast.Name, environment Environment) ResolvedMember {
 	if _, ok := environment.variables[member.Name]; ok {
 		return PropertyOrVar{environment.variables, member.Name}
 	}
@@ -50,7 +52,7 @@ func evaluateMemberName(member ast.Name, environment Environment) ListOrIndexOrP
 	panic(variableNotFoundError(member.Name))
 }
 
-func evaluateMemberProperty(member ast.Property, environment Environment) ListOrIndexOrPropertyOrVar {
+func evaluateMemberProperty(member ast.Property, environment Environment) ResolvedMember {
 	maybeObject := EvaluateExpression(member.Object, environment)
 	object, ok := maybeObject.(PawnObject)
 	if !ok {
@@ -62,7 +64,7 @@ func evaluateMemberProperty(member ast.Property, environment Environment) ListOr
 	panic(fieldNonExistantError(member.Property))
 }
 
-func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexOrPropertyOrVar {
+func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMember {
 	maybeList := EvaluateExpression(member.List, environment)
 	pawnList, ok := maybeList.(PawnList)
 	if !ok {
