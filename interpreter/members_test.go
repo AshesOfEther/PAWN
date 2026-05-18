@@ -39,7 +39,8 @@ func TestEvaluateMemberIndex(t *testing.T) {
 func TestEvaluateMemberListIndex(t *testing.T) {
 	env := NewEnvironment(nil)
 	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{}}}
-	(*list.v)[1] = list // Recursive list
+	listInner := PawnList{&[]PawnValue{PawnBoolean{true}}}
+	(*list.v)[1] = listInner // List with a reference to test that list duplication is not happening
 	env.variables["varForList"] = list
 	listAsVar := ast.MemberExpression{
 		Member: ast.Name{Name: "varForList"},
@@ -64,7 +65,7 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 
 	// 3-value indexing
 	memberIndexList3Values := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}, ast.IntLiteral{1}}}
-	assert.Equal(t, PawnList{&[]PawnValue{list, PawnBoolean{true}, list}}, evaluateMemberIndex(memberIndexList3Values, env))
+	assert.Equal(t, PawnList{&[]PawnValue{listInner, PawnBoolean{true}, listInner}}, evaluateMemberIndex(memberIndexList3Values, env))
 
 	// Index not found
 	memberIndexListNotFound := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{2}}}
