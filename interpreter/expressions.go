@@ -347,7 +347,7 @@ func evaluateList(list ast.List, environment Environment) PawnList {
 
 	var newList []PawnValue 
 
-	for i := 0; i < listLength; i++ {
+	for i := range listLength {
 		newList[i] = EvaluateExpression(list.Elements[i],environment)
 	}
 
