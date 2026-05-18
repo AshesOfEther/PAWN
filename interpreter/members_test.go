@@ -26,7 +26,7 @@ func TestEvaluateMemberIndex(t *testing.T) {
 	)
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{3}}}
 	assert.PanicsWithValue(t,
-		PawnError{"Tried indexing non-list: {true}"},
+		typeError("list", PawnBoolean{true}),
 		func () {evaluateMemberIndex(indexNonList, env)},
 	)
 }
@@ -61,7 +61,7 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 	// Multi-indexing non-list
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{1}}}
 	assert.PanicsWithValue(t,
-		PawnError{"Tried indexing non-list: {true}"},
+		typeError("list", PawnBoolean{true}),
 		func () {evaluateMemberIndex(indexNonList, env)},
 	)
 

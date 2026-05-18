@@ -66,9 +66,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 	maybeList := EvaluateExpression(member.List, environment)
 	pawnList, ok := maybeList.(PawnList)
 	if !ok {
-		panic(PawnError{
-			fmt.Sprint("Tried indexing non-list: ", maybeList),
-		})
+		panic(typeError("list", maybeList))
 	}
 
 	if len(member.Index) == 1 {
