@@ -33,77 +33,77 @@ func TestEvaluateEqual(t *testing.T) {
 	noOptionalArgs := []NamedArgument{}
 
 	// Values
-	B1 := PawnBoolean{true}
-	B2 := PawnBoolean{false} // false since that's the only other case of this type
-	O1 := PawnObject{map[string]PawnValue{}}
-	O2 := PawnObject{map[string]PawnValue{}} // Maps are equal in content but have different reference
-	I1 := PawnInt{-1}
-	I2 := PawnInt{1}
-	S1 := PawnString{"S"}
-	S2 := PawnString{"S\000"}
-	F1 := PawnFloat{0.3}
-	F2 := PawnFloat{float64(0.1)+float64(0.2)} // Floats round
-	L1 := PawnList{&[]PawnValue{}}
-	L2 := PawnList{&[]PawnValue{}} // Lists are equal in content but have different reference
-	P1 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgTypes: []reflect.Type{}, namedArgumentStructType: reflect.TypeOf(nil)}}
-	P2 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgTypes: []reflect.Type{}, namedArgumentStructType: reflect.TypeOf(nil)}} // Functions are equal in content but have different reference
-	U1 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
-	U2 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
+	bool_1 := PawnBoolean{true}
+	bool_2 := PawnBoolean{false} // false since that's the only other case of this type
+	object_1 := PawnObject{map[string]PawnValue{}}
+	object_2 := PawnObject{map[string]PawnValue{}} // Maps are equal in content but have different reference
+	integer_1 := PawnInt{-1}
+	integer_2 := PawnInt{1}
+	string_1 := PawnString{"S"}
+	string_2 := PawnString{"S\000"}
+	float_1 := PawnFloat{0.3}
+	float_2 := PawnFloat{float64(0.1)+float64(0.2)} // Floats round
+	list_1 := PawnList{&[]PawnValue{}}
+	list_2 := PawnList{&[]PawnValue{}} // Lists are equal in content but have different reference
+	primitiveFunc_1 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgTypes: []reflect.Type{}, namedArgumentStructType: reflect.TypeOf(nil)}}
+	primitiveFunc_2 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgTypes: []reflect.Type{}, namedArgumentStructType: reflect.TypeOf(nil)}} // Functions are equal in content but have different reference
+	userFunc_1 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
+	userFunc_2 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
 
 	// Float nans are special, they aren't equal to themselves
 	F3 := PawnFloat{math.NaN()}
 
 	// Bool
-	assert.True(t,  evaluateEqual(B1, B1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(B1, B2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(B1, B1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(B1, B2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(bool_1, bool_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(bool_1, bool_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(bool_1, bool_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(bool_1, bool_2).(PawnBoolean).v)  //   (a1 != a2)
 
 	// Object
-	assert.True(t,  evaluateEqual(O1, O1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(O1, O2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(O1, O1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(O1, O2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(object_1, object_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(object_1, object_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(object_1, object_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(object_1, object_2).(PawnBoolean).v)  //   (a1 != a2)
 
 	// Integers
-	assert.True(t,  evaluateEqual(I1, I1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(I1, I2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(I1, I1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(I1, I2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(integer_1, integer_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(integer_1, integer_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(integer_1, integer_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(integer_1, integer_2).(PawnBoolean).v)  //   (a1 != a2)
 
 	// Strings
-	assert.True(t,  evaluateEqual(S1, S1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(S1, S2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(S1, S1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(S1, S2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(string_1, string_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(string_1, string_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(string_1, string_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(string_1, string_2).(PawnBoolean).v)  //   (a1 != a2)
 
 	// Float
-	assert.True(t,  evaluateEqual(F1, F1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(F1, F2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t,  evaluateEqual(float_1, float_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(float_1, float_2).(PawnBoolean).v)     // ! (a1 == a2)
 	assert.True(t, !evaluateEqual(F3, F3).(PawnBoolean).v)     // ! (nan == nan)
-	assert.True(t, !evaluateNotEqual(F1, F1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(F1, F2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t, !evaluateNotEqual(float_1, float_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(float_1, float_2).(PawnBoolean).v)  //   (a1 != a2)
 	assert.True(t,  evaluateNotEqual(F3, F3).(PawnBoolean).v)  //   (nan != nan)
 
 	// List
-	assert.True(t,  evaluateEqual(L1, L1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(L1, L2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(L1, L1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(L1, L2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(list_1, list_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(list_1, list_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(list_1, list_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(list_1, list_2).(PawnBoolean).v)  //   (a1 != a2)
 
 	// Primtitive function
-	assert.True(t,  evaluateEqual(P1, P1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(P1, P2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(P1, P1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(P1, P2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(primitiveFunc_1, primitiveFunc_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(primitiveFunc_1, primitiveFunc_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(primitiveFunc_1, primitiveFunc_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(primitiveFunc_1, primitiveFunc_2).(PawnBoolean).v)  //   (a1 != a2)
 
 	// User function
-	assert.True(t,  evaluateEqual(U1, U1).(PawnBoolean).v)     //   (a1 == a1)
-	assert.True(t, !evaluateEqual(U1, U2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateNotEqual(U1, U1).(PawnBoolean).v)  // ! (a1 != a1)
-	assert.True(t,  evaluateNotEqual(U1, U2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateEqual(userFunc_1, userFunc_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(userFunc_1, userFunc_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(userFunc_1, userFunc_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(userFunc_1, userFunc_2).(PawnBoolean).v)  //   (a1 != a2)
 
-	testValues := []PawnValue{B1, O1, I1, S1, F1, L1, P1, U1}
+	testValues := []PawnValue{bool_1, object_1, integer_1, string_1, float_1, list_1, primitiveFunc_1, userFunc_1}
 	for i, leftValue := range testValues {
 		for j, rightValue := range testValues {
 			if i == j {
