@@ -71,6 +71,10 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMemb
 		panic(typeError("list", maybeList))
 	}
 
+	if len(member.Index) == 0 {
+		panic("Multi-indexing with 0 indecies is invalid")
+	}
+
 	if len(member.Index) == 1 {
 		maybeIndex := EvaluateExpression(member.Index[0], environment)
 		index, ok := maybeIndex.(PawnInt)
