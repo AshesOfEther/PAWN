@@ -56,68 +56,63 @@ func TestEvaluateEqual(t *testing.T) {
 	// Bool
 	assert.True(t,  evaluateEqual(B1, B1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(B1, B2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(B1, U1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(B1, B1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(B1, B2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(B1, U1).(PawnBoolean).v)  //   (a1 != b1)
 
 	// Object
 	assert.True(t,  evaluateEqual(O1, O1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(O1, O2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(O1, B1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(O1, O1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(O1, O2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(O1, B1).(PawnBoolean).v)  //   (a1 != b1)
 
 	// Integers
 	assert.True(t,  evaluateEqual(I1, I1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(I1, I2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(I1, O1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(I1, I1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(I1, I2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(I1, O1).(PawnBoolean).v)  //   (a1 != b1)
 
 	// Strings
 	assert.True(t,  evaluateEqual(S1, S1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(S1, S2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(S1, I1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(S1, S1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(S1, S2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(S1, I1).(PawnBoolean).v)  //   (a1 != b1)
 
 	// Float
 	assert.True(t,  evaluateEqual(F1, F1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(F1, F2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(F1, S1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateEqual(F3, F3).(PawnBoolean).v)     // ! (nan == nan)
 	assert.True(t, !evaluateNotEqual(F1, F1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(F1, F2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(F1, S1).(PawnBoolean).v)  //   (a1 != b1)
 	assert.True(t,  evaluateNotEqual(F3, F3).(PawnBoolean).v)  //   (nan != nan)
 
 	// List
 	assert.True(t,  evaluateEqual(L1, L1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(L1, L2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(L1, F1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(L1, L1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(L1, L2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(L1, F1).(PawnBoolean).v)  //   (a1 != b1)
 
 	// Primtitive function
 	assert.True(t,  evaluateEqual(P1, P1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(P1, P2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(P1, L1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(P1, P1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(P1, P2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(P1, L1).(PawnBoolean).v)  //   (a1 != b1)
 
 	// User function
 	assert.True(t,  evaluateEqual(U1, U1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(U1, U2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(U1, P1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateNotEqual(U1, U1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(U1, U2).(PawnBoolean).v)  //   (a1 != a2)
-	assert.True(t,  evaluateNotEqual(U1, P1).(PawnBoolean).v)  //   (a1 != b1)
+
+	testValues := []PawnValue{B1, O1, I1, S1, F1, L1, P1, U1}
+	for i, leftValue := range testValues {
+		for j, rightValue := range testValues {
+			if i == j {
+				continue
+			}
+			assert.False(t, evaluateEqual(leftValue, rightValue).(PawnBoolean).v, "`evaluateEqual(%v, %v)` should be false", leftValue, rightValue)
+			assert.True(t, evaluateNotEqual(leftValue, rightValue).(PawnBoolean).v, "`evaluateNotEqual(%v, %v)` should be true", leftValue, rightValue)
+		}
+	}
 }
 
 func TestGreaterThanInt(t *testing.T) {
