@@ -84,6 +84,12 @@ func negativePowerError(gotPower int64) PawnError {
 	}
 }
 
+func variableNotFoundError(name string) PawnError {
+	return PawnError{
+		fmt.Sprint("Variable '", name, "' doesn't exist"),
+	}
+}
+
 func divideByZeroError() PawnError {
 	return PawnError{
 		("expected non-zero divisor for integer division, got zero"),

@@ -47,17 +47,14 @@ func evaluateMemberName(member ast.Name, environment Environment) ListOrIndexOrP
 	if environment.parent != nil {
 		return evaluateMemberName(member, *environment.parent)
 	}
-	panic(PawnError{
-		fmt.Sprint("Variable '", member.Name, "' doesn't exist"),
-	})
+	panic(variableNotFoundError(member.Name))
 }
 
 func evaluateMemberProperty(member ast.Property, environment Environment) ListOrIndexOrPropertyOrVar {
-	object, ok := EvaluateExpression(member.Object, environment).(PawnObject)
+	maybeObject := EvaluateExpression(member.Object, environment)
+	object, ok := maybeObject.(PawnObject)
 	if !ok {
-		panic(PawnError{
-			fmt.Sprint("Tried accessing property of non-object: ", object),
-		})
+		panic(typeError("object", maybeObject))
 	}
 	if _, ok := object.v[member.Property]; ok {
 		return PropertyOrVar{object.v, member.Property}

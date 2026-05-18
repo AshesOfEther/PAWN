@@ -83,7 +83,7 @@ func TestEvaluateMemberProperty(t *testing.T) {
 
 	accesssNonObject := ast.Property{ast.BooleanLiteral{true}, "property"}
 	assert.PanicsWithValue(t,
-		PawnError{"Tried accessing property of non-object: {map[]}"},
+		typeError("object", PawnBoolean{true}),
 		func () {evaluateMemberProperty(accesssNonObject, env)},
 	)
 }
