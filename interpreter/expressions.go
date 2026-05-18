@@ -23,7 +23,7 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 			}
 			return result
 		case ast.List:
-			panic("TODO")
+			return evaluateList(expression, environment)
 		case ast.FloatLiteral:
 			return PawnFloat{expression.Value}
 		case ast.IntLiteral:
@@ -340,4 +340,16 @@ func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue
 		},
 		func(a, b float64) PawnValue { panic(rangeFloatError()) },
 	)
+}
+
+func evaluateList(list ast.List, environment Environment) PawnList {
+	var listLength int = len(list.Elements)
+
+	newList := make([]PawnValue, listLength)
+
+	for i := range listLength {
+		newList[i] = EvaluateExpression(list.Elements[i],environment)
+	}
+
+	return PawnList{&newList}
 }
