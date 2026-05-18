@@ -59,9 +59,7 @@ func evaluateMemberProperty(member ast.Property, environment Environment) ListOr
 	if _, ok := object.v[member.Property]; ok {
 		return PropertyOrVar{object.v, member.Property}
 	}
-	panic(PawnError{
-		fmt.Sprint("Field '", member.Property, "' doesn't exist in object"),
-	})
+	panic(fieldNonExistantError(member.Property))
 }
 
 func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexOrPropertyOrVar {
@@ -82,7 +80,9 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 				fmt.Sprint("Cannot index with a non-integer: ", maybeIndex),
 			})
 		}
-		validateIndex(index.v, pawnList)
+		if index.v < 0 || index.v >= int64(len(*pawnList.v)) {
+			panic(indexError(index.v, pawnList))
+		}
 		return Index{*pawnList.v, index.v}
 	}
 
@@ -92,31 +92,18 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 
 		indexPawn, ok := maybeIndex.(PawnInt)
 		if !ok {
-			panic(PawnError{
-				fmt.Sprint("Tried multi-indexing but value at position ",i , " was a non-integer: ", maybeIndex),
-			})
+			panic(typeError("integer", indexPawn))
 		}
 		indecies[i] = indexPawn.v
 	}
 
 	outputList := make([]PawnValue, len(member.Index))
-	for i, v := range indecies {
-		validateIndex(v, pawnList)
-		outputList[i] = (*pawnList.v)[v]
+	for i, index := range indecies {
+		if index < 0 || index >= int64(len(*pawnList.v)) {
+			panic(indexError(index, pawnList))
+		}
+		outputList[i] = (*pawnList.v)[index]
 	}
 
 	return PawnList{&outputList}
-}
-
-func validateIndex(index int64, pawnList PawnList) {
-	if index < 0 {
-		panic(PawnError{
-			fmt.Sprint("Cannot index with a negative integer: ", index),
-		})
-	}
-	if index >= int64(len(*pawnList.v)) {
-		panic(PawnError{
-			fmt.Sprint("Cannot index with ", index, " because it is not less than ", len(*pawnList.v),", the list's size"),
-		})
-	}
 }

@@ -90,6 +90,24 @@ func variableNotFoundError(name string) PawnError {
 	}
 }
 
+func indexError(index int64, pawnList PawnList) PawnError {
+	if (index < 0) {
+		return PawnError{
+			fmt.Sprint("Cannot index with a negative integer: ", index),
+		}
+	}
+
+	return PawnError{
+		fmt.Sprint("Cannot index with ", index, " because it is not less than ", len(*pawnList.v), ", the list's size"),
+	}
+}
+
+func fieldNonExistantError(property string) PawnError {
+	return PawnError{
+		fmt.Sprint("Property '", property, "' doesn't exist in object"),
+	}
+}
+
 func divideByZeroError() PawnError {
 	return PawnError{
 		("expected non-zero divisor for integer division, got zero"),

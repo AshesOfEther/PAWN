@@ -21,7 +21,7 @@ func TestEvaluateMemberIndex(t *testing.T) {
 
 	assert.Equal(t, Index{*env.variables["varForList"].(PawnList).v, 1}, evaluateMemberIndex(indexInBounds, env))
 	assert.PanicsWithValue(t,
-		PawnError{"Cannot index with 3 because it is not less than 2, the list's size"},
+		indexError(3, env.variables["varForList"].(PawnList)),
 		func () {evaluateMemberIndex(indexOutOfBounds, env)},
 	)
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{3}}}
@@ -76,10 +76,16 @@ func TestEvaluateMemberProperty(t *testing.T) {
 	objectAsVar := ast.MemberExpression{
 		Member: ast.Name{Name: "varForObject"},
 	}
-	assert.Equal(t, PropertyOrVar{object.v, "property"}, evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "property"}, env))
-	assert.PanicsWithValue(t, PawnError{"Field 'notProperty' doesn't exist in object"}, func() {
-		evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
-	})
+	assert.Equal(t,
+		PropertyOrVar{object.v, "property"},
+		evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "property"}, env),
+	)
+	assert.PanicsWithValue(t,
+		fieldNonExistantError("notProperty"),
+		func() {
+			evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
+		},
+	)
 
 	accesssNonObject := ast.Property{ast.BooleanLiteral{true}, "property"}
 	assert.PanicsWithValue(t,
