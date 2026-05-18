@@ -83,7 +83,7 @@ func TestEvaluateEqual(t *testing.T) {
 	assert.True(t,  evaluateNotEqual(B1, B2).(PawnBoolean).v)  //   (a1 != a2)
 	assert.True(t,  evaluateNotEqual(B1, U1).(PawnBoolean).v)  //   (a1 != b1)
 
-	// Primtitive
+	// Primtitive function
 	assert.True(t,  evaluateEqual(P1, P1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(P1, P2).(PawnBoolean).v)     // ! (a1 == a2)
 	assert.True(t, !evaluateEqual(P1, L1).(PawnBoolean).v)     // ! (a1 == b1)
@@ -91,7 +91,7 @@ func TestEvaluateEqual(t *testing.T) {
 	assert.True(t,  evaluateNotEqual(B1, B2).(PawnBoolean).v)  //   (a1 != a2)
 	assert.True(t,  evaluateNotEqual(B1, U1).(PawnBoolean).v)  //   (a1 != b1)
 
-	// User
+	// User function
 	assert.True(t,  evaluateEqual(U1, U1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(U1, U2).(PawnBoolean).v)     // ! (a1 == a2)
 	assert.True(t, !evaluateEqual(U1, P1).(PawnBoolean).v)     // ! (a1 == b1)
