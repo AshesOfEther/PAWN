@@ -235,3 +235,21 @@ func TestRangeErrorsOnFloat(t *testing.T)  {
 func TestRangeInclusiveErrorsOnFloat(t *testing.T) {
 	assert.PanicsWithValue(t, rangeFloatError(), func() {evaluateRangeInclusive(PawnFloat{2}, PawnFloat{2})})
 }
+
+func TestEvaluateListEmpty(t *testing.T) {
+	list := ast.List{[]ast.Expression{}}
+	expected := PawnList{&[]PawnValue{}}
+	assert.Equal(t, expected, evaluateList(list, NewEnvironment(nil)))
+}
+
+func TestEvaluateListNonEmpty(t *testing.T) {
+	list := ast.List{[]ast.Expression{
+		ast.IntLiteral{2},
+		ast.BooleanLiteral{true},
+	}}
+	expected := PawnList{&[]PawnValue{
+		PawnInt{2},
+		PawnBoolean{true},
+	}}
+	assert.Equal(t, expected, evaluateList(list, NewEnvironment(nil)))
+}
