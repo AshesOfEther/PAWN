@@ -74,9 +74,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 		index, ok := maybeIndex.(PawnInt)
 
 		if !ok {
-			panic(PawnError{
-				fmt.Sprint("Cannot index with a non-integer: ", maybeIndex),
-			})
+			panic(typeError("int", maybeIndex))
 		}
 		if index.v < 0 || index.v >= int64(len(*pawnList.v)) {
 			panic(indexError(index.v, pawnList))
@@ -90,7 +88,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ListOrIndexO
 
 		indexPawn, ok := maybeIndex.(PawnInt)
 		if !ok {
-			panic(typeError("integer", indexPawn))
+			panic(typeError("integer", maybeIndex))
 		}
 		indecies[i] = indexPawn.v
 	}
