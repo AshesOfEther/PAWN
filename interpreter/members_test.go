@@ -21,7 +21,7 @@ func TestEvaluateMemberIndex(t *testing.T) {
 
 	assert.Equal(t, Index{*env.variables["varForList"].(PawnList).v, 1}, evaluateMemberIndex(indexInBounds, env))
 	assert.PanicsWithValue(t,
-		PawnError{"Cannot index with the integer 3 because it is not less than the list's size 2"},
+		PawnError{"Cannot index with 3 because it is not less than 2, the list's size"},
 		func () {evaluateMemberIndex(indexOutOfBounds, env)},
 	)
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{3}}}
@@ -54,7 +54,7 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 
 	// Index not found
 	memberIndexListNotFound := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{2}}}
-	assert.PanicsWithValue(t, PawnError{"Cannot index with the integer 2 because it is not less than the list's size 2"}, func () {
+	assert.PanicsWithValue(t, PawnError{"Cannot index with 2 because it is not less than 2, the list's size"}, func () {
 		evaluateMemberIndex(memberIndexListNotFound, env)
 	})
 
