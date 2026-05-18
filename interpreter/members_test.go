@@ -97,10 +97,10 @@ func TestEvaluateMemberEnvironmentName(t *testing.T) {
 	envDeep := NewEnvironment(&env)
 
 	// Var doesn't exist, shallow and deep search:
-	assert.PanicsWithValue(t, PawnError{"Variable 'notVar' doesn't exist"}, func() {
+	assert.PanicsWithValue(t, variableNotFoundError("notVar"), func() {
 		evaluateMemberName(memberNameNotFound, env)
 	})
-	assert.PanicsWithValue(t, PawnError{"Variable 'notVar' doesn't exist"}, func() {
+	assert.PanicsWithValue(t, variableNotFoundError("notVar"), func() {
 		evaluateMemberName(memberNameNotFound, envDeep)
 	})
 
