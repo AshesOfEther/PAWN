@@ -342,8 +342,6 @@ func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue
 	)
 }
 
-
-
 func evaluateList(list ast.List, environment Environment) PawnList {
 	var listLength int = len(list.Elements)
 
