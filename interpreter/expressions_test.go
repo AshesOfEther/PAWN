@@ -37,6 +37,10 @@ func TestEvaluateEqual(t *testing.T) {
 	B2 := PawnBoolean{false} // false since that's the only other case of this type
 	O1 := PawnObject{map[string]PawnValue{}}
 	O2 := PawnObject{map[string]PawnValue{}} // Maps are equal in content but have different reference
+	I1 := PawnInt{-1}
+	I2 := PawnInt{1}
+	S1 := PawnString{"S"}
+	S2 := PawnString{"S\000"}
 	F1 := PawnFloat{0.3}
 	F2 := PawnFloat{float64(0.1)+float64(0.2)} // Floats round
 	L1 := PawnList{&[]PawnValue{}}
@@ -65,10 +69,26 @@ func TestEvaluateEqual(t *testing.T) {
 	assert.True(t,  evaluateNotEqual(O1, O2).(PawnBoolean).v)  //   (a1 != a2)
 	assert.True(t,  evaluateNotEqual(O1, B1).(PawnBoolean).v)  //   (a1 != b1)
 
+	// Integers
+	assert.True(t,  evaluateEqual(I1, I1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(I1, I2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateEqual(I1, O1).(PawnBoolean).v)     // ! (a1 == b1)
+	assert.True(t, !evaluateNotEqual(I1, I1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(I1, I2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateNotEqual(I1, O1).(PawnBoolean).v)  //   (a1 != b1)
+
+	// Strings
+	assert.True(t,  evaluateEqual(S1, S1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(S1, S2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateEqual(S1, I1).(PawnBoolean).v)     // ! (a1 == b1)
+	assert.True(t, !evaluateNotEqual(S1, S1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(S1, S2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateNotEqual(S1, I1).(PawnBoolean).v)  //   (a1 != b1)
+
 	// Float
 	assert.True(t,  evaluateEqual(F1, F1).(PawnBoolean).v)     //   (a1 == a1)
 	assert.True(t, !evaluateEqual(F1, F2).(PawnBoolean).v)     // ! (a1 == a2)
-	assert.True(t, !evaluateEqual(F1, O1).(PawnBoolean).v)     // ! (a1 == b1)
+	assert.True(t, !evaluateEqual(F1, S1).(PawnBoolean).v)     // ! (a1 == b1)
 	assert.True(t, !evaluateEqual(F3, F3).(PawnBoolean).v)     // ! (nan == nan)
 	assert.True(t, !evaluateNotEqual(F1, F1).(PawnBoolean).v)  // ! (a1 != a1)
 	assert.True(t,  evaluateNotEqual(F1, F2).(PawnBoolean).v)  //   (a1 != a2)
