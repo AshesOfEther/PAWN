@@ -345,7 +345,7 @@ func evaluateRangeInclusive(leftValue PawnValue, rightValue PawnValue) PawnValue
 func evaluateList(list ast.List, environment Environment) PawnList {
 	var listLength int = len(list.Elements)
 
-	var newList []PawnValue 
+	newList := make([]PawnValue, listLength)
 
 	for i := range listLength {
 		newList[i] = EvaluateExpression(list.Elements[i],environment)
