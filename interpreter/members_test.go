@@ -36,15 +36,20 @@ func TestEvaluateMemberIndex(t *testing.T) {
 	)
 }
 
-func TestEvaluateMemberListIndex(t *testing.T) {
-	env := NewEnvironment(nil)
-	list := PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{}}}
-	listInner := PawnList{&[]PawnValue{PawnBoolean{true}}}
+func listIndexTestInit() (listAsVar ast.MemberExpression, listInner, list PawnList, env Environment)  {
+	env = NewEnvironment(nil)
+	list = PawnList{&[]PawnValue{PawnBoolean{true}, PawnList{}}}
+	listInner = PawnList{&[]PawnValue{PawnBoolean{true}}}
 	(*list.v)[1] = listInner // List with a reference to test that list duplication is not happening
 	env.variables["varForList"] = list
-	listAsVar := ast.MemberExpression{
+	listAsVar = ast.MemberExpression{
 		Member: ast.Name{Name: "varForList"},
 	}
+	return
+}
+
+func TestEvaluateMemberListIndexNonIntError(t *testing.T) {
+	listAsVar, _, _, env := listIndexTestInit()
 
 	// Non-int indexing
 	nonIntIndexing := ast.Index{listAsVar, []ast.Expression{
@@ -54,24 +59,44 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 		typeError("integer", PawnString{"nonInt"}),
 		func () {evaluateMemberIndex(nonIntIndexing, env)},
 	)
+}
+
+func TestEvaluateMemberListIndexEmptyInvalid(t *testing.T) {
+	listAsVar, _, _, env := listIndexTestInit()
 
 	// 0-length empty indexing
 	memberIndexListEmpty := ast.Index{listAsVar, []ast.Expression{}}
-	assert.Equal(t, PawnList{&[]PawnValue{}}, evaluateMemberIndex(memberIndexListEmpty, env))
+	assert.Panics(t, func () {evaluateMemberIndex(memberIndexListEmpty, env)})
+}
+
+func TestEvaluateMemberListIndexDuplicate(t *testing.T) {
+	listAsVar, _, _, env := listIndexTestInit()
 
 	// duplicate index
 	memberIndexListDuplicate := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{0}}}
 	assert.Equal(t, PawnList{&[]PawnValue{PawnBoolean{true}, PawnBoolean{true}}}, evaluateMemberIndex(memberIndexListDuplicate, env))
+}
+
+func TestEvaluateMemberListIndex3Values(t *testing.T) {
+	listAsVar, listInner, _, env := listIndexTestInit()
 
 	// 3-value indexing
 	memberIndexList3Values := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{0}, ast.IntLiteral{1}}}
 	assert.Equal(t, PawnList{&[]PawnValue{listInner, PawnBoolean{true}, listInner}}, evaluateMemberIndex(memberIndexList3Values, env))
+}
+
+func TestEvaluateMemberListIndexOutOfBounds(t *testing.T) {
+	listAsVar, _, list, env := listIndexTestInit()
 
 	// Index not found
 	memberIndexListNotFound := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{2}}}
 	assert.PanicsWithValue(t, indexError(2, list), func () {
 		evaluateMemberIndex(memberIndexListNotFound, env)
 	})
+}
+
+func TestEvaluateMemberListIndex(t *testing.T) {
+	_, _, _, env := listIndexTestInit()
 
 	// Multi-indexing non-list
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{1}, ast.IntLiteral{1}}}
@@ -80,7 +105,7 @@ func TestEvaluateMemberListIndex(t *testing.T) {
 		func () {evaluateMemberIndex(indexNonList, env)},
 	)
 
-	// TODO After implementing call completely, test changing list in second arg while indexing.
+	// TODO After implementing function call with body completely, test changing list in second arg while indexing.
 	// It's supposed to index as the last step, so index errors do not happen if the non-modified list is short.
 }
 
