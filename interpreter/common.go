@@ -135,3 +135,7 @@ func unexpectedBodyError() PawnError {
 		"function does not expect a body, but it was called with one",
 	}
 }
+
+func unexpectedBodyOnUserFunctionCall() PawnError {
+	return PawnError{"expected empty or no body on call to user function, found non-empty body"}
+}
