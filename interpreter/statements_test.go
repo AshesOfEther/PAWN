@@ -33,9 +33,9 @@ func TestDeclareUserFunction(t *testing.T) {
 		&PawnFunctionUserInner{
 			environment,
 			positionalArguments,
-			map[string]ast.Expression{
-				"a": ast.IntLiteral{2},
-				"b": ast.FloatLiteral{3},
+			[]NamedArgument{
+				{"a", ast.IntLiteral{2}},
+				{"b", ast.FloatLiteral{3}},
 			},
 			body,
 		},

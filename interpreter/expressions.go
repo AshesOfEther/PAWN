@@ -132,8 +132,12 @@ func evaluateFunctionCall(expression ast.FunctionCall, environment Environment) 
 				len(function.v.positionalArguments),
 				expression.NamedArgs,
 				func(name string) bool {
-					_, ok := function.v.namedArguments[name]
-					return ok
+					for _, namedArgument := range function.v.namedArguments {
+						if namedArgument.name == name {
+							return true
+						}
+					}
+					return false
 				},
 			)
 			panic("TODO: Call the function")

@@ -59,18 +59,21 @@ func evaluateIfClause(clause ast.IfClause, environment Environment) (bool, Contr
 }
 
 func evaluateFunctionDeclaration(statement ast.FunctionDecl, environment Environment) {
-	namedArgsMap := map[string]ast.Expression{}
-	for _, namedArg := range statement.NamedArgs {
-		if _, ok := namedArgsMap[namedArg.Name]; ok {
+	// Ensure that no two named arguments have the same name.
+	existingNamedArguments := map[string]bool{}
+	namedArguments := make([]NamedArgument, len(statement.NamedArgs))
+	for i, namedArg := range statement.NamedArgs {
+		if _, ok := existingNamedArguments[namedArg.Name]; ok {
 			panic(duplicateNamedArgumentDeclarationError(namedArg.Name))
 		}
-		namedArgsMap[namedArg.Name] = namedArg.DefaultValue
+		existingNamedArguments[namedArg.Name] = true
+		namedArguments[i] = NamedArgument{namedArg.Name, namedArg.DefaultValue}
 	}
 	environment.variables[statement.Name] = PawnFunctionUser{
 		&PawnFunctionUserInner{
 			environment,
 			statement.PositionalArgs,
-			namedArgsMap,
+			namedArguments,
 			statement.Body,
 		},
 	}
