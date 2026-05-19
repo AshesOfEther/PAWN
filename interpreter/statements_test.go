@@ -72,3 +72,16 @@ func TestWhile(t *testing.T) {
 	time.Sleep(time.Second / 20)
 	assert.True(t, done)
 }
+
+func TestReturnValue(t *testing.T) {
+	var literal ast.Expression = ast.IntLiteral{2}
+	statement := ast.Return{
+		(&literal),
+	}
+	assert.Equal(t, Return{PawnInt{2}}, EvaluateStatement(statement, NewEnvironment(nil)))
+}
+
+func TestReturnNoValue(t *testing.T) {
+	statement := ast.Return{nil}
+	assert.Equal(t, Return{nil}, EvaluateStatement(statement, NewEnvironment(nil)))
+}

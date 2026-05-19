@@ -17,7 +17,7 @@ func EvaluateStatement(statement ast.Statement, environment Environment) Control
 		case ast.FunctionDecl:
 			evaluateFunctionDeclaration(statement, environment)
 		case ast.Return:
-			panic("TODO")
+			return evaluateReturn(statement, environment)
 		case ast.Assignment:
 			panic("TODO")
 		case ast.ExpressionStatement:
@@ -76,6 +76,14 @@ func evaluateFunctionDeclaration(statement ast.FunctionDecl, environment Environ
 	}
 }
 
+func evaluateReturn(statement ast.Return, environment Environment) Return {
+	var value PawnValue
+	if statement.Value != nil {
+		value = EvaluateExpression(*statement.Value, environment)
+	}
+	return Return{value}
+}
+
 func EvaluateStatements(statements []ast.Statement, environment Environment) ControlFlow {
 	for _, statement := range statements {
 		controlFlow := EvaluateStatement(statement, environment)
@@ -111,3 +119,10 @@ func evaluateWhile(whileStmt ast.While, environment Environment) ControlFlow {
 type ControlFlow interface {
 	controlFlow()
 }
+
+// Represents that a return statement was encountered.
+type Return struct {
+	value PawnValue
+}
+
+func (Return) controlFlow() {}
