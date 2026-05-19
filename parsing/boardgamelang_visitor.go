@@ -13,6 +13,9 @@ type BoardGameLangVisitor interface {
 	// Visit a parse tree produced by BoardGameLangParser#MulDivMod.
 	VisitMulDivMod(ctx *MulDivModContext) interface{}
 
+	// Visit a parse tree produced by BoardGameLangParser#Or.
+	VisitOr(ctx *OrContext) interface{}
+
 	// Visit a parse tree produced by BoardGameLangParser#MemberExpr.
 	VisitMemberExpr(ctx *MemberExprContext) interface{}
 
@@ -24,6 +27,9 @@ type BoardGameLangVisitor interface {
 
 	// Visit a parse tree produced by BoardGameLangParser#Parens.
 	VisitParens(ctx *ParensContext) interface{}
+
+	// Visit a parse tree produced by BoardGameLangParser#And.
+	VisitAnd(ctx *AndContext) interface{}
 
 	// Visit a parse tree produced by BoardGameLangParser#LiteralExpr.
 	VisitLiteralExpr(ctx *LiteralExprContext) interface{}

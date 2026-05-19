@@ -32,16 +32,16 @@ var BoardGameLangParserStaticData struct {
 func boardgamelangParserInit() {
 	staticData := &BoardGameLangParserStaticData
 	staticData.LiteralNames = []string{
-		"", "'('", "')'", "'{'", "'}'", "'['", "']'", "'^'", "'.'", "','", "'='",
-		"'apply'", "'while'", "'if'", "'else'", "'fn'", "'return'", "';'", "",
-		"", "", "", "", "", "'*'", "'/'", "'%'", "'+'", "'-'", "'..'", "'..='",
-		"'=='", "'!='", "'<'", "'>'", "'<='", "'>='",
+		"", "'('", "')'", "'{'", "'}'", "'['", "']'", "'^'", "'&&'", "'||'",
+		"'.'", "','", "'='", "'apply'", "'while'", "'if'", "'else'", "'fn'",
+		"'return'", "';'", "", "", "", "", "", "", "'*'", "'/'", "'%'", "'+'",
+		"'-'", "'..'", "'..='", "'=='", "'!='", "'<'", "'>'", "'<='", "'>='",
 	}
 	staticData.SymbolicNames = []string{
 		"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-		"", "LINE_COMMENT", "MULTILINE_COMMENT", "BOOL", "NAME", "NUMBER", "STRING",
-		"MUL", "DIV", "MOD", "ADD", "SUB", "RANGE", "RANGE_INCLUSIVE", "EQUAL",
-		"NOT_EQUAL", "LESS_THAN", "GREATER_THAN", "LESS_EQUAL", "GREATER_EQUAL",
+		"", "", "", "LINE_COMMENT", "MULTILINE_COMMENT", "BOOL", "NAME", "NUMBER",
+		"STRING", "MUL", "DIV", "MOD", "ADD", "SUB", "RANGE", "RANGE_INCLUSIVE",
+		"EQUAL", "NOT_EQUAL", "LESS_THAN", "GREATER_THAN", "LESS_EQUAL", "GREATER_EQUAL",
 		"WS",
 	}
 	staticData.RuleNames = []string{
@@ -51,113 +51,116 @@ func boardgamelangParserInit() {
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 37, 243, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 39, 249, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
 		0, 3, 0, 34, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
 		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-		3, 0, 57, 8, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 5, 0, 64, 8, 0, 10, 0, 12,
-		0, 67, 9, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 75, 8, 1, 10, 1,
-		12, 1, 78, 9, 1, 1, 2, 1, 2, 1, 2, 1, 2, 5, 2, 84, 8, 2, 10, 2, 12, 2,
-		87, 9, 2, 1, 2, 3, 2, 90, 8, 2, 3, 2, 92, 8, 2, 1, 2, 1, 2, 1, 2, 1, 2,
-		3, 2, 98, 8, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 3, 3, 106, 8, 3, 1,
-		3, 3, 3, 109, 8, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 3, 3, 116, 8, 3, 1, 3,
-		1, 3, 3, 3, 120, 8, 3, 1, 4, 1, 4, 1, 4, 5, 4, 125, 8, 4, 10, 4, 12, 4,
-		128, 9, 4, 1, 5, 1, 5, 1, 5, 5, 5, 133, 8, 5, 10, 5, 12, 5, 136, 9, 5,
-		1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 5, 7, 143, 8, 7, 10, 7, 12, 7, 146, 9, 7,
+		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 63, 8, 0, 1, 0, 1, 0, 1, 0, 1,
+		0, 1, 0, 5, 0, 70, 8, 0, 10, 0, 12, 0, 73, 9, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 5, 1, 81, 8, 1, 10, 1, 12, 1, 84, 9, 1, 1, 2, 1, 2, 1, 2, 1,
+		2, 5, 2, 90, 8, 2, 10, 2, 12, 2, 93, 9, 2, 1, 2, 3, 2, 96, 8, 2, 3, 2,
+		98, 8, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 104, 8, 2, 1, 3, 1, 3, 1, 3, 1,
+		3, 1, 3, 1, 3, 3, 3, 112, 8, 3, 1, 3, 3, 3, 115, 8, 3, 1, 3, 1, 3, 1, 3,
+		1, 3, 1, 3, 3, 3, 122, 8, 3, 1, 3, 1, 3, 3, 3, 126, 8, 3, 1, 4, 1, 4, 1,
+		4, 5, 4, 131, 8, 4, 10, 4, 12, 4, 134, 9, 4, 1, 5, 1, 5, 1, 5, 5, 5, 139,
+		8, 5, 10, 5, 12, 5, 142, 9, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 5, 7, 149,
+		8, 7, 10, 7, 12, 7, 152, 9, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8,
 		1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8,
-		1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8,
-		5, 8, 172, 8, 8, 10, 8, 12, 8, 175, 9, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8,
-		3, 8, 182, 8, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8,
-		1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8, 199, 8, 8, 1, 9, 1, 9, 1, 9,
-		1, 9, 1, 9, 1, 9, 3, 9, 207, 8, 9, 1, 9, 3, 9, 210, 8, 9, 1, 9, 1, 9, 1,
-		9, 1, 9, 1, 9, 3, 9, 217, 8, 9, 1, 9, 1, 9, 3, 9, 221, 8, 9, 1, 10, 1,
-		10, 1, 10, 5, 10, 226, 8, 10, 10, 10, 12, 10, 229, 9, 10, 1, 11, 1, 11,
-		1, 11, 5, 11, 234, 8, 11, 10, 11, 12, 11, 237, 9, 11, 1, 12, 1, 12, 1,
-		12, 1, 12, 1, 12, 0, 2, 0, 2, 13, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
-		22, 24, 0, 4, 1, 0, 24, 26, 1, 0, 27, 28, 1, 0, 29, 30, 1, 0, 31, 36, 269,
-		0, 33, 1, 0, 0, 0, 2, 68, 1, 0, 0, 0, 4, 97, 1, 0, 0, 0, 6, 119, 1, 0,
-		0, 0, 8, 121, 1, 0, 0, 0, 10, 129, 1, 0, 0, 0, 12, 137, 1, 0, 0, 0, 14,
-		144, 1, 0, 0, 0, 16, 198, 1, 0, 0, 0, 18, 220, 1, 0, 0, 0, 20, 222, 1,
-		0, 0, 0, 22, 230, 1, 0, 0, 0, 24, 238, 1, 0, 0, 0, 26, 27, 6, 0, -1, 0,
-		27, 28, 5, 1, 0, 0, 28, 29, 3, 0, 0, 0, 29, 30, 5, 2, 0, 0, 30, 34, 1,
-		0, 0, 0, 31, 34, 3, 2, 1, 0, 32, 34, 3, 4, 2, 0, 33, 26, 1, 0, 0, 0, 33,
-		31, 1, 0, 0, 0, 33, 32, 1, 0, 0, 0, 34, 65, 1, 0, 0, 0, 35, 36, 10, 7,
-		0, 0, 36, 37, 5, 7, 0, 0, 37, 64, 3, 0, 0, 8, 38, 39, 10, 6, 0, 0, 39,
-		40, 7, 0, 0, 0, 40, 64, 3, 0, 0, 7, 41, 42, 10, 5, 0, 0, 42, 43, 7, 1,
-		0, 0, 43, 64, 3, 0, 0, 6, 44, 45, 10, 4, 0, 0, 45, 46, 7, 2, 0, 0, 46,
-		64, 3, 0, 0, 5, 47, 48, 10, 3, 0, 0, 48, 49, 7, 3, 0, 0, 49, 64, 3, 0,
-		0, 4, 50, 51, 10, 9, 0, 0, 51, 56, 3, 6, 3, 0, 52, 53, 5, 3, 0, 0, 53,
-		54, 3, 14, 7, 0, 54, 55, 5, 4, 0, 0, 55, 57, 1, 0, 0, 0, 56, 52, 1, 0,
-		0, 0, 56, 57, 1, 0, 0, 0, 57, 64, 1, 0, 0, 0, 58, 59, 10, 8, 0, 0, 59,
-		60, 5, 5, 0, 0, 60, 61, 3, 8, 4, 0, 61, 62, 5, 6, 0, 0, 62, 64, 1, 0, 0,
-		0, 63, 35, 1, 0, 0, 0, 63, 38, 1, 0, 0, 0, 63, 41, 1, 0, 0, 0, 63, 44,
-		1, 0, 0, 0, 63, 47, 1, 0, 0, 0, 63, 50, 1, 0, 0, 0, 63, 58, 1, 0, 0, 0,
-		64, 67, 1, 0, 0, 0, 65, 63, 1, 0, 0, 0, 65, 66, 1, 0, 0, 0, 66, 1, 1, 0,
-		0, 0, 67, 65, 1, 0, 0, 0, 68, 69, 6, 1, -1, 0, 69, 70, 5, 21, 0, 0, 70,
-		76, 1, 0, 0, 0, 71, 72, 10, 2, 0, 0, 72, 73, 5, 8, 0, 0, 73, 75, 5, 21,
-		0, 0, 74, 71, 1, 0, 0, 0, 75, 78, 1, 0, 0, 0, 76, 74, 1, 0, 0, 0, 76, 77,
-		1, 0, 0, 0, 77, 3, 1, 0, 0, 0, 78, 76, 1, 0, 0, 0, 79, 91, 5, 5, 0, 0,
-		80, 85, 3, 0, 0, 0, 81, 82, 5, 9, 0, 0, 82, 84, 3, 0, 0, 0, 83, 81, 1,
-		0, 0, 0, 84, 87, 1, 0, 0, 0, 85, 83, 1, 0, 0, 0, 85, 86, 1, 0, 0, 0, 86,
-		89, 1, 0, 0, 0, 87, 85, 1, 0, 0, 0, 88, 90, 5, 9, 0, 0, 89, 88, 1, 0, 0,
-		0, 89, 90, 1, 0, 0, 0, 90, 92, 1, 0, 0, 0, 91, 80, 1, 0, 0, 0, 91, 92,
-		1, 0, 0, 0, 92, 93, 1, 0, 0, 0, 93, 98, 5, 6, 0, 0, 94, 98, 5, 20, 0, 0,
-		95, 98, 5, 22, 0, 0, 96, 98, 5, 23, 0, 0, 97, 79, 1, 0, 0, 0, 97, 94, 1,
-		0, 0, 0, 97, 95, 1, 0, 0, 0, 97, 96, 1, 0, 0, 0, 98, 5, 1, 0, 0, 0, 99,
-		100, 5, 1, 0, 0, 100, 120, 5, 2, 0, 0, 101, 102, 5, 1, 0, 0, 102, 105,
-		3, 8, 4, 0, 103, 104, 5, 9, 0, 0, 104, 106, 3, 10, 5, 0, 105, 103, 1, 0,
-		0, 0, 105, 106, 1, 0, 0, 0, 106, 108, 1, 0, 0, 0, 107, 109, 5, 9, 0, 0,
-		108, 107, 1, 0, 0, 0, 108, 109, 1, 0, 0, 0, 109, 110, 1, 0, 0, 0, 110,
-		111, 5, 2, 0, 0, 111, 120, 1, 0, 0, 0, 112, 113, 5, 1, 0, 0, 113, 115,
-		3, 10, 5, 0, 114, 116, 5, 9, 0, 0, 115, 114, 1, 0, 0, 0, 115, 116, 1, 0,
-		0, 0, 116, 117, 1, 0, 0, 0, 117, 118, 5, 2, 0, 0, 118, 120, 1, 0, 0, 0,
-		119, 99, 1, 0, 0, 0, 119, 101, 1, 0, 0, 0, 119, 112, 1, 0, 0, 0, 120, 7,
-		1, 0, 0, 0, 121, 126, 3, 0, 0, 0, 122, 123, 5, 9, 0, 0, 123, 125, 3, 0,
-		0, 0, 124, 122, 1, 0, 0, 0, 125, 128, 1, 0, 0, 0, 126, 124, 1, 0, 0, 0,
-		126, 127, 1, 0, 0, 0, 127, 9, 1, 0, 0, 0, 128, 126, 1, 0, 0, 0, 129, 134,
-		3, 12, 6, 0, 130, 131, 5, 9, 0, 0, 131, 133, 3, 12, 6, 0, 132, 130, 1,
-		0, 0, 0, 133, 136, 1, 0, 0, 0, 134, 132, 1, 0, 0, 0, 134, 135, 1, 0, 0,
-		0, 135, 11, 1, 0, 0, 0, 136, 134, 1, 0, 0, 0, 137, 138, 5, 21, 0, 0, 138,
-		139, 5, 10, 0, 0, 139, 140, 3, 0, 0, 0, 140, 13, 1, 0, 0, 0, 141, 143,
-		3, 16, 8, 0, 142, 141, 1, 0, 0, 0, 143, 146, 1, 0, 0, 0, 144, 142, 1, 0,
-		0, 0, 144, 145, 1, 0, 0, 0, 145, 15, 1, 0, 0, 0, 146, 144, 1, 0, 0, 0,
-		147, 148, 5, 11, 0, 0, 148, 149, 3, 0, 0, 0, 149, 150, 5, 3, 0, 0, 150,
-		151, 3, 14, 7, 0, 151, 152, 5, 4, 0, 0, 152, 199, 1, 0, 0, 0, 153, 154,
-		5, 12, 0, 0, 154, 155, 3, 0, 0, 0, 155, 156, 5, 3, 0, 0, 156, 157, 3, 14,
-		7, 0, 157, 158, 5, 4, 0, 0, 158, 199, 1, 0, 0, 0, 159, 160, 5, 13, 0, 0,
+		1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 5, 8, 178, 8, 8, 10, 8, 12, 8, 181, 9, 8,
+		1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8, 188, 8, 8, 1, 8, 1, 8, 1, 8, 1, 8,
+		1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8,
+		205, 8, 8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 213, 8, 9, 1, 9, 3,
+		9, 216, 8, 9, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 223, 8, 9, 1, 9, 1, 9,
+		3, 9, 227, 8, 9, 1, 10, 1, 10, 1, 10, 5, 10, 232, 8, 10, 10, 10, 12, 10,
+		235, 9, 10, 1, 11, 1, 11, 1, 11, 5, 11, 240, 8, 11, 10, 11, 12, 11, 243,
+		9, 11, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 0, 2, 0, 2, 13, 0, 2, 4, 6, 8,
+		10, 12, 14, 16, 18, 20, 22, 24, 0, 4, 1, 0, 26, 28, 1, 0, 29, 30, 1, 0,
+		31, 32, 1, 0, 33, 38, 277, 0, 33, 1, 0, 0, 0, 2, 74, 1, 0, 0, 0, 4, 103,
+		1, 0, 0, 0, 6, 125, 1, 0, 0, 0, 8, 127, 1, 0, 0, 0, 10, 135, 1, 0, 0, 0,
+		12, 143, 1, 0, 0, 0, 14, 150, 1, 0, 0, 0, 16, 204, 1, 0, 0, 0, 18, 226,
+		1, 0, 0, 0, 20, 228, 1, 0, 0, 0, 22, 236, 1, 0, 0, 0, 24, 244, 1, 0, 0,
+		0, 26, 27, 6, 0, -1, 0, 27, 28, 5, 1, 0, 0, 28, 29, 3, 0, 0, 0, 29, 30,
+		5, 2, 0, 0, 30, 34, 1, 0, 0, 0, 31, 34, 3, 2, 1, 0, 32, 34, 3, 4, 2, 0,
+		33, 26, 1, 0, 0, 0, 33, 31, 1, 0, 0, 0, 33, 32, 1, 0, 0, 0, 34, 71, 1,
+		0, 0, 0, 35, 36, 10, 9, 0, 0, 36, 37, 5, 7, 0, 0, 37, 70, 3, 0, 0, 10,
+		38, 39, 10, 8, 0, 0, 39, 40, 7, 0, 0, 0, 40, 70, 3, 0, 0, 9, 41, 42, 10,
+		7, 0, 0, 42, 43, 7, 1, 0, 0, 43, 70, 3, 0, 0, 8, 44, 45, 10, 6, 0, 0, 45,
+		46, 7, 2, 0, 0, 46, 70, 3, 0, 0, 7, 47, 48, 10, 5, 0, 0, 48, 49, 7, 3,
+		0, 0, 49, 70, 3, 0, 0, 6, 50, 51, 10, 4, 0, 0, 51, 52, 5, 8, 0, 0, 52,
+		70, 3, 0, 0, 5, 53, 54, 10, 3, 0, 0, 54, 55, 5, 9, 0, 0, 55, 70, 3, 0,
+		0, 4, 56, 57, 10, 11, 0, 0, 57, 62, 3, 6, 3, 0, 58, 59, 5, 3, 0, 0, 59,
+		60, 3, 14, 7, 0, 60, 61, 5, 4, 0, 0, 61, 63, 1, 0, 0, 0, 62, 58, 1, 0,
+		0, 0, 62, 63, 1, 0, 0, 0, 63, 70, 1, 0, 0, 0, 64, 65, 10, 10, 0, 0, 65,
+		66, 5, 5, 0, 0, 66, 67, 3, 8, 4, 0, 67, 68, 5, 6, 0, 0, 68, 70, 1, 0, 0,
+		0, 69, 35, 1, 0, 0, 0, 69, 38, 1, 0, 0, 0, 69, 41, 1, 0, 0, 0, 69, 44,
+		1, 0, 0, 0, 69, 47, 1, 0, 0, 0, 69, 50, 1, 0, 0, 0, 69, 53, 1, 0, 0, 0,
+		69, 56, 1, 0, 0, 0, 69, 64, 1, 0, 0, 0, 70, 73, 1, 0, 0, 0, 71, 69, 1,
+		0, 0, 0, 71, 72, 1, 0, 0, 0, 72, 1, 1, 0, 0, 0, 73, 71, 1, 0, 0, 0, 74,
+		75, 6, 1, -1, 0, 75, 76, 5, 23, 0, 0, 76, 82, 1, 0, 0, 0, 77, 78, 10, 2,
+		0, 0, 78, 79, 5, 10, 0, 0, 79, 81, 5, 23, 0, 0, 80, 77, 1, 0, 0, 0, 81,
+		84, 1, 0, 0, 0, 82, 80, 1, 0, 0, 0, 82, 83, 1, 0, 0, 0, 83, 3, 1, 0, 0,
+		0, 84, 82, 1, 0, 0, 0, 85, 97, 5, 5, 0, 0, 86, 91, 3, 0, 0, 0, 87, 88,
+		5, 11, 0, 0, 88, 90, 3, 0, 0, 0, 89, 87, 1, 0, 0, 0, 90, 93, 1, 0, 0, 0,
+		91, 89, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0, 92, 95, 1, 0, 0, 0, 93, 91, 1,
+		0, 0, 0, 94, 96, 5, 11, 0, 0, 95, 94, 1, 0, 0, 0, 95, 96, 1, 0, 0, 0, 96,
+		98, 1, 0, 0, 0, 97, 86, 1, 0, 0, 0, 97, 98, 1, 0, 0, 0, 98, 99, 1, 0, 0,
+		0, 99, 104, 5, 6, 0, 0, 100, 104, 5, 22, 0, 0, 101, 104, 5, 24, 0, 0, 102,
+		104, 5, 25, 0, 0, 103, 85, 1, 0, 0, 0, 103, 100, 1, 0, 0, 0, 103, 101,
+		1, 0, 0, 0, 103, 102, 1, 0, 0, 0, 104, 5, 1, 0, 0, 0, 105, 106, 5, 1, 0,
+		0, 106, 126, 5, 2, 0, 0, 107, 108, 5, 1, 0, 0, 108, 111, 3, 8, 4, 0, 109,
+		110, 5, 11, 0, 0, 110, 112, 3, 10, 5, 0, 111, 109, 1, 0, 0, 0, 111, 112,
+		1, 0, 0, 0, 112, 114, 1, 0, 0, 0, 113, 115, 5, 11, 0, 0, 114, 113, 1, 0,
+		0, 0, 114, 115, 1, 0, 0, 0, 115, 116, 1, 0, 0, 0, 116, 117, 5, 2, 0, 0,
+		117, 126, 1, 0, 0, 0, 118, 119, 5, 1, 0, 0, 119, 121, 3, 10, 5, 0, 120,
+		122, 5, 11, 0, 0, 121, 120, 1, 0, 0, 0, 121, 122, 1, 0, 0, 0, 122, 123,
+		1, 0, 0, 0, 123, 124, 5, 2, 0, 0, 124, 126, 1, 0, 0, 0, 125, 105, 1, 0,
+		0, 0, 125, 107, 1, 0, 0, 0, 125, 118, 1, 0, 0, 0, 126, 7, 1, 0, 0, 0, 127,
+		132, 3, 0, 0, 0, 128, 129, 5, 11, 0, 0, 129, 131, 3, 0, 0, 0, 130, 128,
+		1, 0, 0, 0, 131, 134, 1, 0, 0, 0, 132, 130, 1, 0, 0, 0, 132, 133, 1, 0,
+		0, 0, 133, 9, 1, 0, 0, 0, 134, 132, 1, 0, 0, 0, 135, 140, 3, 12, 6, 0,
+		136, 137, 5, 11, 0, 0, 137, 139, 3, 12, 6, 0, 138, 136, 1, 0, 0, 0, 139,
+		142, 1, 0, 0, 0, 140, 138, 1, 0, 0, 0, 140, 141, 1, 0, 0, 0, 141, 11, 1,
+		0, 0, 0, 142, 140, 1, 0, 0, 0, 143, 144, 5, 23, 0, 0, 144, 145, 5, 12,
+		0, 0, 145, 146, 3, 0, 0, 0, 146, 13, 1, 0, 0, 0, 147, 149, 3, 16, 8, 0,
+		148, 147, 1, 0, 0, 0, 149, 152, 1, 0, 0, 0, 150, 148, 1, 0, 0, 0, 150,
+		151, 1, 0, 0, 0, 151, 15, 1, 0, 0, 0, 152, 150, 1, 0, 0, 0, 153, 154, 5,
+		13, 0, 0, 154, 155, 3, 0, 0, 0, 155, 156, 5, 3, 0, 0, 156, 157, 3, 14,
+		7, 0, 157, 158, 5, 4, 0, 0, 158, 205, 1, 0, 0, 0, 159, 160, 5, 14, 0, 0,
 		160, 161, 3, 0, 0, 0, 161, 162, 5, 3, 0, 0, 162, 163, 3, 14, 7, 0, 163,
-		173, 5, 4, 0, 0, 164, 165, 5, 14, 0, 0, 165, 166, 5, 13, 0, 0, 166, 167,
-		3, 0, 0, 0, 167, 168, 5, 3, 0, 0, 168, 169, 3, 14, 7, 0, 169, 170, 5, 4,
-		0, 0, 170, 172, 1, 0, 0, 0, 171, 164, 1, 0, 0, 0, 172, 175, 1, 0, 0, 0,
-		173, 171, 1, 0, 0, 0, 173, 174, 1, 0, 0, 0, 174, 181, 1, 0, 0, 0, 175,
-		173, 1, 0, 0, 0, 176, 177, 5, 14, 0, 0, 177, 178, 5, 3, 0, 0, 178, 179,
-		3, 14, 7, 0, 179, 180, 5, 4, 0, 0, 180, 182, 1, 0, 0, 0, 181, 176, 1, 0,
-		0, 0, 181, 182, 1, 0, 0, 0, 182, 199, 1, 0, 0, 0, 183, 184, 5, 15, 0, 0,
-		184, 185, 5, 21, 0, 0, 185, 186, 3, 18, 9, 0, 186, 187, 5, 3, 0, 0, 187,
-		188, 3, 14, 7, 0, 188, 189, 5, 4, 0, 0, 189, 199, 1, 0, 0, 0, 190, 191,
-		5, 16, 0, 0, 191, 199, 3, 0, 0, 0, 192, 193, 3, 0, 0, 0, 193, 194, 5, 17,
-		0, 0, 194, 199, 1, 0, 0, 0, 195, 196, 5, 21, 0, 0, 196, 197, 5, 10, 0,
-		0, 197, 199, 3, 0, 0, 0, 198, 147, 1, 0, 0, 0, 198, 153, 1, 0, 0, 0, 198,
-		159, 1, 0, 0, 0, 198, 183, 1, 0, 0, 0, 198, 190, 1, 0, 0, 0, 198, 192,
-		1, 0, 0, 0, 198, 195, 1, 0, 0, 0, 199, 17, 1, 0, 0, 0, 200, 201, 5, 1,
-		0, 0, 201, 221, 5, 2, 0, 0, 202, 203, 5, 1, 0, 0, 203, 206, 3, 20, 10,
-		0, 204, 205, 5, 9, 0, 0, 205, 207, 3, 22, 11, 0, 206, 204, 1, 0, 0, 0,
-		206, 207, 1, 0, 0, 0, 207, 209, 1, 0, 0, 0, 208, 210, 5, 9, 0, 0, 209,
-		208, 1, 0, 0, 0, 209, 210, 1, 0, 0, 0, 210, 211, 1, 0, 0, 0, 211, 212,
-		5, 2, 0, 0, 212, 221, 1, 0, 0, 0, 213, 214, 5, 1, 0, 0, 214, 216, 3, 22,
-		11, 0, 215, 217, 5, 9, 0, 0, 216, 215, 1, 0, 0, 0, 216, 217, 1, 0, 0, 0,
-		217, 218, 1, 0, 0, 0, 218, 219, 5, 2, 0, 0, 219, 221, 1, 0, 0, 0, 220,
-		200, 1, 0, 0, 0, 220, 202, 1, 0, 0, 0, 220, 213, 1, 0, 0, 0, 221, 19, 1,
-		0, 0, 0, 222, 227, 5, 21, 0, 0, 223, 224, 5, 9, 0, 0, 224, 226, 5, 21,
-		0, 0, 225, 223, 1, 0, 0, 0, 226, 229, 1, 0, 0, 0, 227, 225, 1, 0, 0, 0,
-		227, 228, 1, 0, 0, 0, 228, 21, 1, 0, 0, 0, 229, 227, 1, 0, 0, 0, 230, 235,
-		3, 24, 12, 0, 231, 232, 5, 9, 0, 0, 232, 234, 3, 24, 12, 0, 233, 231, 1,
-		0, 0, 0, 234, 237, 1, 0, 0, 0, 235, 233, 1, 0, 0, 0, 235, 236, 1, 0, 0,
-		0, 236, 23, 1, 0, 0, 0, 237, 235, 1, 0, 0, 0, 238, 239, 5, 21, 0, 0, 239,
-		240, 5, 10, 0, 0, 240, 241, 3, 0, 0, 0, 241, 25, 1, 0, 0, 0, 25, 33, 56,
-		63, 65, 76, 85, 89, 91, 97, 105, 108, 115, 119, 126, 134, 144, 173, 181,
-		198, 206, 209, 216, 220, 227, 235,
+		164, 5, 4, 0, 0, 164, 205, 1, 0, 0, 0, 165, 166, 5, 15, 0, 0, 166, 167,
+		3, 0, 0, 0, 167, 168, 5, 3, 0, 0, 168, 169, 3, 14, 7, 0, 169, 179, 5, 4,
+		0, 0, 170, 171, 5, 16, 0, 0, 171, 172, 5, 15, 0, 0, 172, 173, 3, 0, 0,
+		0, 173, 174, 5, 3, 0, 0, 174, 175, 3, 14, 7, 0, 175, 176, 5, 4, 0, 0, 176,
+		178, 1, 0, 0, 0, 177, 170, 1, 0, 0, 0, 178, 181, 1, 0, 0, 0, 179, 177,
+		1, 0, 0, 0, 179, 180, 1, 0, 0, 0, 180, 187, 1, 0, 0, 0, 181, 179, 1, 0,
+		0, 0, 182, 183, 5, 16, 0, 0, 183, 184, 5, 3, 0, 0, 184, 185, 3, 14, 7,
+		0, 185, 186, 5, 4, 0, 0, 186, 188, 1, 0, 0, 0, 187, 182, 1, 0, 0, 0, 187,
+		188, 1, 0, 0, 0, 188, 205, 1, 0, 0, 0, 189, 190, 5, 17, 0, 0, 190, 191,
+		5, 23, 0, 0, 191, 192, 3, 18, 9, 0, 192, 193, 5, 3, 0, 0, 193, 194, 3,
+		14, 7, 0, 194, 195, 5, 4, 0, 0, 195, 205, 1, 0, 0, 0, 196, 197, 5, 18,
+		0, 0, 197, 205, 3, 0, 0, 0, 198, 199, 3, 0, 0, 0, 199, 200, 5, 19, 0, 0,
+		200, 205, 1, 0, 0, 0, 201, 202, 5, 23, 0, 0, 202, 203, 5, 12, 0, 0, 203,
+		205, 3, 0, 0, 0, 204, 153, 1, 0, 0, 0, 204, 159, 1, 0, 0, 0, 204, 165,
+		1, 0, 0, 0, 204, 189, 1, 0, 0, 0, 204, 196, 1, 0, 0, 0, 204, 198, 1, 0,
+		0, 0, 204, 201, 1, 0, 0, 0, 205, 17, 1, 0, 0, 0, 206, 207, 5, 1, 0, 0,
+		207, 227, 5, 2, 0, 0, 208, 209, 5, 1, 0, 0, 209, 212, 3, 20, 10, 0, 210,
+		211, 5, 11, 0, 0, 211, 213, 3, 22, 11, 0, 212, 210, 1, 0, 0, 0, 212, 213,
+		1, 0, 0, 0, 213, 215, 1, 0, 0, 0, 214, 216, 5, 11, 0, 0, 215, 214, 1, 0,
+		0, 0, 215, 216, 1, 0, 0, 0, 216, 217, 1, 0, 0, 0, 217, 218, 5, 2, 0, 0,
+		218, 227, 1, 0, 0, 0, 219, 220, 5, 1, 0, 0, 220, 222, 3, 22, 11, 0, 221,
+		223, 5, 11, 0, 0, 222, 221, 1, 0, 0, 0, 222, 223, 1, 0, 0, 0, 223, 224,
+		1, 0, 0, 0, 224, 225, 5, 2, 0, 0, 225, 227, 1, 0, 0, 0, 226, 206, 1, 0,
+		0, 0, 226, 208, 1, 0, 0, 0, 226, 219, 1, 0, 0, 0, 227, 19, 1, 0, 0, 0,
+		228, 233, 5, 23, 0, 0, 229, 230, 5, 11, 0, 0, 230, 232, 5, 23, 0, 0, 231,
+		229, 1, 0, 0, 0, 232, 235, 1, 0, 0, 0, 233, 231, 1, 0, 0, 0, 233, 234,
+		1, 0, 0, 0, 234, 21, 1, 0, 0, 0, 235, 233, 1, 0, 0, 0, 236, 241, 3, 24,
+		12, 0, 237, 238, 5, 11, 0, 0, 238, 240, 3, 24, 12, 0, 239, 237, 1, 0, 0,
+		0, 240, 243, 1, 0, 0, 0, 241, 239, 1, 0, 0, 0, 241, 242, 1, 0, 0, 0, 242,
+		23, 1, 0, 0, 0, 243, 241, 1, 0, 0, 0, 244, 245, 5, 23, 0, 0, 245, 246,
+		5, 12, 0, 0, 246, 247, 3, 0, 0, 0, 247, 25, 1, 0, 0, 0, 25, 33, 62, 69,
+		71, 82, 91, 95, 97, 103, 111, 114, 121, 125, 132, 140, 150, 179, 187, 204,
+		212, 215, 222, 226, 233, 241,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -213,26 +216,28 @@ const (
 	BoardGameLangParserT__14             = 15
 	BoardGameLangParserT__15             = 16
 	BoardGameLangParserT__16             = 17
-	BoardGameLangParserLINE_COMMENT      = 18
-	BoardGameLangParserMULTILINE_COMMENT = 19
-	BoardGameLangParserBOOL              = 20
-	BoardGameLangParserNAME              = 21
-	BoardGameLangParserNUMBER            = 22
-	BoardGameLangParserSTRING            = 23
-	BoardGameLangParserMUL               = 24
-	BoardGameLangParserDIV               = 25
-	BoardGameLangParserMOD               = 26
-	BoardGameLangParserADD               = 27
-	BoardGameLangParserSUB               = 28
-	BoardGameLangParserRANGE             = 29
-	BoardGameLangParserRANGE_INCLUSIVE   = 30
-	BoardGameLangParserEQUAL             = 31
-	BoardGameLangParserNOT_EQUAL         = 32
-	BoardGameLangParserLESS_THAN         = 33
-	BoardGameLangParserGREATER_THAN      = 34
-	BoardGameLangParserLESS_EQUAL        = 35
-	BoardGameLangParserGREATER_EQUAL     = 36
-	BoardGameLangParserWS                = 37
+	BoardGameLangParserT__17             = 18
+	BoardGameLangParserT__18             = 19
+	BoardGameLangParserLINE_COMMENT      = 20
+	BoardGameLangParserMULTILINE_COMMENT = 21
+	BoardGameLangParserBOOL              = 22
+	BoardGameLangParserNAME              = 23
+	BoardGameLangParserNUMBER            = 24
+	BoardGameLangParserSTRING            = 25
+	BoardGameLangParserMUL               = 26
+	BoardGameLangParserDIV               = 27
+	BoardGameLangParserMOD               = 28
+	BoardGameLangParserADD               = 29
+	BoardGameLangParserSUB               = 30
+	BoardGameLangParserRANGE             = 31
+	BoardGameLangParserRANGE_INCLUSIVE   = 32
+	BoardGameLangParserEQUAL             = 33
+	BoardGameLangParserNOT_EQUAL         = 34
+	BoardGameLangParserLESS_THAN         = 35
+	BoardGameLangParserGREATER_THAN      = 36
+	BoardGameLangParserLESS_EQUAL        = 37
+	BoardGameLangParserGREATER_EQUAL     = 38
+	BoardGameLangParserWS                = 39
 )
 
 // BoardGameLangParser rules.
@@ -486,6 +491,92 @@ func (s *MulDivModContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case BoardGameLangVisitor:
 		return t.VisitMulDivMod(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type OrContext struct {
+	ExpressionContext
+	op antlr.Token
+}
+
+func NewOrContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *OrContext {
+	var p = new(OrContext)
+
+	InitEmptyExpressionContext(&p.ExpressionContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ExpressionContext))
+
+	return p
+}
+
+func (s *OrContext) GetOp() antlr.Token { return s.op }
+
+func (s *OrContext) SetOp(v antlr.Token) { s.op = v }
+
+func (s *OrContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *OrContext) AllExpression() []IExpressionContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IExpressionContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]IExpressionContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IExpressionContext); ok {
+			tst[i] = t.(IExpressionContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *OrContext) Expression(i int) IExpressionContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IExpressionContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
+}
+
+func (s *OrContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(BoardGameLangListener); ok {
+		listenerT.EnterOr(s)
+	}
+}
+
+func (s *OrContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(BoardGameLangListener); ok {
+		listenerT.ExitOr(s)
+	}
+}
+
+func (s *OrContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case BoardGameLangVisitor:
+		return t.VisitOr(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -802,6 +893,92 @@ func (s *ParensContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case BoardGameLangVisitor:
 		return t.VisitParens(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
+type AndContext struct {
+	ExpressionContext
+	op antlr.Token
+}
+
+func NewAndContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *AndContext {
+	var p = new(AndContext)
+
+	InitEmptyExpressionContext(&p.ExpressionContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ExpressionContext))
+
+	return p
+}
+
+func (s *AndContext) GetOp() antlr.Token { return s.op }
+
+func (s *AndContext) SetOp(v antlr.Token) { s.op = v }
+
+func (s *AndContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *AndContext) AllExpression() []IExpressionContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IExpressionContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]IExpressionContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IExpressionContext); ok {
+			tst[i] = t.(IExpressionContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *AndContext) Expression(i int) IExpressionContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IExpressionContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
+}
+
+func (s *AndContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(BoardGameLangListener); ok {
+		listenerT.EnterAnd(s)
+	}
+}
+
+func (s *AndContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(BoardGameLangListener); ok {
+		listenerT.ExitAnd(s)
+	}
+}
+
+func (s *AndContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case BoardGameLangVisitor:
+		return t.VisitAnd(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -1185,7 +1362,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 		goto errorExit
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(65)
+	p.SetState(71)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1200,7 +1377,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(63)
+			p.SetState(69)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -1212,8 +1389,8 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
 				p.SetState(35)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 7)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 7)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 9)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 9)", ""))
 					goto errorExit
 				}
 				{
@@ -1226,7 +1403,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				}
 				{
 					p.SetState(37)
-					p.expression(8)
+					p.expression(10)
 				}
 
 			case 2:
@@ -1234,8 +1411,8 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
 				p.SetState(38)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 6)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 6)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 8)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 8)", ""))
 					goto errorExit
 				}
 				{
@@ -1247,7 +1424,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 
 					_la = p.GetTokenStream().LA(1)
 
-					if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&117440512) != 0) {
+					if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&469762048) != 0) {
 						var _ri = p.GetErrorHandler().RecoverInline(p)
 
 						localctx.(*MulDivModContext).op = _ri
@@ -1258,7 +1435,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				}
 				{
 					p.SetState(40)
-					p.expression(7)
+					p.expression(9)
 				}
 
 			case 3:
@@ -1266,8 +1443,8 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
 				p.SetState(41)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 5)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 5)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 7)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 7)", ""))
 					goto errorExit
 				}
 				{
@@ -1290,7 +1467,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				}
 				{
 					p.SetState(43)
-					p.expression(6)
+					p.expression(8)
 				}
 
 			case 4:
@@ -1298,8 +1475,8 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
 				p.SetState(44)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 6)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 6)", ""))
 					goto errorExit
 				}
 				{
@@ -1322,7 +1499,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				}
 				{
 					p.SetState(46)
-					p.expression(5)
+					p.expression(7)
 				}
 
 			case 5:
@@ -1330,8 +1507,8 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
 				p.SetState(47)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 5)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 5)", ""))
 					goto errorExit
 				}
 				{
@@ -1343,7 +1520,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 
 					_la = p.GetTokenStream().LA(1)
 
-					if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&135291469824) != 0) {
+					if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&541165879296) != 0) {
 						var _ri = p.GetErrorHandler().RecoverInline(p)
 
 						localctx.(*ComparisonContext).op = _ri
@@ -1354,28 +1531,78 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 				}
 				{
 					p.SetState(49)
-					p.expression(4)
+					p.expression(6)
 				}
 
 			case 6:
-				localctx = NewCallContext(p, NewExpressionContext(p, _parentctx, _parentState))
+				localctx = NewAndContext(p, NewExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
 				p.SetState(50)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 9)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 9)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
 					goto errorExit
 				}
 				{
 					p.SetState(51)
+
+					var _m = p.Match(BoardGameLangParserT__7)
+
+					localctx.(*AndContext).op = _m
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
+				}
+				{
+					p.SetState(52)
+					p.expression(5)
+				}
+
+			case 7:
+				localctx = NewOrContext(p, NewExpressionContext(p, _parentctx, _parentState))
+				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
+				p.SetState(53)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
+					goto errorExit
+				}
+				{
+					p.SetState(54)
+
+					var _m = p.Match(BoardGameLangParserT__8)
+
+					localctx.(*OrContext).op = _m
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
+				}
+				{
+					p.SetState(55)
+					p.expression(4)
+				}
+
+			case 8:
+				localctx = NewCallContext(p, NewExpressionContext(p, _parentctx, _parentState))
+				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
+				p.SetState(56)
+
+				if !(p.Precpred(p.GetParserRuleContext(), 11)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 11)", ""))
+					goto errorExit
+				}
+				{
+					p.SetState(57)
 					p.ArgList()
 				}
-				p.SetState(56)
+				p.SetState(62)
 				p.GetErrorHandler().Sync(p)
 
 				if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext()) == 1 {
 					{
-						p.SetState(52)
+						p.SetState(58)
 						p.Match(BoardGameLangParserT__2)
 						if p.HasError() {
 							// Recognition error - abort rule
@@ -1383,11 +1610,11 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 						}
 					}
 					{
-						p.SetState(53)
+						p.SetState(59)
 						p.StatementList()
 					}
 					{
-						p.SetState(54)
+						p.SetState(60)
 						p.Match(BoardGameLangParserT__3)
 						if p.HasError() {
 							// Recognition error - abort rule
@@ -1399,17 +1626,17 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 					goto errorExit
 				}
 
-			case 7:
+			case 9:
 				localctx = NewIndexContext(p, NewExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_expression)
-				p.SetState(58)
+				p.SetState(64)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 8)) {
-					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 8)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 10)) {
+					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 10)", ""))
 					goto errorExit
 				}
 				{
-					p.SetState(59)
+					p.SetState(65)
 					p.Match(BoardGameLangParserT__4)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -1417,11 +1644,11 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 					}
 				}
 				{
-					p.SetState(60)
+					p.SetState(66)
 					p.ExpressionList()
 				}
 				{
-					p.SetState(61)
+					p.SetState(67)
 					p.Match(BoardGameLangParserT__5)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -1434,7 +1661,7 @@ func (p *BoardGameLangParser) expression(_p int) (localctx IExpressionContext) {
 			}
 
 		}
-		p.SetState(67)
+		p.SetState(73)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1637,7 +1864,7 @@ func (p *BoardGameLangParser) member(_p int) (localctx IMemberContext) {
 	_prevctx = localctx
 
 	{
-		p.SetState(69)
+		p.SetState(75)
 		p.Match(BoardGameLangParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1646,7 +1873,7 @@ func (p *BoardGameLangParser) member(_p int) (localctx IMemberContext) {
 	}
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(76)
+	p.SetState(82)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1663,22 +1890,22 @@ func (p *BoardGameLangParser) member(_p int) (localctx IMemberContext) {
 			_prevctx = localctx
 			localctx = NewPropertyContext(p, NewMemberContext(p, _parentctx, _parentState))
 			p.PushNewRecursionContext(localctx, _startState, BoardGameLangParserRULE_member)
-			p.SetState(71)
+			p.SetState(77)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 				goto errorExit
 			}
 			{
-				p.SetState(72)
-				p.Match(BoardGameLangParserT__7)
+				p.SetState(78)
+				p.Match(BoardGameLangParserT__9)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(73)
+				p.SetState(79)
 				p.Match(BoardGameLangParserNAME)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1687,7 +1914,7 @@ func (p *BoardGameLangParser) member(_p int) (localctx IMemberContext) {
 			}
 
 		}
-		p.SetState(78)
+		p.SetState(84)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1985,7 +2212,7 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 
 	var _alt int
 
-	p.SetState(97)
+	p.SetState(103)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1996,26 +2223,26 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 		localctx = NewListContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(79)
+			p.SetState(85)
 			p.Match(BoardGameLangParserT__4)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(91)
+		p.SetState(97)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&15728674) != 0 {
+		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&62914594) != 0 {
 			{
-				p.SetState(80)
+				p.SetState(86)
 				p.expression(0)
 			}
-			p.SetState(85)
+			p.SetState(91)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -2027,20 +2254,20 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 			for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 				if _alt == 1 {
 					{
-						p.SetState(81)
-						p.Match(BoardGameLangParserT__8)
+						p.SetState(87)
+						p.Match(BoardGameLangParserT__10)
 						if p.HasError() {
 							// Recognition error - abort rule
 							goto errorExit
 						}
 					}
 					{
-						p.SetState(82)
+						p.SetState(88)
 						p.expression(0)
 					}
 
 				}
-				p.SetState(87)
+				p.SetState(93)
 				p.GetErrorHandler().Sync(p)
 				if p.HasError() {
 					goto errorExit
@@ -2050,17 +2277,17 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 					goto errorExit
 				}
 			}
-			p.SetState(89)
+			p.SetState(95)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
 			_la = p.GetTokenStream().LA(1)
 
-			if _la == BoardGameLangParserT__8 {
+			if _la == BoardGameLangParserT__10 {
 				{
-					p.SetState(88)
-					p.Match(BoardGameLangParserT__8)
+					p.SetState(94)
+					p.Match(BoardGameLangParserT__10)
 					if p.HasError() {
 						// Recognition error - abort rule
 						goto errorExit
@@ -2071,7 +2298,7 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 
 		}
 		{
-			p.SetState(93)
+			p.SetState(99)
 			p.Match(BoardGameLangParserT__5)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2083,7 +2310,7 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 		localctx = NewBoolContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(94)
+			p.SetState(100)
 			p.Match(BoardGameLangParserBOOL)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2095,7 +2322,7 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 		localctx = NewNumberContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(95)
+			p.SetState(101)
 			p.Match(BoardGameLangParserNUMBER)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2107,7 +2334,7 @@ func (p *BoardGameLangParser) Literal() (localctx ILiteralContext) {
 		localctx = NewStringContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(96)
+			p.SetState(102)
 			p.Match(BoardGameLangParserSTRING)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2247,7 +2474,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 	p.EnterRule(localctx, 6, BoardGameLangParserRULE_argList)
 	var _la int
 
-	p.SetState(119)
+	p.SetState(125)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2257,7 +2484,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(99)
+			p.SetState(105)
 			p.Match(BoardGameLangParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2265,7 +2492,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 			}
 		}
 		{
-			p.SetState(100)
+			p.SetState(106)
 			p.Match(BoardGameLangParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2276,7 +2503,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(101)
+			p.SetState(107)
 			p.Match(BoardGameLangParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2284,40 +2511,40 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 			}
 		}
 		{
-			p.SetState(102)
+			p.SetState(108)
 			p.ExpressionList()
 		}
-		p.SetState(105)
+		p.SetState(111)
 		p.GetErrorHandler().Sync(p)
 
 		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 9, p.GetParserRuleContext()) == 1 {
 			{
-				p.SetState(103)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(109)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(104)
+				p.SetState(110)
 				p.NamedArgs()
 			}
 
 		} else if p.HasError() { // JIM
 			goto errorExit
 		}
-		p.SetState(108)
+		p.SetState(114)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == BoardGameLangParserT__8 {
+		if _la == BoardGameLangParserT__10 {
 			{
-				p.SetState(107)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(113)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -2326,7 +2553,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 
 		}
 		{
-			p.SetState(110)
+			p.SetState(116)
 			p.Match(BoardGameLangParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2337,7 +2564,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(112)
+			p.SetState(118)
 			p.Match(BoardGameLangParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2345,20 +2572,20 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 			}
 		}
 		{
-			p.SetState(113)
+			p.SetState(119)
 			p.NamedArgs()
 		}
-		p.SetState(115)
+		p.SetState(121)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == BoardGameLangParserT__8 {
+		if _la == BoardGameLangParserT__10 {
 			{
-				p.SetState(114)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(120)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -2367,7 +2594,7 @@ func (p *BoardGameLangParser) ArgList() (localctx IArgListContext) {
 
 		}
 		{
-			p.SetState(117)
+			p.SetState(123)
 			p.Match(BoardGameLangParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2517,10 +2744,10 @@ func (p *BoardGameLangParser) ExpressionList() (localctx IExpressionListContext)
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(121)
+		p.SetState(127)
 		p.expression(0)
 	}
-	p.SetState(126)
+	p.SetState(132)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2532,20 +2759,20 @@ func (p *BoardGameLangParser) ExpressionList() (localctx IExpressionListContext)
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			{
-				p.SetState(122)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(128)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(123)
+				p.SetState(129)
 				p.expression(0)
 			}
 
 		}
-		p.SetState(128)
+		p.SetState(134)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2694,10 +2921,10 @@ func (p *BoardGameLangParser) NamedArgs() (localctx INamedArgsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(129)
+		p.SetState(135)
 		p.NamedArg()
 	}
-	p.SetState(134)
+	p.SetState(140)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2709,20 +2936,20 @@ func (p *BoardGameLangParser) NamedArgs() (localctx INamedArgsContext) {
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			{
-				p.SetState(130)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(136)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(131)
+				p.SetState(137)
 				p.NamedArg()
 			}
 
 		}
-		p.SetState(136)
+		p.SetState(142)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2848,7 +3075,7 @@ func (p *BoardGameLangParser) NamedArg() (localctx INamedArgContext) {
 	p.EnterRule(localctx, 12, BoardGameLangParserRULE_namedArg)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(137)
+		p.SetState(143)
 		p.Match(BoardGameLangParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2856,15 +3083,15 @@ func (p *BoardGameLangParser) NamedArg() (localctx INamedArgContext) {
 		}
 	}
 	{
-		p.SetState(138)
-		p.Match(BoardGameLangParserT__9)
+		p.SetState(144)
+		p.Match(BoardGameLangParserT__11)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
 	{
-		p.SetState(139)
+		p.SetState(145)
 		p.expression(0)
 	}
 
@@ -3005,20 +3232,20 @@ func (p *BoardGameLangParser) StatementList() (localctx IStatementListContext) {
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(144)
+	p.SetState(150)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&15841314) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&63365154) != 0 {
 		{
-			p.SetState(141)
+			p.SetState(147)
 			p.Statement()
 		}
 
-		p.SetState(146)
+		p.SetState(152)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -3614,7 +3841,7 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 
 	var _alt int
 
-	p.SetState(198)
+	p.SetState(204)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -3625,44 +3852,8 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 		localctx = NewApplyContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(147)
-			p.Match(BoardGameLangParserT__10)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(148)
-			p.expression(0)
-		}
-		{
-			p.SetState(149)
-			p.Match(BoardGameLangParserT__2)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(150)
-			p.StatementList()
-		}
-		{
-			p.SetState(151)
-			p.Match(BoardGameLangParserT__3)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case 2:
-		localctx = NewWhileContext(p, localctx)
-		p.EnterOuterAlt(localctx, 2)
-		{
 			p.SetState(153)
-			p.Match(BoardGameLangParserT__11)
+			p.Match(BoardGameLangParserT__12)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -3693,12 +3884,12 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 			}
 		}
 
-	case 3:
-		localctx = NewIfContext(p, localctx)
-		p.EnterOuterAlt(localctx, 3)
+	case 2:
+		localctx = NewWhileContext(p, localctx)
+		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(159)
-			p.Match(BoardGameLangParserT__12)
+			p.Match(BoardGameLangParserT__13)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -3728,7 +3919,43 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 				goto errorExit
 			}
 		}
-		p.SetState(173)
+
+	case 3:
+		localctx = NewIfContext(p, localctx)
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(165)
+			p.Match(BoardGameLangParserT__14)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(166)
+			p.expression(0)
+		}
+		{
+			p.SetState(167)
+			p.Match(BoardGameLangParserT__2)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(168)
+			p.StatementList()
+		}
+		{
+			p.SetState(169)
+			p.Match(BoardGameLangParserT__3)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		p.SetState(179)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -3740,27 +3967,27 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
-					p.SetState(164)
-					p.Match(BoardGameLangParserT__13)
+					p.SetState(170)
+					p.Match(BoardGameLangParserT__15)
 					if p.HasError() {
 						// Recognition error - abort rule
 						goto errorExit
 					}
 				}
 				{
-					p.SetState(165)
-					p.Match(BoardGameLangParserT__12)
+					p.SetState(171)
+					p.Match(BoardGameLangParserT__14)
 					if p.HasError() {
 						// Recognition error - abort rule
 						goto errorExit
 					}
 				}
 				{
-					p.SetState(166)
+					p.SetState(172)
 					p.expression(0)
 				}
 				{
-					p.SetState(167)
+					p.SetState(173)
 					p.Match(BoardGameLangParserT__2)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -3768,11 +3995,11 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 					}
 				}
 				{
-					p.SetState(168)
+					p.SetState(174)
 					p.StatementList()
 				}
 				{
-					p.SetState(169)
+					p.SetState(175)
 					p.Match(BoardGameLangParserT__3)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -3781,7 +4008,7 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 				}
 
 			}
-			p.SetState(175)
+			p.SetState(181)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -3791,24 +4018,24 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 				goto errorExit
 			}
 		}
-		p.SetState(181)
+		p.SetState(187)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == BoardGameLangParserT__13 {
+		if _la == BoardGameLangParserT__15 {
 			{
-				p.SetState(176)
-				p.Match(BoardGameLangParserT__13)
+				p.SetState(182)
+				p.Match(BoardGameLangParserT__15)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(177)
+				p.SetState(183)
 				p.Match(BoardGameLangParserT__2)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -3816,11 +4043,11 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 				}
 			}
 			{
-				p.SetState(178)
+				p.SetState(184)
 				p.StatementList()
 			}
 			{
-				p.SetState(179)
+				p.SetState(185)
 				p.Match(BoardGameLangParserT__3)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -3834,15 +4061,15 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 		localctx = NewFunctionDeclContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(183)
-			p.Match(BoardGameLangParserT__14)
+			p.SetState(189)
+			p.Match(BoardGameLangParserT__16)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 		{
-			p.SetState(184)
+			p.SetState(190)
 			p.Match(BoardGameLangParserNAME)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3850,11 +4077,11 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 			}
 		}
 		{
-			p.SetState(185)
+			p.SetState(191)
 			p.FunctionDeclArgs()
 		}
 		{
-			p.SetState(186)
+			p.SetState(192)
 			p.Match(BoardGameLangParserT__2)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3862,11 +4089,11 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 			}
 		}
 		{
-			p.SetState(187)
+			p.SetState(193)
 			p.StatementList()
 		}
 		{
-			p.SetState(188)
+			p.SetState(194)
 			p.Match(BoardGameLangParserT__3)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3878,15 +4105,15 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 		localctx = NewReturnContext(p, localctx)
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(190)
-			p.Match(BoardGameLangParserT__15)
+			p.SetState(196)
+			p.Match(BoardGameLangParserT__17)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 		{
-			p.SetState(191)
+			p.SetState(197)
 			p.expression(0)
 		}
 
@@ -3894,12 +4121,12 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 		localctx = NewExpressionStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(192)
+			p.SetState(198)
 			p.expression(0)
 		}
 		{
-			p.SetState(193)
-			p.Match(BoardGameLangParserT__16)
+			p.SetState(199)
+			p.Match(BoardGameLangParserT__18)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -3910,7 +4137,7 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 		localctx = NewAssignmentContext(p, localctx)
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(195)
+			p.SetState(201)
 			p.Match(BoardGameLangParserNAME)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3918,15 +4145,15 @@ func (p *BoardGameLangParser) Statement() (localctx IStatementContext) {
 			}
 		}
 		{
-			p.SetState(196)
-			p.Match(BoardGameLangParserT__9)
+			p.SetState(202)
+			p.Match(BoardGameLangParserT__11)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 		{
-			p.SetState(197)
+			p.SetState(203)
 			p.expression(0)
 		}
 
@@ -4061,7 +4288,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 	p.EnterRule(localctx, 18, BoardGameLangParserRULE_functionDeclArgs)
 	var _la int
 
-	p.SetState(220)
+	p.SetState(226)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4071,7 +4298,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(200)
+			p.SetState(206)
 			p.Match(BoardGameLangParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4079,7 +4306,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 			}
 		}
 		{
-			p.SetState(201)
+			p.SetState(207)
 			p.Match(BoardGameLangParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4090,7 +4317,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(202)
+			p.SetState(208)
 			p.Match(BoardGameLangParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4098,40 +4325,40 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 			}
 		}
 		{
-			p.SetState(203)
+			p.SetState(209)
 			p.NameList()
 		}
-		p.SetState(206)
+		p.SetState(212)
 		p.GetErrorHandler().Sync(p)
 
 		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 19, p.GetParserRuleContext()) == 1 {
 			{
-				p.SetState(204)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(210)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(205)
+				p.SetState(211)
 				p.NamedArgsDeclList()
 			}
 
 		} else if p.HasError() { // JIM
 			goto errorExit
 		}
-		p.SetState(209)
+		p.SetState(215)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == BoardGameLangParserT__8 {
+		if _la == BoardGameLangParserT__10 {
 			{
-				p.SetState(208)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(214)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -4140,7 +4367,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 
 		}
 		{
-			p.SetState(211)
+			p.SetState(217)
 			p.Match(BoardGameLangParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4151,7 +4378,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(213)
+			p.SetState(219)
 			p.Match(BoardGameLangParserT__0)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4159,20 +4386,20 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 			}
 		}
 		{
-			p.SetState(214)
+			p.SetState(220)
 			p.NamedArgsDeclList()
 		}
-		p.SetState(216)
+		p.SetState(222)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == BoardGameLangParserT__8 {
+		if _la == BoardGameLangParserT__10 {
 			{
-				p.SetState(215)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(221)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
@@ -4181,7 +4408,7 @@ func (p *BoardGameLangParser) FunctionDeclArgs() (localctx IFunctionDeclArgsCont
 
 		}
 		{
-			p.SetState(218)
+			p.SetState(224)
 			p.Match(BoardGameLangParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4298,14 +4525,14 @@ func (p *BoardGameLangParser) NameList() (localctx INameListContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(222)
+		p.SetState(228)
 		p.Match(BoardGameLangParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(227)
+	p.SetState(233)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4317,15 +4544,15 @@ func (p *BoardGameLangParser) NameList() (localctx INameListContext) {
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			{
-				p.SetState(223)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(229)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(224)
+				p.SetState(230)
 				p.Match(BoardGameLangParserNAME)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -4334,7 +4561,7 @@ func (p *BoardGameLangParser) NameList() (localctx INameListContext) {
 			}
 
 		}
-		p.SetState(229)
+		p.SetState(235)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -4483,10 +4710,10 @@ func (p *BoardGameLangParser) NamedArgsDeclList() (localctx INamedArgsDeclListCo
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(230)
+		p.SetState(236)
 		p.NamedArgDecl()
 	}
-	p.SetState(235)
+	p.SetState(241)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4498,20 +4725,20 @@ func (p *BoardGameLangParser) NamedArgsDeclList() (localctx INamedArgsDeclListCo
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
 			{
-				p.SetState(231)
-				p.Match(BoardGameLangParserT__8)
+				p.SetState(237)
+				p.Match(BoardGameLangParserT__10)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 			{
-				p.SetState(232)
+				p.SetState(238)
 				p.NamedArgDecl()
 			}
 
 		}
-		p.SetState(237)
+		p.SetState(243)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -4637,7 +4864,7 @@ func (p *BoardGameLangParser) NamedArgDecl() (localctx INamedArgDeclContext) {
 	p.EnterRule(localctx, 24, BoardGameLangParserRULE_namedArgDecl)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(238)
+		p.SetState(244)
 		p.Match(BoardGameLangParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -4645,15 +4872,15 @@ func (p *BoardGameLangParser) NamedArgDecl() (localctx INamedArgDeclContext) {
 		}
 	}
 	{
-		p.SetState(239)
-		p.Match(BoardGameLangParserT__9)
+		p.SetState(245)
+		p.Match(BoardGameLangParserT__11)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
 	{
-		p.SetState(240)
+		p.SetState(246)
 		p.expression(0)
 	}
 
@@ -4694,25 +4921,31 @@ func (p *BoardGameLangParser) Sempred(localctx antlr.RuleContext, ruleIndex, pre
 func (p *BoardGameLangParser) Expression_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
 	case 0:
-		return p.Precpred(p.GetParserRuleContext(), 7)
-
-	case 1:
-		return p.Precpred(p.GetParserRuleContext(), 6)
-
-	case 2:
-		return p.Precpred(p.GetParserRuleContext(), 5)
-
-	case 3:
-		return p.Precpred(p.GetParserRuleContext(), 4)
-
-	case 4:
-		return p.Precpred(p.GetParserRuleContext(), 3)
-
-	case 5:
 		return p.Precpred(p.GetParserRuleContext(), 9)
 
-	case 6:
+	case 1:
 		return p.Precpred(p.GetParserRuleContext(), 8)
+
+	case 2:
+		return p.Precpred(p.GetParserRuleContext(), 7)
+
+	case 3:
+		return p.Precpred(p.GetParserRuleContext(), 6)
+
+	case 4:
+		return p.Precpred(p.GetParserRuleContext(), 5)
+
+	case 5:
+		return p.Precpred(p.GetParserRuleContext(), 4)
+
+	case 6:
+		return p.Precpred(p.GetParserRuleContext(), 3)
+
+	case 7:
+		return p.Precpred(p.GetParserRuleContext(), 11)
+
+	case 8:
+		return p.Precpred(p.GetParserRuleContext(), 10)
 
 	default:
 		panic("No predicate with index: " + fmt.Sprint(predIndex))
@@ -4721,7 +4954,7 @@ func (p *BoardGameLangParser) Expression_Sempred(localctx antlr.RuleContext, pre
 
 func (p *BoardGameLangParser) Member_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
-	case 7:
+	case 9:
 		return p.Precpred(p.GetParserRuleContext(), 2)
 
 	default:
