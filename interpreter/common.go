@@ -90,13 +90,13 @@ func variableNotFoundError(name string) PawnError {
 	}
 }
 
-func indexError(index int64, pawnList PawnList) PawnError {
-	if (index < 0) {
-		return PawnError{
-			fmt.Sprintf("Cannot index with a negative integer: %v", index),
-		}
+func negativeIndexError(index int64) PawnError {
+	return PawnError{
+		fmt.Sprintf("Cannot index with a negative integer: %v", index),
 	}
+}
 
+func indexTooHighError(index int64, pawnList PawnList) PawnError {
 	return PawnError{
 		fmt.Sprintf("Cannot index with %v because it is not less than %v, the list's size", index, len(*pawnList.v)),
 	}

@@ -82,8 +82,11 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMemb
 		if !ok {
 			panic(typeError("int", maybeIndex))
 		}
-		if index.v < 0 || index.v >= int64(len(*pawnList.v)) {
-			panic(indexError(index.v, pawnList))
+		if index.v < 0 {
+			panic(negativeIndexError(index.v))
+		}
+		if index.v >= int64(len(*pawnList.v)) {
+			panic(indexTooHighError(index.v, pawnList))
 		}
 		return Index{*pawnList.v, index.v}
 	}
@@ -101,8 +104,11 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMemb
 
 	outputList := make([]PawnValue, len(member.Index))
 	for i, index := range indecies {
-		if index < 0 || index >= int64(len(*pawnList.v)) {
-			panic(indexError(index, pawnList))
+		if index < 0 {
+			panic(negativeIndexError(index))
+		}
+		if index >= int64(len(*pawnList.v)) {
+			panic(indexTooHighError(index, pawnList))
 		}
 		outputList[i] = (*pawnList.v)[index]
 	}

@@ -26,7 +26,7 @@ func TestEvaluateMemberIndex(t *testing.T) {
 	)
 	assert.Equal(t, Index{*env.variables["varForList"].(PawnList).v, 1}, evaluateMemberIndex(indexInBounds, env))
 	assert.PanicsWithValue(t,
-		indexError(3, env.variables["varForList"].(PawnList)),
+		indexTooHighError(3, env.variables["varForList"].(PawnList)),
 		func () {evaluateMemberIndex(indexOutOfBounds, env)},
 	)
 	indexNonList := ast.Index{ast.BooleanLiteral{true}, []ast.Expression{ast.IntLiteral{3}}}
@@ -90,7 +90,7 @@ func TestEvaluateMemberListIndexOutOfBounds(t *testing.T) {
 
 	// Index not found
 	memberIndexListNotFound := ast.Index{listAsVar, []ast.Expression{ast.IntLiteral{0}, ast.IntLiteral{2}}}
-	assert.PanicsWithValue(t, indexError(2, list), func () {
+	assert.PanicsWithValue(t, indexTooHighError(2, list), func () {
 		evaluateMemberIndex(memberIndexListNotFound, env)
 	})
 }
