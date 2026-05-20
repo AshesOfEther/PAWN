@@ -72,7 +72,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMemb
 	}
 
 	if len(member.Index) == 0 {
-		panic("Multi-indexing with 0 indecies is invalid")
+		panic("Multi-indexing with 0 indices is invalid")
 	}
 
 	if len(member.Index) == 1 {
@@ -91,7 +91,7 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMemb
 		return Index{*pawnList.v, index.v}
 	}
 
-	indecies := make([]int64, len(member.Index))
+	indices := make([]int64, len(member.Index))
 	for i, v := range member.Index {
 		maybeIndex := EvaluateExpression(v, environment)
 
@@ -99,11 +99,11 @@ func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMemb
 		if !ok {
 			panic(typeError("integer", maybeIndex))
 		}
-		indecies[i] = indexPawn.v
+		indices[i] = indexPawn.v
 	}
 
 	outputList := make([]PawnValue, len(member.Index))
-	for i, index := range indecies {
+	for i, index := range indices {
 		if index < 0 {
 			panic(negativeIndexError(index))
 		}
