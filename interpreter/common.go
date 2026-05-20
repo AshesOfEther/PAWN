@@ -86,25 +86,25 @@ func negativePowerError(gotPower int64) PawnError {
 
 func variableNotFoundError(name string) PawnError {
 	return PawnError{
-		fmt.Sprint("Variable '", name, "' doesn't exist"),
+		fmt.Sprintf("Variable '%s' doesn't exist", name),
 	}
 }
 
 func indexError(index int64, pawnList PawnList) PawnError {
 	if (index < 0) {
 		return PawnError{
-			fmt.Sprint("Cannot index with a negative integer: ", index),
+			fmt.Sprintf("Cannot index with a negative integer: %v", index),
 		}
 	}
 
 	return PawnError{
-		fmt.Sprint("Cannot index with ", index, " because it is not less than ", len(*pawnList.v), ", the list's size"),
+		fmt.Sprintf("Cannot index with %v because it is not less than %v, the list's size", index, len(*pawnList.v)),
 	}
 }
 
 func fieldNonExistantError(property string) PawnError {
 	return PawnError{
-		fmt.Sprint("Property '", property, "' doesn't exist in object"),
+		fmt.Sprintf("Property '%s' doesn't exist in object", property),
 	}
 }
 

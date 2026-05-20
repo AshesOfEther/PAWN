@@ -38,7 +38,7 @@ func evaluateMember(member ast.Member, environment Environment) ResolvedMember {
 		case ast.Index:
 			return evaluateMemberIndex(member, environment)
 		default:
-			panic(fmt.Sprint("Unexpected invalid Member: ", member))
+			panic(fmt.Sprintf("Unexpected invalid Member: %t", member))
 	}
 }
 
