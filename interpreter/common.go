@@ -86,7 +86,7 @@ func negativePowerError(gotPower int64) PawnError {
 
 func variableNotFoundError(name string) PawnError {
 	return PawnError{
-		fmt.Sprintf("Variable '%s' doesn't exist", name),
+		fmt.Sprintf("tried to access undefined variable '%s'", name),
 	}
 }
 
