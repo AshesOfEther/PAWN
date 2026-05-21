@@ -84,6 +84,30 @@ func negativePowerError(gotPower int64) PawnError {
 	}
 }
 
+func variableNotFoundError(name string) PawnError {
+	return PawnError{
+		fmt.Sprintf("tried to access undefined variable '%s'", name),
+	}
+}
+
+func negativeIndexError(index int64) PawnError {
+	return PawnError{
+		fmt.Sprintf("Cannot index with a negative integer: %v", index),
+	}
+}
+
+func indexTooHighError(index int64, pawnList PawnList) PawnError {
+	return PawnError{
+		fmt.Sprintf("Cannot index with %v because it is not less than %v, the list's size", index, len(*pawnList.v)),
+	}
+}
+
+func fieldNonExistantError(property string) PawnError {
+	return PawnError{
+		fmt.Sprintf("Property '%s' doesn't exist in object", property),
+	}
+}
+
 func divideByZeroError() PawnError {
 	return PawnError{
 		("expected non-zero divisor for integer division, got zero"),

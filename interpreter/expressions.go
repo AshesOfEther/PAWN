@@ -33,7 +33,7 @@ func EvaluateExpression(expression ast.Expression, environment Environment) Pawn
 		case ast.StringLiteral:
 			return PawnString{expression.Value}
 		case ast.MemberExpression:
-			panic("TODO")
+			return evaluateMemberExpression(expression, environment)
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Expression: %t", expression))
 	}
@@ -203,6 +203,22 @@ func numberOperation(
 			default:
 				panic(typeError("int or float", a))
 		}
+}
+
+func evaluateMemberExpression(expression ast.MemberExpression, environment Environment) PawnValue {
+	member := evaluateMember(expression.Member, environment)
+	switch member := member.(type) {
+		case PropertyOrVar:
+			// It is impossible for the name to not exist since MemberReturnedMap only has a valid object and field
+			return member.map_[member.key]
+		case PawnList:
+			return member
+		case Index:
+			// It is impossible to be out of bounds since MemberReturnedIndex only has a valid list and index
+			return member.list[member.index]
+		default:
+			panic(fmt.Sprintf("Unexpected invalid Member return value: %t", member))
+	}
 }
 
 func evaluateAnd(leftValue PawnValue, rightValue PawnValue) PawnBoolean {
