@@ -316,3 +316,40 @@ func TestEvaluateListNonEmpty(t *testing.T) {
 	}}
 	assert.Equal(t, expected, evaluateList(list, NewEnvironment(nil)))
 }
+
+func TestCallFunctionNoReturn(t *testing.T) {
+	environment := NewEnvironment(nil)
+	environment.variables["foo"] = PawnFunctionUser{&PawnFunctionUserInner{
+		NewEnvironment(nil),
+		[]string{},
+		[]NamedArgument{},
+		[]ast.Statement{},
+	}}
+	call := ast.FunctionCall{
+		ast.MemberExpression{ast.Name{"foo"}},
+		[]ast.Expression{},
+		[]ast.NamedArg{},
+		[]ast.Statement{},
+	}
+	assert.Equal(t, nil, evaluateFunctionCall(call, environment))
+}
+
+func TestCallUserFunctionWithReturn(t *testing.T) {
+	environment := NewEnvironment(nil)
+	var literal ast.Expression = ast.IntLiteral{3}
+	environment.variables["foo"] = PawnFunctionUser{&PawnFunctionUserInner{
+		NewEnvironment(nil),
+		[]string{},
+		[]NamedArgument{},
+		[]ast.Statement{
+			ast.Return{&literal},
+		},
+	}}
+	call := ast.FunctionCall{
+		ast.MemberExpression{ast.Name{"foo"}},
+		[]ast.Expression{},
+		[]ast.NamedArg{},
+		[]ast.Statement{},
+	}
+	assert.Equal(t, PawnInt{3}, evaluateFunctionCall(call, environment))
+}
