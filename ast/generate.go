@@ -254,7 +254,7 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 		var positionalArgs []string
 		if arguments.NameList() != nil {
 			positionalArgTokens := arguments.NameList().AllNAME()
-			positionalArgs := make([]string, len(positionalArgTokens))
+			positionalArgs = make([]string, len(positionalArgTokens))
 			for i, token := range positionalArgTokens {
 				positionalArgs[i] = token.GetText()
 			}
@@ -265,7 +265,7 @@ func generateStatement(ctx parsing.IStatementContext) Statement {
 		var namedArgs []NamedArg
 		if arguments.NamedArgsDeclList() != nil {
 			declarations := arguments.NamedArgsDeclList().AllNamedArgDecl()
-			namedArgs := make([]NamedArg, len(declarations))
+			namedArgs = make([]NamedArg, len(declarations))
 			for i, declaration := range declarations {
 				namedArgs[i] = NamedArg{
 					declaration.NAME().GetText(),
