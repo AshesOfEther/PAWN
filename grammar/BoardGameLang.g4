@@ -58,7 +58,7 @@ statement
         ('else' 'if' expression '{' statementList '}' )*
         ('else' '{' statementList '}')?                   # If
     | 'fn' NAME functionDeclArgs '{' statementList '}'    # FunctionDecl
-    | 'return' expression                                 # Return
+    | 'return' expression ';'                             # Return
     | expression ';'                                      # ExpressionStatement
     | NAME '=' expression                                 # Assignment
     ;
