@@ -18,7 +18,7 @@ func main() {
 
 func repl() {
 	reader := bufio.NewReader(os.Stdin)
-	environment := interpreter.NewEnvironment(nil)
+	environment := interpreter.CreateGlobalScope()
 
 	for true {
 		fmt.Print("> ")

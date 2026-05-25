@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
-	"slices"
+	"reflect"
 
 	"pawn/ast"
 )
@@ -140,13 +140,59 @@ func evaluateFunctionCall(expression ast.FunctionCall, environment Environment) 
 		case PawnFunctionPrimitive:
 			validateFunctionArguments(
 				len(expression.PositionalArgs),
-				int(function.v.positionalArgCount),
+				len(function.v.positionalArgTypes),
 				expression.NamedArgs,
 				func(name string) bool {
-					return slices.Contains(function.v.namedArguments, name)
+					if function.v.namedArgumentTypes == nil {
+						return false
+					}
+					_, ok := function.v.namedArgumentTypes[name]
+					return ok
 				},
 			)
-			panic("TODO: Call the function")
+			if len(expression.Body) != 0 && !function.v.acceptsBody {
+				panic(unexpectedBodyError())
+			}
+			
+			arguments := []reflect.Value{}
+			for i, positionalArgument := range expression.PositionalArgs {
+				value := EvaluateExpression(positionalArgument, environment)
+				reflectValue := reflect.ValueOf(value)
+				expectedType := function.v.positionalArgTypes[i]
+				if !reflectValue.Type().AssignableTo(expectedType) {
+					panic(typeError(fmt.Sprintf("%s for positional argument #%d", getTypeName(expectedType), i), value))
+				}
+				arguments = append(arguments, reflectValue)
+			}
+
+			if function.v.namedArgumentStructType != nil {
+				namedArguments := reflect.New(function.v.namedArgumentStructType).Elem()
+				for _, namedArgument := range expression.NamedArgs {
+					value := EvaluateExpression(namedArgument.DefaultValue, environment)
+					reflectValue := reflect.ValueOf(value)
+					field := namedArguments.FieldByName(toStructFieldCase(namedArgument.Name))
+					if !reflectValue.Type().AssignableTo(field.Type().Elem()) {
+						panic(typeError(fmt.Sprintf("%s for named argument '%s'", getTypeName(field.Type()), namedArgument.Name), value))
+					}
+					idk := reflect.New(field.Type().Elem())
+					idk.Elem().Set(reflectValue)
+					field.Set(idk)
+				}
+				arguments = append(arguments, namedArguments)
+			}
+			
+			if function.v.acceptsBody {
+				innerEnvironment := NewEnvironment(&environment)
+				EvaluateStatements(expression.Body, innerEnvironment)
+				body := innerEnvironment.variables
+				arguments = append(arguments, reflect.ValueOf(body))
+			}
+
+			returnValue := function.v.f.Call(arguments)
+			if len(returnValue) == 0 || returnValue[0].IsNil() {
+				return nil
+			}
+			return returnValue[0].Interface().(PawnValue)
 		default:
 			panic(typeError("function", callee))
 	}

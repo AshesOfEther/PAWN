@@ -17,6 +17,16 @@ func NewEnvironment(parent *Environment) Environment {
 	}
 }
 
+func pawnPrint(s PawnString) {
+	println(s.v)
+}
+
+func CreateGlobalScope() Environment {
+	environment := NewEnvironment(nil)
+	environment.variables["print"] = newPrimitiveFunction(pawnPrint)
+	return environment
+}
+
 type PawnError struct {
 	Message string
 }
@@ -117,5 +127,11 @@ func divideByZeroError() PawnError {
 func rangeFloatError() PawnError {
 	return PawnError{
 		("Range was given float"),
+	}
+}
+
+func unexpectedBodyError() PawnError {
+	return PawnError{
+		"function does not expect a body, but it was called with one",
 	}
 }

@@ -1,6 +1,10 @@
 package interpreter
 
-import "pawn/ast"
+import (
+	"reflect"
+	
+	"pawn/ast"
+)
 
 // ----------------------------------
 // # Value definition
@@ -48,9 +52,22 @@ func (l PawnList) value() {}
 // Function
 //--------
 type PawnFunctionPrimitiveInner struct {
-	f func([]PawnValue) *PawnValue // Possibly nil result pointer, incase there's no returned value
-	positionalArgCount uint
-	namedArguments []string
+	// Stores a function with the following arguments:
+	//
+	// - Zero or more positional arguments: Either `PawnValue` or a type that implements it
+	// - (Optional) A struct representing the named arguments, with fields of type `PawnValue` or `*T`
+	//   where `T` implements it
+	// - (Optional) A `map[string]PawnValue` containing variables defined in the body of the call
+	//
+	// If present, the return type must either be `PawnValue`, `T`, or `*T`, where `T` implements
+	// `PawnValue`.
+	// 
+	// Positional arguments must not be nil.
+	f reflect.Value
+	positionalArgTypes []reflect.Type
+	namedArgumentStructType reflect.Type // Is nil if the underlying function doesn't accept a named arguments struct
+	namedArgumentTypes map[string]reflect.Type // Is nil if the underlying function doesn't accept a named arguments struct
+	acceptsBody bool
 }
 type PawnFunctionUserInner struct {
 	environment Environment
