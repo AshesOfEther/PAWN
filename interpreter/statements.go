@@ -6,18 +6,18 @@ import (
 	"pawn/ast"
 )
 
-func EvaluateStatement(statement ast.Statement, environment Environment) {
+func EvaluateStatement(statement ast.Statement, environment Environment) ControlFlow {
 	switch statement := statement.(type) {
 		case ast.If:
-			evaluateIf(statement, environment)
+			return evaluateIf(statement, environment)
 		case ast.While:
-			evaluateWhile(statement, environment)
+			return evaluateWhile(statement, environment)
 		case ast.Apply:
 			panic("TODO")
 		case ast.FunctionDecl:
 			evaluateFunctionDeclaration(statement, environment)
 		case ast.Return:
-			panic("TODO")
+			return evaluateReturn(statement, environment)
 		case ast.Assignment:
 			panic("TODO")
 		case ast.ExpressionStatement:
@@ -25,62 +25,79 @@ func EvaluateStatement(statement ast.Statement, environment Environment) {
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Statement: %t", statement))
 	}
+	return nil
 }
 
-func evaluateIf(statement ast.If, environment Environment) {
-	if evaluateIfClause(statement.First, environment) {
-		return
+func evaluateIf(statement ast.If, environment Environment) ControlFlow {
+	if executed, controlFlow := evaluateIfClause(statement.First, environment); executed {
+		return controlFlow
 	}
 
 	for _, clause := range statement.Rest {
-		if evaluateIfClause(clause, environment) {
-			return
+		if executed, controlFlow := evaluateIfClause(clause, environment); executed {
+			return controlFlow
 		}
 	}
 
 	innerEnvironment := NewEnvironment(&environment)
-	EvaluateStatements(statement.Else_, innerEnvironment)
+	return EvaluateStatements(statement.Else_, innerEnvironment)
 
 }
 
-func evaluateIfClause(clause ast.IfClause, environment Environment) bool {
+func evaluateIfClause(clause ast.IfClause, environment Environment) (bool, ControlFlow) {
 	conditionValue := EvaluateExpression(clause.Condition, environment)
 	if booleanValue, ok := conditionValue.(PawnBoolean); ok {
+		var controlFlow ControlFlow
 		if booleanValue.v {
 			innerEnvironment := NewEnvironment(&environment)
-			EvaluateStatements(clause.Body, innerEnvironment)
+			controlFlow = EvaluateStatements(clause.Body, innerEnvironment)
 		}
-		return booleanValue.v
+		return booleanValue.v, controlFlow
 	} else {
 		panic(typeError("boolean", conditionValue))
 	}
 }
 
 func evaluateFunctionDeclaration(statement ast.FunctionDecl, environment Environment) {
-	namedArgsMap := map[string]ast.Expression{}
-	for _, namedArg := range statement.NamedArgs {
-		if _, ok := namedArgsMap[namedArg.Name]; ok {
+	// Ensure that no two named arguments have the same name.
+	existingNamedArguments := map[string]bool{}
+	namedArguments := make([]NamedArgument, len(statement.NamedArgs))
+	for i, namedArg := range statement.NamedArgs {
+		if _, ok := existingNamedArguments[namedArg.Name]; ok {
 			panic(duplicateNamedArgumentDeclarationError(namedArg.Name))
 		}
-		namedArgsMap[namedArg.Name] = namedArg.DefaultValue
+		existingNamedArguments[namedArg.Name] = true
+		namedArguments[i] = NamedArgument{namedArg.Name, namedArg.DefaultValue}
 	}
 	environment.variables[statement.Name] = PawnFunctionUser{
 		&PawnFunctionUserInner{
 			environment,
 			statement.PositionalArgs,
-			namedArgsMap,
+			namedArguments,
 			statement.Body,
 		},
 	}
 }
 
-func EvaluateStatements(statements []ast.Statement, environment Environment) {
-	for _, statement := range statements {
-		EvaluateStatement(statement, environment)
+func evaluateReturn(statement ast.Return, environment Environment) Return {
+	var value PawnValue
+	if statement.Value != nil {
+		value = EvaluateExpression(*statement.Value, environment)
 	}
+	return Return{value}
 }
 
-func evaluateWhile(whileStmt ast.While, environment Environment) {
+func EvaluateStatements(statements []ast.Statement, environment Environment) ControlFlow {
+	for _, statement := range statements {
+		controlFlow := EvaluateStatement(statement, environment)
+		if controlFlow != nil {
+			return controlFlow
+		}
+	}
+	return nil
+}
+
+func evaluateWhile(whileStmt ast.While, environment Environment) ControlFlow {
 	for {
 		conditionValue := EvaluateExpression(whileStmt.Condition, environment)
 		booleanValue, ok := conditionValue.(PawnBoolean)
@@ -88,9 +105,27 @@ func evaluateWhile(whileStmt ast.While, environment Environment) {
 			panic(typeError("boolean", conditionValue))
 		}
 		if booleanValue.v {
-			EvaluateStatements(whileStmt.Body, NewEnvironment(&environment))
+			controlFlow := EvaluateStatements(whileStmt.Body, NewEnvironment(&environment))
+			if controlFlow != nil {
+				return controlFlow
+			}
 		} else {
-			return
+			return nil
 		}
 	}
 }
+
+// Represents a control flow operation that the caller should act on. `nil`
+// indicates that no special handling is expected. A caller encountering a
+// `ControlFlow` instance that it doesn't act on should return it immediately
+// (e.g. a return statement inside an if statement).
+type ControlFlow interface {
+	controlFlow()
+}
+
+// Represents that a return statement was encountered.
+type Return struct {
+	value PawnValue
+}
+
+func (Return) controlFlow() {}

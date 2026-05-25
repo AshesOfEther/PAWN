@@ -132,11 +132,30 @@ func evaluateFunctionCall(expression ast.FunctionCall, environment Environment) 
 				len(function.v.positionalArguments),
 				expression.NamedArgs,
 				func(name string) bool {
-					_, ok := function.v.namedArguments[name]
-					return ok
+					for _, namedArgument := range function.v.namedArguments {
+						if namedArgument.name == name {
+							return true
+						}
+					}
+					return false
 				},
 			)
-			panic("TODO: Call the function")
+			if len(expression.Body) != 0 {
+				panic(unexpectedBodyOnUserFunctionCall())
+			}
+			functionEnvironment := NewEnvironment(&function.v.environment)
+			for i, name := range function.v.positionalArguments {
+				functionEnvironment.variables[name] = EvaluateExpression(expression.PositionalArgs[i], environment)
+			}
+			for _, namedArgument := range expression.NamedArgs {
+				functionEnvironment.variables[namedArgument.Name] = EvaluateExpression(namedArgument.DefaultValue, environment)
+			}
+
+			controlFlow := EvaluateStatements(function.v.body, functionEnvironment)
+			if return_, ok := controlFlow.(Return); ok {
+				return return_.value
+			}
+			return nil
 		case PawnFunctionPrimitive:
 			validateFunctionArguments(
 				len(expression.PositionalArgs),
