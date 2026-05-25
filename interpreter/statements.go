@@ -19,13 +19,26 @@ func EvaluateStatement(statement ast.Statement, environment Environment) Control
 		case ast.Return:
 			return evaluateReturn(statement, environment)
 		case ast.Assignment:
-			panic("TODO")
+			evaluateAssignment(statement, environment)
 		case ast.ExpressionStatement:
 			EvaluateExpressionStatement(statement, environment)
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Statement: %t", statement))
 	}
 	return nil
+}
+
+func evaluateAssignment(statement ast.Assignment, environment Environment) {
+	member := evaluateMember(statement.Destination, environment)
+	value := EvaluateExpression(statement.Value, environment)
+	switch member := member.(type) {
+		case Index:
+			member.list[member.index] = value
+		case PropertyOrVar:
+			member.map_[member.key] = value
+		case PawnList:
+			panic(assignToMultipleIndicesError())
+	}
 }
 
 func evaluateIf(statement ast.If, environment Environment) ControlFlow {

@@ -139,3 +139,7 @@ func unexpectedBodyError() PawnError {
 func unexpectedBodyOnUserFunctionCall() PawnError {
 	return PawnError{"expected empty or no body on call to user function, found non-empty body"}
 }
+
+func assignToMultipleIndicesError() PawnError {
+	return PawnError{"expected assignment to variable, property or singular list index, found multiple indices"}
+}
