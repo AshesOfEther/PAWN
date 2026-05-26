@@ -29,15 +29,29 @@ func EvaluateStatement(statement ast.Statement, environment Environment) Control
 }
 
 func evaluateAssignment(statement ast.Assignment, environment Environment) {
-	member := evaluateMember(statement.Destination, environment)
 	value := EvaluateExpression(statement.Value, environment)
-	switch member := member.(type) {
-		case Index:
-			member.list[member.index] = value
-		case PropertyOrVar:
-			member.map_[member.key] = value
-		case PawnList:
-			panic(assignToMultipleIndicesError())
+	switch member := statement.Destination.(type) {
+		case ast.Name:
+			result := evaluateMemberName(member, environment)
+			if result != nil {
+				result.map_[result.key] = value
+			} else {
+				environment.variables[member.Name] = value
+			}
+		case ast.Property:
+			result := evaluateMemberProperty(member, environment)
+			result.map_[result.key] = value
+		case ast.Index:
+			switch result := evaluateMemberIndex(member, environment).(type) {
+				case Index:
+					result.list[result.index] = value
+				case PawnList:
+					panic(assignToMultipleIndicesError())
+				default:
+					panic(fmt.Sprintf("Unexpected invalid ResolvedMember: %t", result))
+			}
+		default:
+			panic(fmt.Sprintf("Unexpected invalid Member: %t", member))
 	}
 }
 

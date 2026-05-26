@@ -123,7 +123,7 @@ func TestEvaluateMemberProperty(t *testing.T) {
 	assert.PanicsWithValue(t,
 		fieldNonExistantError("notProperty"),
 		func() {
-			evaluateMemberProperty(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
+			evaluateMember(ast.Property{Object: objectAsVar, Property: "notProperty"}, env)
 		},
 	)
 
@@ -144,13 +144,13 @@ func TestEvaluateMemberEnvironmentName(t *testing.T) {
 
 	// Var doesn't exist, shallow and deep search:
 	assert.PanicsWithValue(t, variableNotFoundError("notVar"), func() {
-		evaluateMemberName(memberNameNotFound, env)
+		evaluateMember(memberNameNotFound, env)
 	})
 	assert.PanicsWithValue(t, variableNotFoundError("notVar"), func() {
-		evaluateMemberName(memberNameNotFound, envDeep)
+		evaluateMember(memberNameNotFound, envDeep)
 	})
 
 	// Var exists, shallow and deep search:
-	assert.Equal(t, PropertyOrVar{env.variables, "var"}, evaluateMemberName(memberNameFound, env))
-	assert.Equal(t, PropertyOrVar{env.variables, "var"}, evaluateMemberName(memberNameFound, envDeep))
+	assert.Equal(t, PropertyOrVar{env.variables, "var"}, evaluateMember(memberNameFound, env))
+	assert.Equal(t, PropertyOrVar{env.variables, "var"}, evaluateMember(memberNameFound, envDeep))
 }

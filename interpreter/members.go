@@ -32,9 +32,17 @@ func (PropertyOrVar) ResolvedMember() {}
 func evaluateMember(member ast.Member, environment Environment) ResolvedMember {
 	switch member := member.(type) {
 		case ast.Name:
-			return evaluateMemberName(member, environment)
+			result := evaluateMemberName(member, environment)
+			if result == nil {
+				panic(variableNotFoundError(member.Name))
+			}
+			return *result
 		case ast.Property:
-			return evaluateMemberProperty(member, environment)
+			result := evaluateMemberProperty(member, environment)
+			if _, ok := result.map_[result.key]; !ok {
+				panic(fieldNonExistantError(member.Property))
+			}
+			return result
 		case ast.Index:
 			return evaluateMemberIndex(member, environment)
 		default:
@@ -42,26 +50,23 @@ func evaluateMember(member ast.Member, environment Environment) ResolvedMember {
 	}
 }
 
-func evaluateMemberName(member ast.Name, environment Environment) ResolvedMember {
+func evaluateMemberName(member ast.Name, environment Environment) *PropertyOrVar {
 	if _, ok := environment.variables[member.Name]; ok {
-		return PropertyOrVar{environment.variables, member.Name}
+		return &PropertyOrVar{environment.variables, member.Name}
 	}
 	if environment.parent != nil {
 		return evaluateMemberName(member, *environment.parent)
 	}
-	panic(variableNotFoundError(member.Name))
+	return nil
 }
 
-func evaluateMemberProperty(member ast.Property, environment Environment) ResolvedMember {
+func evaluateMemberProperty(member ast.Property, environment Environment) PropertyOrVar {
 	maybeObject := EvaluateExpression(member.Object, environment)
 	object, ok := maybeObject.(PawnObject)
 	if !ok {
 		panic(typeError("object", maybeObject))
 	}
-	if _, ok := object.v[member.Property]; ok {
-		return PropertyOrVar{object.v, member.Property}
-	}
-	panic(fieldNonExistantError(member.Property))
+	return PropertyOrVar{object.v, member.Property}
 }
 
 func evaluateMemberIndex(member ast.Index, environment Environment) ResolvedMember {
