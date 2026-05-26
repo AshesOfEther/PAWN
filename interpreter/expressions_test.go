@@ -1,7 +1,9 @@
 package interpreter
 
 import (
+	"math"
 	"pawn/ast"
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,6 +14,105 @@ func dummyIntHandler(_ int64, _ int64) PawnValue {
 }
 func dummyFloatHandler(_ float64, _ float64) PawnValue {
 	return PawnFloat{0}
+}
+
+
+func TestEvaluateEqual(t *testing.T) {
+
+	// Except for floats, the total amount of cases is 3*amountOfTypes
+	// Two values T1 T2 of each type T to compare 3 cases,
+	// where T1 != T2 in the most non-trivial way.
+	// 1. a1 == a1 is true
+	// 2. a1 == a2 is false
+	// 3. a1 == b1 is false
+
+	emptyStringList := []string{}
+	PrimitiveFunctionForTest := reflect.ValueOf(nil)
+	env := NewEnvironment(nil)
+	emptyBody := []ast.Statement{}
+	noOptionalArgs := []NamedArgument{}
+
+	// Values
+	bool_1 := PawnBoolean{true}
+	bool_2 := PawnBoolean{false} // false since that's the only other case of this type
+	object_1 := PawnObject{map[string]PawnValue{}}
+	object_2 := PawnObject{map[string]PawnValue{}} // Maps are equal in content but have different reference
+	integer_1 := PawnInt{-1}
+	integer_2 := PawnInt{1}
+	string_1 := PawnString{"S"}
+	string_2 := PawnString{"S\000"}
+	float_1 := PawnFloat{0.3}
+	float_2 := PawnFloat{float64(0.1)+float64(0.2)} // Floats round
+	list_1 := PawnList{&[]PawnValue{}}
+	list_2 := PawnList{&[]PawnValue{}} // Lists are equal in content but have different reference
+	primitiveFunc_1 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgTypes: []reflect.Type{}, namedArgumentStructType: reflect.TypeOf(nil)}}
+	primitiveFunc_2 := PawnFunctionPrimitive{&PawnFunctionPrimitiveInner{f: PrimitiveFunctionForTest, positionalArgTypes: []reflect.Type{}, namedArgumentStructType: reflect.TypeOf(nil)}} // Functions are equal in content but have different reference
+	userFunc_1 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
+	userFunc_2 := PawnFunctionUser{&PawnFunctionUserInner{environment: env, positionalArguments: emptyStringList, namedArguments: noOptionalArgs, body: emptyBody}}
+
+	// Float nans are special, they aren't equal to themselves
+	F3 := PawnFloat{math.NaN()}
+
+	// Bool
+	assert.True(t,  evaluateEqual(bool_1, bool_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(bool_1, bool_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(bool_1, bool_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(bool_1, bool_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	// Object
+	assert.True(t,  evaluateEqual(object_1, object_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(object_1, object_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(object_1, object_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(object_1, object_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	// Integers
+	assert.True(t,  evaluateEqual(integer_1, integer_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(integer_1, integer_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(integer_1, integer_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(integer_1, integer_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	// Strings
+	assert.True(t,  evaluateEqual(string_1, string_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(string_1, string_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(string_1, string_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(string_1, string_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	// Float
+	assert.True(t,  evaluateEqual(float_1, float_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(float_1, float_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateEqual(F3, F3).(PawnBoolean).v)     // ! (nan == nan)
+	assert.True(t, !evaluateNotEqual(float_1, float_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(float_1, float_2).(PawnBoolean).v)  //   (a1 != a2)
+	assert.True(t,  evaluateNotEqual(F3, F3).(PawnBoolean).v)  //   (nan != nan)
+
+	// List
+	assert.True(t,  evaluateEqual(list_1, list_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(list_1, list_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(list_1, list_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(list_1, list_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	// Primtitive function
+	assert.True(t,  evaluateEqual(primitiveFunc_1, primitiveFunc_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(primitiveFunc_1, primitiveFunc_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(primitiveFunc_1, primitiveFunc_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(primitiveFunc_1, primitiveFunc_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	// User function
+	assert.True(t,  evaluateEqual(userFunc_1, userFunc_1).(PawnBoolean).v)     //   (a1 == a1)
+	assert.True(t, !evaluateEqual(userFunc_1, userFunc_2).(PawnBoolean).v)     // ! (a1 == a2)
+	assert.True(t, !evaluateNotEqual(userFunc_1, userFunc_1).(PawnBoolean).v)  // ! (a1 != a1)
+	assert.True(t,  evaluateNotEqual(userFunc_1, userFunc_2).(PawnBoolean).v)  //   (a1 != a2)
+
+	testValues := []PawnValue{bool_1, object_1, integer_1, string_1, float_1, list_1, primitiveFunc_1, userFunc_1}
+	for i, leftValue := range testValues {
+		for j, rightValue := range testValues {
+			if i == j {
+				continue
+			}
+			assert.False(t, evaluateEqual(leftValue, rightValue).(PawnBoolean).v, "`evaluateEqual(%v, %v)` should be false", leftValue, rightValue)
+			assert.True(t, evaluateNotEqual(leftValue, rightValue).(PawnBoolean).v, "`evaluateNotEqual(%v, %v)` should be true", leftValue, rightValue)
+		}
+	}
 }
 
 func TestGreaterThanInt(t *testing.T) {

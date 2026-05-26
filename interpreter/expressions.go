@@ -82,11 +82,23 @@ func evaluateBinaryOp(expression ast.BinaryOp, environment Environment) PawnValu
 }
 
 func evaluateEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
-	return PawnBoolean{leftValue == rightValue}
+	switch left := leftValue.(type) {
+		case PawnBoolean, PawnInt, PawnFloat,
+				 PawnString, PawnList,
+				 PawnFunctionPrimitive, PawnFunctionUser:
+			return PawnBoolean{left == rightValue}
+		case PawnObject:
+			if right, ok := rightValue.(PawnObject); ok {
+				return PawnBoolean{reflect.ValueOf(left) == reflect.ValueOf(right)}
+			}
+			return PawnBoolean{false}
+		default:
+			panic(fmt.Sprint("Unexpected invalid type: ", leftValue))
+	}
 }
 
 func evaluateNotEqual(leftValue PawnValue, rightValue PawnValue) PawnValue {
-	return PawnBoolean{leftValue != rightValue}
+	return PawnBoolean{!evaluateEqual(leftValue, rightValue).(PawnBoolean).v}
 }
 
 func evaluateGreaterThan(leftValue PawnValue, rightValue PawnValue) PawnValue {
