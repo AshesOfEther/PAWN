@@ -105,6 +105,8 @@ func generateExpression(ctx parsing.IExpressionContext) Expression {
 			operator = Equal
 		case "!=":
 			operator = NotEqual
+		case "<=":
+			operator = LessOrEqual
 		default:
 			panic(fmt.Sprintf("Unexpected invalid Comparison operator at %v", ctx.GetSourceInterval()))
 		}

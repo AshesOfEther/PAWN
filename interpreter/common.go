@@ -17,8 +17,13 @@ func NewEnvironment(parent *Environment) Environment {
 	}
 }
 
-func pawnPrint(s PawnString) {
-	println(s.v)
+func pawnPrint(v PawnValue) {
+	switch v := v.(type) {
+		case PawnString:
+			println(v.v)
+		case PawnInt:
+			print(v.v)
+	}
 }
 
 func CreateGlobalScope() Environment {
