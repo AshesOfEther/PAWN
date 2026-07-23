@@ -60,7 +60,7 @@ statement
     | 'fn' NAME functionDeclArgs '{' statementList '}'    # FunctionDecl
     | 'return' expression ';'                             # Return
     | expression ';'                                      # ExpressionStatement
-    | NAME '=' expression                                 # Assignment
+    | NAME '=' expression ';'                             # Assignment
     ;
 
 functionDeclArgs
